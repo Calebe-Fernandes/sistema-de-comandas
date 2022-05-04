@@ -1,5 +1,7 @@
 package com.produtos.apirest.models;
 
+import com.produtos.apirest.exceptions.ApiRequestException;
+
 import javax.persistence.*;
 
 @Entity
@@ -22,6 +24,9 @@ public class Drink extends Item{
     }
 
     public void setStockAmmount(Integer stockAmmount) {
+        if(stockAmmount == null ||stockAmmount <= 0){
+            throw new ApiRequestException("O estoque deve ser maior que 0");
+        }
         this.stockAmmount = stockAmmount;
     }
 
@@ -30,6 +35,9 @@ public class Drink extends Item{
     }
 
     public void setAlcoholic(Boolean alcoholic) {
+        if(alcoholic == null){
+            throw new ApiRequestException("Por favor, informe se a bebida é ou não alcóolica");
+        }
         isAlcoholic = alcoholic;
     }
 }

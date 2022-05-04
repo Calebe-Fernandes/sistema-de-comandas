@@ -1,5 +1,7 @@
 package com.produtos.apirest.models;
 
+import com.produtos.apirest.exceptions.ApiRequestException;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -38,6 +40,9 @@ public class Item implements Serializable {
     }
 
     public void setPrice(Float price) {
+        if(price == null || price <= 0){
+            throw new ApiRequestException("Preço deve ser maior do que 0");
+        }
         this.price = price;
     }
 
@@ -46,6 +51,9 @@ public class Item implements Serializable {
     }
 
     public void setProductName(String productName) {
+        if(productName == null || productName.isEmpty()){
+            throw new ApiRequestException("O Produto deve ter um nome");
+        }
         this.productName = productName;
     }
 
@@ -54,6 +62,9 @@ public class Item implements Serializable {
     }
 
     public void setDescription(String description) {
+        if(description == null || description.isEmpty()){
+            throw new ApiRequestException("O Produto deve ter uma descrição");
+        }
         this.description = description;
     }
 }

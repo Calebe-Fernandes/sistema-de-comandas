@@ -1,5 +1,6 @@
 package com.produtos.apirest.controllers;
 
+import com.produtos.apirest.exceptions.ApiRequestException;
 import com.produtos.apirest.models.Drink;
 import com.produtos.apirest.models.FoodStuff;
 import com.produtos.apirest.repository.DrinkRepository;
@@ -41,13 +42,17 @@ public class ProductController {
     @DeleteMapping ("/drinks")
     @ApiOperation(value="Deleta uma bebida (de acordo com id)")
     public void deleteDrink(@RequestBody Drink drink){
-        drinkRepository.delete(drink);
+        try {
+            drinkRepository.delete(drink);
+        }catch (ApiRequestException e){
+            throw new ApiRequestException("Erro ao deletar produto");
+        }
     }
 
     @PutMapping("/drinks")
     @ApiOperation(value="Atualiza as informações de uma bebida. Ao atualizar, enviar a nova payload do item com o campo 'id'")
     public Drink updateDrink(@RequestBody Drink drink){
-         return drinkRepository.save(drink);
+        return drinkRepository.save(drink);
     }
 
     //FoodStuff operations
@@ -75,7 +80,12 @@ public class ProductController {
     @DeleteMapping ("/food")
     @ApiOperation(value="Deleta um alimento (de acordo com id)")
     public void deleteFood(@RequestBody FoodStuff food){
-        foodStuffRepository.delete(food);
+        try{
+            foodStuffRepository.delete(food);
+        }catch (ApiRequestException e){
+            throw new ApiRequestException("Erro ao deletar produto");
+        }
+
     }
 
     @PutMapping("/food")
@@ -83,5 +93,4 @@ public class ProductController {
     public FoodStuff updateFood(@RequestBody FoodStuff food){
         return foodStuffRepository.save(food);
     }
-
 }
