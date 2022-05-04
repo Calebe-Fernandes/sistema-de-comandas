@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping(value="/api")
 @Api(value="API REST Produtos")
 @CrossOrigin(origins = "*")
-public class ProdutoController {
+public class ProductController {
     //Drinks operations
     @Autowired
     DrinkRepository drinkRepository;
@@ -34,7 +34,9 @@ public class ProdutoController {
 
     @PostMapping ("/drinks")
     @ApiOperation(value="Cadastra uma nova bebida. Ao cadastrar, omitir o campo 'id' do payload, pois este é gerado automaticamente pelo banco")
-    public Drink registerNewDrink(@RequestBody Drink drink){return drinkRepository.save(drink);}
+    public Drink registerNewDrink(@RequestBody Drink drink){
+        return drinkRepository.save(drink);
+    }
 
     @DeleteMapping ("/drinks")
     @ApiOperation(value="Deleta uma bebida (de acordo com id)")
@@ -44,7 +46,9 @@ public class ProdutoController {
 
     @PutMapping("/drinks")
     @ApiOperation(value="Atualiza as informações de uma bebida. Ao atualizar, enviar a nova payload do item com o campo 'id'")
-    public Drink updateDrink(@RequestBody Drink drink){ return drinkRepository.save(drink);}
+    public Drink updateDrink(@RequestBody Drink drink){
+         return drinkRepository.save(drink);
+    }
 
     //FoodStuff operations
     @Autowired
@@ -58,7 +62,9 @@ public class ProdutoController {
 
     @GetMapping("/food/{id}")
     @ApiOperation(value="Retorna um aliemnto único (busca por id)")
-    public FoodStuff listFoodById(@PathVariable(value="id") long id){return foodStuffRepository.findById(id);}
+    public FoodStuff listFoodById(@PathVariable(value="id") long id){
+        return foodStuffRepository.findById(id);
+    }
 
     @PostMapping ("/food")
     @ApiOperation(value="Cadastra um novo alimento. Ao cadastrar, omitir o campo 'id' do payload, pois este é gerado automaticamente pelo banco")
@@ -74,6 +80,8 @@ public class ProdutoController {
 
     @PutMapping("/food")
     @ApiOperation(value="Atualiza as informações de um alimento. Ao atualizar, enviar a nova payload do item com o campo 'id' ")
-    public FoodStuff updateFood(@RequestBody FoodStuff food){ return foodStuffRepository.save(food);}
+    public FoodStuff updateFood(@RequestBody FoodStuff food){
+        return foodStuffRepository.save(food);
+    }
 
 }
