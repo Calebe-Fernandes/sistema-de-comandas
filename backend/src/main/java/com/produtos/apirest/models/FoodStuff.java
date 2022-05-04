@@ -1,6 +1,8 @@
 package com.produtos.apirest.models;
 
 
+import com.produtos.apirest.exceptions.ApiRequestException;
+
 import javax.persistence.*;
 
 @Entity
@@ -21,6 +23,9 @@ public class FoodStuff extends Item {
     }
 
     public void setIsAvaliable(Boolean avaliable) {
+        if(avaliable == null){
+            throw new ApiRequestException("A disponibilidade do produto deve ser informada");
+        }
         isAvaliable = avaliable;
     }
 }
