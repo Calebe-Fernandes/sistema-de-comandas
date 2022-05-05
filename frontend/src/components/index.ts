@@ -1,3 +1,3 @@
 import Component from "./example-component";
 
-export {Component};
+export { Component };
