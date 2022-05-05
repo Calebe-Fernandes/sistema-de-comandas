@@ -1,5 +1,7 @@
 package com.produtos.apirest.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +22,7 @@ public class OrderModel {
 
 
     @OneToMany(mappedBy = "comanda")
+    @JsonIgnoreProperties("order")
     private List<DrinkWithdrawal> drinkWithdrawalList;
 
     @OneToMany(mappedBy = "comanda")

@@ -56,38 +56,14 @@ public class OrderController {
             return orderRepository.save(order);
         }
     }
-    //Get Commands (needs to be filtered to return only open commands
-    @GetMapping("/order")
-    @Transactional
-    @ApiOperation("Cria e abre uma nova ordem. Ao criar a ordem, o usuário deve enviar também ao menos um produto")
-    public List<OrderModel> getOrders(){
-        return orderRepository.findAll();
-    }
-
-    //Close Order
-    @PutMapping("/order/{id}")
-    @Transactional
-    @ApiOperation("Fecha a comanda de uma mesa, tornando a mesa disponível novamente")
-    public OrderModel closeOrder(
-            @RequestBody @Validated OrderModel order,
-            @PathVariable(value="id") long id
-    ){
-        order.setOpen(false);
-        order.setClosingTime(Timestamp.from(Instant.now()));
-        AvaliableTable closingTable = openTables.findTableByNumber(order.getTable());
-        openTables.delete(closingTable);
-        return orderRepository.save(order);
-    }
-
-
     //Create a new withdraw for Drinks;
     @PostMapping("/order/{idOrder}/drink-withdrawal/{idDrink}")
     @Transactional
     @ApiOperation(value="Retira a quantidade de estoque selecionado referente ao item desejado. Parâmetros de URL: id da comanda e id do produto. Parâmetros a serem enviados: 'quantity'")
     public ResponseEntity<String> drinksWithdraw(
-                @RequestBody @Validated DrinkWithdrawal withdrawal,
-                @PathVariable(value="idOrder") long idOrder,
-                @PathVariable(value="idDrink") long idDrink
+            @RequestBody @Validated DrinkWithdrawal withdrawal,
+            @PathVariable(value="idOrder") long idOrder,
+            @PathVariable(value="idDrink") long idDrink
     ){
         OrderModel order = orderRepository.findById(idOrder);
         withdrawal.setOrder(order);
@@ -111,6 +87,7 @@ public class OrderController {
 
             List<DrinkWithdrawal> associatedTransaction = drinkWithdrawsRepository.findById(withdrawal.getId());
             order.setDrinkWithdrawalList(associatedTransaction);
+            order.setOrderTotal(order.getOrderTotal() + (withdrawal.getQuantity()*drink.getPrice()));
             orderRepository.save(order);
 
             Integer newStockQuantity = stockAvaliable - withdrawal.getQuantity();
@@ -119,6 +96,30 @@ public class OrderController {
 
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Saída contabilizada no estoque");
         }
+    }
+
+    //Get Commands (needs to be filtered to return only open commands)
+    @GetMapping("/order/{id}")
+    @Transactional
+    @ApiOperation("Cria e abre uma nova ordem. Ao criar a ordem, o usuário deve enviar também ao menos um produto")
+    public OrderModel getOrders(@PathVariable(value="id") long id){
+
+        return orderRepository.findById(id);
+    }
+
+    //Close Order
+    @PutMapping("/order/{id}")
+    @Transactional
+    @ApiOperation("Fecha a comanda de uma mesa, tornando a mesa disponível novamente")
+    public OrderModel closeOrder(
+            @RequestBody @Validated OrderModel order,
+            @PathVariable(value="id") long id
+    ){
+        order.setOpen(false);
+        order.setClosingTime(Timestamp.from(Instant.now()));
+        AvaliableTable closingTable = openTables.findTableByNumber(order.getTable());
+        openTables.delete(closingTable);
+        return orderRepository.save(order);
     }
 
     //Return Drink from an Order and readd stock
