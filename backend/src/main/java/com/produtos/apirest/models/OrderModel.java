@@ -25,6 +25,10 @@ public class OrderModel {
     @JsonIgnoreProperties("order")
     private List<DrinkWithdrawal> drinkWithdrawalList;
 
+    @OneToMany(mappedBy = "comanda")
+    @JsonIgnoreProperties("order")
+    private List<FoodWithdraw> foodWithdrawalList;
+
 
     public OrderModel() {}
 
@@ -84,7 +88,7 @@ public class OrderModel {
     public void setDrinkWithdrawalList(List<DrinkWithdrawal> drinkWithdrawalList) {
         this.drinkWithdrawalList = drinkWithdrawalList;
     }
-    
+
     public Float getOrderTotal() {
         return orderTotal;
     }
