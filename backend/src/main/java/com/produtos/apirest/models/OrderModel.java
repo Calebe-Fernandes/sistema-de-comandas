@@ -25,19 +25,16 @@ public class OrderModel {
     @JsonIgnoreProperties("order")
     private List<DrinkWithdrawal> drinkWithdrawalList;
 
-    @OneToMany(mappedBy = "comanda")
-    private List<ReturnDrink> returnedDrinksList;
 
     public OrderModel() {}
 
-    public OrderModel(long id, Integer table, Boolean isOpen, Date openingTime, Date closingTime, List<DrinkWithdrawal> drinkWithdrawalList, List<ReturnDrink> returnedDrinksList) {
+    public OrderModel(long id, Integer table, Boolean isOpen, Date openingTime, Date closingTime, List<DrinkWithdrawal> drinkWithdrawalList) {
         this.id = id;
         this.table = table;
         this.isOpen = isOpen;
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.drinkWithdrawalList = drinkWithdrawalList;
-        this.returnedDrinksList = returnedDrinksList;
     }
 
     public long getId() {
@@ -87,15 +84,7 @@ public class OrderModel {
     public void setDrinkWithdrawalList(List<DrinkWithdrawal> drinkWithdrawalList) {
         this.drinkWithdrawalList = drinkWithdrawalList;
     }
-
-    public List<ReturnDrink> getReturnedDrinksList() {
-        return returnedDrinksList;
-    }
-
-    public void setReturnedDrinksList(List<ReturnDrink> returnedDrinksList) {
-        this.returnedDrinksList = returnedDrinksList;
-    }
-
+    
     public Float getOrderTotal() {
         return orderTotal;
     }
