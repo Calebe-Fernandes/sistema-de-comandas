@@ -5,7 +5,6 @@ import com.produtos.apirest.models.*;
 import com.produtos.apirest.repository.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +15,7 @@ import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+
 
 
 @RestController
@@ -29,9 +29,6 @@ public class OrderController {
 
     @Autowired
     DrinkRepository drinkRepository;
-
-    @Autowired
-    ReturnDrinkRepository returnDrinkRepository;
 
     @Autowired
     OrderRepository orderRepository;
@@ -51,6 +48,7 @@ public class OrderController {
         }else{
             AvaliableTable table = new AvaliableTable(tableNumber);
             order.setOpen(true);
+            order.setOrderTotal((float)0);
             order.setOpeningTime(Timestamp.from(Instant.now()));
             openTables.save(table);
             return orderRepository.save(order);
@@ -75,6 +73,8 @@ public class OrderController {
 
         if(withdrawal.getOrder() == null){
             throw new ApiRequestException("Não há uma comanda associada à transação");
+        }else if (!withdrawal.getOrder().getOpen()){
+            throw new ApiRequestException("A comanda precisa estar aberta");
         }else if(drink == null){
             throw new ApiRequestException("Não há objeto cadastrado com esse id");
         }else if(withdrawal.getQuantity() > stockAvaliable){
@@ -97,15 +97,23 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Saída contabilizada no estoque");
         }
     }
-
-    //Get Commands (needs to be filtered to return only open commands)
+    //Get Commands by Id
     @GetMapping("/order/{id}")
     @Transactional
-    @ApiOperation("Cria e abre uma nova ordem. Ao criar a ordem, o usuário deve enviar também ao menos um produto")
-    public OrderModel getOrders(@PathVariable(value="id") long id){
-
+    @ApiOperation("Busca uma comanda por id")
+    public OrderModel getOrdersByID(@PathVariable(value="id") long id){
         return orderRepository.findById(id);
     }
+
+    //Get All Commands
+    @GetMapping("/order")
+    @Transactional
+    @ApiOperation("Busca todas as comandas abertas")
+    public List<OrderModel> getAllOrders(){
+        return orderRepository.findAll();
+    }
+
+    //Get All Open Commands
 
     //Close Order
     @PutMapping("/order/{id}")
@@ -123,19 +131,31 @@ public class OrderController {
     }
 
     //Return Drink from an Order and readd stock
-    @PostMapping("/order/{id}/drink-return")
+    @PutMapping("/order/{idOrder}/drink-return/{idWithdraw}")
     @Transactional
     @ApiOperation("Adiciona ao estoque a quantidade correta ao cancelar um item 'bebida' de uma comanda")
     public ResponseEntity<String> returnDrinks(
-            @RequestBody @Validated ReturnDrink returnDrink,
-            @PathVariable(value="id") long id
+            @PathVariable(value="idOrder") long idOrder,
+            @PathVariable(value="idWithdraw") long idWithdraw
     ){
-        Drink drink = drinkRepository.findById(id);
-        Integer stockAvaliable = drink.getStockAmmount();
+        DrinkWithdrawal deleteDrink = drinkWithdrawsRepository.findOneById(idWithdraw);
+        OrderModel order = orderRepository.findById(idOrder);
+        List<DrinkWithdrawal> orderList= order.getDrinkWithdrawalList();
 
-        returnDrinkRepository.save(returnDrink);
-        Integer newStockQuantity = stockAvaliable + returnDrink.getQuantity();
-        drink.setStockAmmount(newStockQuantity);
+        int index = orderList.indexOf(deleteDrink);
+        DrinkWithdrawal e = orderList.get(index);
+
+        Drink drink = e.getDrink();
+        Integer currentStock = drink.getStockAmmount();
+        Integer readdStock = e.getQuantity();
+
+        drink.setStockAmmount(currentStock+readdStock);
+        drinkRepository.save(drink);
+
+        Float prevOrderTotal = order.getOrderTotal();
+        order.setOrderTotal(prevOrderTotal - (deleteDrink.getQuantity()*deleteDrink.getDrink().getPrice()));
+        drinkWithdrawsRepository.delete(deleteDrink);
+        orderRepository.save(order);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Retorno contabilizado no estoque");
     }

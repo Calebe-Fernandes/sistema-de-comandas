@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface DrinkWithdrawsRepository extends JpaRepository<DrinkWithdrawal,Long> {
     List<DrinkWithdrawal> findById(long id);
+    DrinkWithdrawal findOneById(long id);
 }
