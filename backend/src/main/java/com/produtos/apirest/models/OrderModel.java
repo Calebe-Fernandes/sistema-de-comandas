@@ -3,6 +3,8 @@ package com.produtos.apirest.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -30,15 +32,24 @@ public class OrderModel {
     private List<FoodWithdraw> foodWithdrawalList;
 
 
+
     public OrderModel() {}
 
-    public OrderModel(long id, Integer table, Boolean isOpen, Date openingTime, Date closingTime, List<DrinkWithdrawal> drinkWithdrawalList) {
+    public OrderModel(long id, Integer table, Boolean isOpen, Date openingTime, Date closingTime, List<DrinkWithdrawal> drinkWithdrawalList,List<FoodWithdraw> foodWithdrawalList) {
         this.id = id;
         this.table = table;
         this.isOpen = isOpen;
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.drinkWithdrawalList = drinkWithdrawalList;
+        this.foodWithdrawalList = foodWithdrawalList;
+    }
+
+    public OrderModel setOrderAttrOnCreate(){
+        this.setOpen(true);
+        this.setOrderTotal((float)0);
+        this.setOpeningTime(Timestamp.from(Instant.now()));
+        return this;
     }
 
     public long getId() {
@@ -95,5 +106,13 @@ public class OrderModel {
 
     public void setOrderTotal(Float orderTotal) {
         this.orderTotal = orderTotal;
+    }
+
+    public List<FoodWithdraw> getFoodWithdrawalList() {
+        return foodWithdrawalList;
+    }
+
+    public void setFoodWithdrawalList(List<FoodWithdraw> foodWithdrawalList) {
+        this.foodWithdrawalList = foodWithdrawalList;
     }
 }

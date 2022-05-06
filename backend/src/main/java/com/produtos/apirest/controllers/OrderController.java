@@ -3,6 +3,8 @@ package com.produtos.apirest.controllers;
 import com.produtos.apirest.exceptions.ApiRequestException;
 import com.produtos.apirest.models.*;
 import com.produtos.apirest.repository.*;
+import com.produtos.apirest.validators.OrderValidator;
+import com.produtos.apirest.validators.TableValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,23 +38,17 @@ public class OrderController {
     @Autowired
     OpenTables openTables;
 
+    TableValidator tableValdiator = new TableValidator();
+    OrderValidator orderValidator = new OrderValidator();
+
     //Create and Open a new Order
     @PostMapping("/order")
     @Transactional
     @ApiOperation("Cria e abre uma nova ordem. Ao criar a ordem, enviar apenas o parâmetro 'table'")
     public OrderModel createOrder(@RequestBody OrderModel order){
-        Integer tableNumber = order.getTable();
-
-        if(openTables.findTableByNumber(tableNumber) != null){
-            throw new ApiRequestException("A mesa já está aberta");
-        }else{
-            AvaliableTable table = new AvaliableTable(tableNumber);
-            order.setOpen(true);
-            order.setOrderTotal((float)0);
-            order.setOpeningTime(Timestamp.from(Instant.now()));
-            openTables.save(table);
-            return orderRepository.save(order);
-        }
+        orderValidator.validateOrder(order);
+        order.setOrderAttrOnCreate();
+        return orderRepository.save(order);
     }
     //Create a new withdraw for Drinks;
     @PostMapping("/order/{idOrder}/drink-withdrawal/{idDrink}")
@@ -120,9 +116,9 @@ public class OrderController {
     @Transactional
     @ApiOperation("Fecha a comanda de uma mesa, tornando a mesa disponível novamente")
     public OrderModel closeOrder(
-            @RequestBody @Validated OrderModel order,
             @PathVariable(value="id") long id
     ){
+        OrderModel order = orderRepository.findById(id);
         order.setOpen(false);
         order.setClosingTime(Timestamp.from(Instant.now()));
         AvaliableTable closingTable = openTables.findTableByNumber(order.getTable());
@@ -159,4 +155,6 @@ public class OrderController {
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Retorno contabilizado no estoque");
     }
+
+
 }

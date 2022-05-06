@@ -5,6 +5,8 @@ import com.produtos.apirest.models.Drink;
 import com.produtos.apirest.models.FoodStuff;
 import com.produtos.apirest.repository.DrinkRepository;
 import com.produtos.apirest.repository.FoodStuffRepository;
+import com.produtos.apirest.validators.DrinkValidator;
+import com.produtos.apirest.validators.FoodValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +19,17 @@ import java.util.List;
 @Api(value="API REST Produtos")
 @CrossOrigin(origins = "*")
 public class ProductController {
-    //Drinks operations
+    @Autowired
+    FoodStuffRepository foodStuffRepository;
+
     @Autowired
     DrinkRepository drinkRepository;
 
+    DrinkValidator drinkValidator = new DrinkValidator();
+
+    FoodValidator foodValidator = new FoodValidator();
+
+    //Drinks operations
     @GetMapping("/drinks")
     @ApiOperation(value="Retorna uma lista de todos as bebidas cadastradas")
     public List<Drink> listDrinks(){
@@ -36,6 +45,7 @@ public class ProductController {
     @PostMapping ("/drinks")
     @ApiOperation(value="Cadastra uma nova bebida. Ao cadastrar, omitir o campo 'id' do payload, pois este é gerado automaticamente pelo banco")
     public Drink registerNewDrink(@RequestBody Drink drink){
+        drinkValidator.valdiateDrink(drink);
         return drinkRepository.save(drink);
     }
 
@@ -52,13 +62,11 @@ public class ProductController {
     @PutMapping("/drinks")
     @ApiOperation(value="Atualiza as informações de uma bebida. Ao atualizar, enviar a nova payload do item com o campo 'id'")
     public Drink updateDrink(@RequestBody Drink drink){
+        drinkValidator.valdiateDrink(drink);
         return drinkRepository.save(drink);
     }
 
     //FoodStuff operations
-    @Autowired
-    FoodStuffRepository foodStuffRepository;
-
     @GetMapping("/food")
     @ApiOperation(value="Retorna uma lista de todos os alimentos cadastrados")
     public List<FoodStuff> listFood(){
@@ -74,6 +82,7 @@ public class ProductController {
     @PostMapping ("/food")
     @ApiOperation(value="Cadastra um novo alimento. Ao cadastrar, omitir o campo 'id' do payload, pois este é gerado automaticamente pelo banco")
     public FoodStuff registerNewFoodStuff(@RequestBody FoodStuff food){
+        foodValidator.validateFood(food);
         return foodStuffRepository.save(food);
     }
 
@@ -91,6 +100,7 @@ public class ProductController {
     @PutMapping("/food")
     @ApiOperation(value="Atualiza as informações de um alimento. Ao atualizar, enviar a nova payload do item com o campo 'id' ")
     public FoodStuff updateFood(@RequestBody FoodStuff food){
+        foodValidator.validateFood(food);
         return foodStuffRepository.save(food);
     }
 }
