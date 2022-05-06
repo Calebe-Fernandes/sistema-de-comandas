@@ -36,10 +36,13 @@ public class OrderController {
     OrderRepository orderRepository;
 
     @Autowired
-    OpenTables openTables;
+    OpenTablesRepository tablesRepository;
 
-    TableValidator tableValdiator = new TableValidator();
-    OrderValidator orderValidator = new OrderValidator();
+    @Autowired
+    OrderValidator orderValidator;
+
+    @Autowired
+    TableValidator tableValidator;
 
     //Create and Open a new Order
     @PostMapping("/order")
@@ -47,7 +50,14 @@ public class OrderController {
     @ApiOperation("Cria e abre uma nova ordem. Ao criar a ordem, enviar apenas o parâmetro 'table'")
     public OrderModel createOrder(@RequestBody OrderModel order){
         orderValidator.validateOrder(order);
+        tableValidator.validateTable(order);
+
+        Integer tableNumber = order.getTable();
+        AvaliableTable table = new AvaliableTable(tableNumber);
+        tablesRepository.save(table);
+
         order.setOrderAttrOnCreate();
+
         return orderRepository.save(order);
     }
     //Create a new withdraw for Drinks;
@@ -112,7 +122,7 @@ public class OrderController {
     //Get All Open Commands
 
     //Close Order
-    @PutMapping("/order/{id}")
+    @PutMapping("/order/close/{id}")
     @Transactional
     @ApiOperation("Fecha a comanda de uma mesa, tornando a mesa disponível novamente")
     public OrderModel closeOrder(
@@ -121,8 +131,10 @@ public class OrderController {
         OrderModel order = orderRepository.findById(id);
         order.setOpen(false);
         order.setClosingTime(Timestamp.from(Instant.now()));
-        AvaliableTable closingTable = openTables.findTableByNumber(order.getTable());
-        openTables.delete(closingTable);
+
+        AvaliableTable closingTable = tablesRepository.findByNumber(order.getTable());
+        tablesRepository.delete(closingTable);
+
         return orderRepository.save(order);
     }
 
@@ -134,6 +146,7 @@ public class OrderController {
             @PathVariable(value="idOrder") long idOrder,
             @PathVariable(value="idWithdraw") long idWithdraw
     ){
+        //Service
         DrinkWithdrawal deleteDrink = drinkWithdrawsRepository.findOneById(idWithdraw);
         OrderModel order = orderRepository.findById(idOrder);
         List<DrinkWithdrawal> orderList= order.getDrinkWithdrawalList();

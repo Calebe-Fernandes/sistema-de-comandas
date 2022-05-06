@@ -2,7 +2,9 @@ package com.produtos.apirest.validators;
 
 import com.produtos.apirest.exceptions.ApiRequestException;
 import com.produtos.apirest.models.FoodStuff;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FoodValidator {
     public FoodValidator(){}
 

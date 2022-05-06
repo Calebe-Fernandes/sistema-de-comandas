@@ -2,7 +2,9 @@ package com.produtos.apirest.validators;
 
 import com.produtos.apirest.exceptions.ApiRequestException;
 import com.produtos.apirest.models.Drink;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DrinkValidator {
 
     public DrinkValidator() {}

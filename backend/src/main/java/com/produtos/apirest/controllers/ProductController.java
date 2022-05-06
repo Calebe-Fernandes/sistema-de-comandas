@@ -21,13 +21,12 @@ import java.util.List;
 public class ProductController {
     @Autowired
     FoodStuffRepository foodStuffRepository;
-
     @Autowired
     DrinkRepository drinkRepository;
-
-    DrinkValidator drinkValidator = new DrinkValidator();
-
-    FoodValidator foodValidator = new FoodValidator();
+    @Autowired
+    DrinkValidator drinkValidator;
+    @Autowired
+    FoodValidator foodValidator;
 
     //Drinks operations
     @GetMapping("/drinks")
