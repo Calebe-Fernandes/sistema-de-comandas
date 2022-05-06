@@ -3,6 +3,7 @@ package com.produtos.apirest.controllers;
 import com.produtos.apirest.exceptions.ApiRequestException;
 import com.produtos.apirest.models.*;
 import com.produtos.apirest.repository.*;
+import com.produtos.apirest.validators.DrinkWithdrawValidator;
 import com.produtos.apirest.validators.OrderValidator;
 import com.produtos.apirest.validators.TableValidator;
 import io.swagger.annotations.Api;
@@ -44,6 +45,9 @@ public class OrderController {
     @Autowired
     TableValidator tableValidator;
 
+    @Autowired
+    DrinkWithdrawValidator withdrawValidator;
+
     //Create and Open a new Order
     @PostMapping("/order")
     @Transactional
@@ -69,40 +73,34 @@ public class OrderController {
             @PathVariable(value="idOrder") long idOrder,
             @PathVariable(value="idDrink") long idDrink
     ){
-        OrderModel order = orderRepository.findById(idOrder);
-        withdrawal.setOrder(order);
+        withdrawValidator.validateDrinkWithdrawal(idOrder,idDrink,withdrawal);
 
+        //Save Withdraw
+        OrderModel order = orderRepository.findById(idOrder);
         Drink drink = drinkRepository.findById(idDrink);
+
+        withdrawal.setOrder(order);
         withdrawal.setDrink(drink);
 
+        drinkWithdrawsRepository.save(withdrawal);
+
+        //Associate Withdraw and Order
+        List<DrinkWithdrawal> associatedTransaction = drinkWithdrawsRepository.findById(withdrawal.getId());
+        order.setDrinkWithdrawalList(associatedTransaction);
+
+        //Update Order total
+        order.setOrderTotal(order.getOrderTotal() + (withdrawal.getQuantity()*drink.getPrice()));
+        orderRepository.save(order);
+
+        //Update Drink stockAmmount
         Integer stockAvaliable = drink.getStockAmmount();
+        Integer newStockQuantity = stockAvaliable - withdrawal.getQuantity();
+        drink.setStockAmmount(newStockQuantity);
+        drinkRepository.save(drink);
 
-        if(withdrawal.getOrder() == null){
-            throw new ApiRequestException("Não há uma comanda associada à transação");
-        }else if (!withdrawal.getOrder().getOpen()){
-            throw new ApiRequestException("A comanda precisa estar aberta");
-        }else if(drink == null){
-            throw new ApiRequestException("Não há objeto cadastrado com esse id");
-        }else if(withdrawal.getQuantity() > stockAvaliable){
-            throw new ApiRequestException("Não existe estoque suficiente");
-        }else if(withdrawal.getQuantity() <= 0){
-            throw new ApiRequestException("O valor de itens a serem retirados deve ser maior que 0");
-        }
-        else{
-            drinkWithdrawsRepository.save(withdrawal);
-
-            List<DrinkWithdrawal> associatedTransaction = drinkWithdrawsRepository.findById(withdrawal.getId());
-            order.setDrinkWithdrawalList(associatedTransaction);
-            order.setOrderTotal(order.getOrderTotal() + (withdrawal.getQuantity()*drink.getPrice()));
-            orderRepository.save(order);
-
-            Integer newStockQuantity = stockAvaliable - withdrawal.getQuantity();
-            drink.setStockAmmount(newStockQuantity);
-            drinkRepository.save(drink);
-
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Saída contabilizada no estoque");
-        }
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Saída contabilizada no estoque");
     }
+
     //Get Commands by Id
     @GetMapping("/order/{id}")
     @Transactional
