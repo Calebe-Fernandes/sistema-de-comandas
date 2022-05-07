@@ -5,6 +5,7 @@ import com.produtos.apirest.models.*;
 import com.produtos.apirest.repository.*;
 import com.produtos.apirest.validators.DrinkWithdrawValidator;
 import com.produtos.apirest.validators.OrderValidator;
+import com.produtos.apirest.validators.ReturnDrinkValidator;
 import com.produtos.apirest.validators.TableValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,6 +48,9 @@ public class OrderController {
 
     @Autowired
     DrinkWithdrawValidator withdrawValidator;
+
+    @Autowired
+    ReturnDrinkValidator returnDrinkValidator;
 
     //Create and Open a new Order
     @PostMapping("/order")
@@ -144,6 +148,8 @@ public class OrderController {
             @PathVariable(value="idOrder") long idOrder,
             @PathVariable(value="idWithdraw") long idWithdraw
     ){
+
+        returnDrinkValidator.validateReturnDrink(idOrder,idWithdraw);
         //Service
         DrinkWithdrawal deleteDrink = drinkWithdrawsRepository.findOneById(idWithdraw);
         OrderModel order = orderRepository.findById(idOrder);
@@ -166,6 +172,5 @@ public class OrderController {
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Retorno contabilizado no estoque");
     }
-
 
 }
