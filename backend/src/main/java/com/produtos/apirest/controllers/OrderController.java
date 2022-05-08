@@ -3,6 +3,10 @@ package com.produtos.apirest.controllers;
 import com.produtos.apirest.exceptions.ApiRequestException;
 import com.produtos.apirest.models.*;
 import com.produtos.apirest.repository.*;
+import com.produtos.apirest.validators.DrinkWithdrawValidator;
+import com.produtos.apirest.validators.OrderValidator;
+import com.produtos.apirest.validators.ReturnDrinkValidator;
+import com.produtos.apirest.validators.TableValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,25 +38,35 @@ public class OrderController {
     OrderRepository orderRepository;
 
     @Autowired
-    OpenTables openTables;
+    OpenTablesRepository tablesRepository;
+
+    @Autowired
+    OrderValidator orderValidator;
+
+    @Autowired
+    TableValidator tableValidator;
+
+    @Autowired
+    DrinkWithdrawValidator withdrawValidator;
+
+    @Autowired
+    ReturnDrinkValidator returnDrinkValidator;
 
     //Create and Open a new Order
     @PostMapping("/order")
     @Transactional
     @ApiOperation("Cria e abre uma nova ordem. Ao criar a ordem, enviar apenas o parâmetro 'table'")
     public OrderModel createOrder(@RequestBody OrderModel order){
-        Integer tableNumber = order.getTable();
+        orderValidator.validateOrder(order);
+        tableValidator.validateTable(order);
 
-        if(openTables.findTableByNumber(tableNumber) != null){
-            throw new ApiRequestException("A mesa já está aberta");
-        }else{
-            AvaliableTable table = new AvaliableTable(tableNumber);
-            order.setOpen(true);
-            order.setOrderTotal((float)0);
-            order.setOpeningTime(Timestamp.from(Instant.now()));
-            openTables.save(table);
-            return orderRepository.save(order);
-        }
+        Integer tableNumber = order.getTable();
+        AvaliableTable table = new AvaliableTable(tableNumber);
+        tablesRepository.save(table);
+
+        order.setOrderAttrOnCreate();
+
+        return orderRepository.save(order);
     }
     //Create a new withdraw for Drinks;
     @PostMapping("/order/{idOrder}/drink-withdrawal/{idDrink}")
@@ -63,40 +77,34 @@ public class OrderController {
             @PathVariable(value="idOrder") long idOrder,
             @PathVariable(value="idDrink") long idDrink
     ){
-        OrderModel order = orderRepository.findById(idOrder);
-        withdrawal.setOrder(order);
+        withdrawValidator.validateDrinkWithdrawal(idOrder,idDrink,withdrawal);
 
+        //Save Withdraw
+        OrderModel order = orderRepository.findById(idOrder);
         Drink drink = drinkRepository.findById(idDrink);
+
+        withdrawal.setOrder(order);
         withdrawal.setDrink(drink);
 
+        drinkWithdrawsRepository.save(withdrawal);
+
+        //Associate Withdraw and Order
+        List<DrinkWithdrawal> associatedTransaction = drinkWithdrawsRepository.findById(withdrawal.getId());
+        order.setDrinkWithdrawalList(associatedTransaction);
+
+        //Update Order total
+        order.setOrderTotal(order.getOrderTotal() + (withdrawal.getQuantity()*drink.getPrice()));
+        orderRepository.save(order);
+
+        //Update Drink stockAmmount
         Integer stockAvaliable = drink.getStockAmmount();
+        Integer newStockQuantity = stockAvaliable - withdrawal.getQuantity();
+        drink.setStockAmmount(newStockQuantity);
+        drinkRepository.save(drink);
 
-        if(withdrawal.getOrder() == null){
-            throw new ApiRequestException("Não há uma comanda associada à transação");
-        }else if (!withdrawal.getOrder().getOpen()){
-            throw new ApiRequestException("A comanda precisa estar aberta");
-        }else if(drink == null){
-            throw new ApiRequestException("Não há objeto cadastrado com esse id");
-        }else if(withdrawal.getQuantity() > stockAvaliable){
-            throw new ApiRequestException("Não existe estoque suficiente");
-        }else if(withdrawal.getQuantity() <= 0){
-            throw new ApiRequestException("O valor de itens a serem retirados deve ser maior que 0");
-        }
-        else{
-            drinkWithdrawsRepository.save(withdrawal);
-
-            List<DrinkWithdrawal> associatedTransaction = drinkWithdrawsRepository.findById(withdrawal.getId());
-            order.setDrinkWithdrawalList(associatedTransaction);
-            order.setOrderTotal(order.getOrderTotal() + (withdrawal.getQuantity()*drink.getPrice()));
-            orderRepository.save(order);
-
-            Integer newStockQuantity = stockAvaliable - withdrawal.getQuantity();
-            drink.setStockAmmount(newStockQuantity);
-            drinkRepository.save(drink);
-
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Saída contabilizada no estoque");
-        }
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Saída contabilizada no estoque");
     }
+
     //Get Commands by Id
     @GetMapping("/order/{id}")
     @Transactional
@@ -116,17 +124,19 @@ public class OrderController {
     //Get All Open Commands
 
     //Close Order
-    @PutMapping("/order/{id}")
+    @PutMapping("/order/close/{id}")
     @Transactional
     @ApiOperation("Fecha a comanda de uma mesa, tornando a mesa disponível novamente")
     public OrderModel closeOrder(
-            @RequestBody @Validated OrderModel order,
             @PathVariable(value="id") long id
     ){
+        OrderModel order = orderRepository.findById(id);
         order.setOpen(false);
         order.setClosingTime(Timestamp.from(Instant.now()));
-        AvaliableTable closingTable = openTables.findTableByNumber(order.getTable());
-        openTables.delete(closingTable);
+
+        AvaliableTable closingTable = tablesRepository.findByNumber(order.getTable());
+        tablesRepository.delete(closingTable);
+
         return orderRepository.save(order);
     }
 
@@ -138,6 +148,9 @@ public class OrderController {
             @PathVariable(value="idOrder") long idOrder,
             @PathVariable(value="idWithdraw") long idWithdraw
     ){
+
+        returnDrinkValidator.validateReturnDrink(idOrder,idWithdraw);
+        //Service
         DrinkWithdrawal deleteDrink = drinkWithdrawsRepository.findOneById(idWithdraw);
         OrderModel order = orderRepository.findById(idOrder);
         List<DrinkWithdrawal> orderList= order.getDrinkWithdrawalList();
@@ -159,4 +172,5 @@ public class OrderController {
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Retorno contabilizado no estoque");
     }
+
 }
