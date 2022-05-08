@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import { useNavigate } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,6 +17,10 @@ const HeaderComponent: React.FC<Props> = ({ user, page }) => {
     navigate("/");
   };
 
+  const navigateToCashierCommands = () => {
+    navigate("/caixa/comandas");
+  };
+
   return (
     <>
       <header>
@@ -28,13 +31,16 @@ const HeaderComponent: React.FC<Props> = ({ user, page }) => {
         {user !== "waiter" ?
           <div className="links-container" >
             {user === "cashier" ?
-              <a className={page === "commands" ? "active" : ""}>Comandas</a>
+              <div
+                className={page === "commands" ? "active" : ""}
+                onClick={navigateToCashierCommands}
+              > Comandas </div>
               : null}
             {user === "manager" ?
-              <a className={page === "stock" ? "active" : ""}>Estoque</a> 
+              <div className={page === "stock" ? "active" : ""}>Estoque</div>
               : null}
-            {user === "cashier" || user === "manager" ? 
-              <a className={page === "history" ? "active" : ""}>Histórico</a> 
+            {user === "cashier" || user === "manager" ?
+              <div className={page === "history" ? "active" : ""}>Histórico</div>
               : null}
           </div>
           : null}

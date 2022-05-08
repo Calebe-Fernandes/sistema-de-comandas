@@ -29,12 +29,13 @@ header {
     border-radius: 0px 0px 0px 50px;
     width: 100%;
 
-    a {
+    div {
       font-size: 16px;
       color: var(--white);
+      cursor: pointer;
     }
 
-    a.active {
+    div.active {
       font-weight: 800;
       border-bottom:1px solid var(--white);
       padding-bottom:2px;
