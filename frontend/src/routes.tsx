@@ -1,13 +1,14 @@
 import React from 'react'
 import { Routes, Route } from "react-router-dom";
 
-import { Home } from './pages';
+import { Home, Comandas } from './pages';
 
 const Router = () => {
   
   return (
     <Routes>
       <Route path="/" element={<Home/>}/> 
+      <Route path="/comandas" element={<Comandas/>}/> 
     </Routes>
   );
 };
