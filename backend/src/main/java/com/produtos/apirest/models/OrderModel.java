@@ -2,6 +2,8 @@ package com.produtos.apirest.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -9,19 +11,19 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name="TB_ORDER_MODEL")
+@Component
+@Table(name = "TB_ORDER_MODEL")
 public class OrderModel {
-    private static final long serialVersionUID =1L;
+    private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private Integer table;
     private Boolean isOpen;
     private Date openingTime;
     private Date closingTime;
     private Float orderTotal;
-
 
     @OneToMany(mappedBy = "comanda")
     @JsonIgnoreProperties("order")
@@ -31,11 +33,11 @@ public class OrderModel {
     @JsonIgnoreProperties("order")
     private List<FoodWithdraw> foodWithdrawalList;
 
+    public OrderModel() {
+    }
 
-
-    public OrderModel() {}
-
-    public OrderModel(long id, Integer table, Boolean isOpen, Date openingTime, Date closingTime, List<DrinkWithdrawal> drinkWithdrawalList,List<FoodWithdraw> foodWithdrawalList) {
+    public OrderModel(long id, Integer table, Boolean isOpen, Date openingTime, Date closingTime,
+            List<DrinkWithdrawal> drinkWithdrawalList, List<FoodWithdraw> foodWithdrawalList) {
         this.id = id;
         this.table = table;
         this.isOpen = isOpen;
@@ -45,9 +47,9 @@ public class OrderModel {
         this.foodWithdrawalList = foodWithdrawalList;
     }
 
-    public OrderModel setOrderAttrOnCreate(){
+    public OrderModel setOrderAttrOnCreate() {
         this.setOpen(true);
-        this.setOrderTotal((float)0);
+        this.setOrderTotal((float) 0);
         this.setOpeningTime(Timestamp.from(Instant.now()));
         return this;
     }

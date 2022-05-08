@@ -20,11 +20,9 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 
-
-
 @RestController
-@RequestMapping(value="/api")
-@Api(value="API REST Produtos")
+@RequestMapping(value = "/api")
+@Api(value = "API REST Produtos")
 @CrossOrigin(origins = "*")
 public class OrderController {
 
@@ -52,11 +50,11 @@ public class OrderController {
     @Autowired
     ReturnDrinkValidator returnDrinkValidator;
 
-    //Create and Open a new Order
+    // Create and Open a new Order
     @PostMapping("/order")
     @Transactional
     @ApiOperation("Cria e abre uma nova ordem. Ao criar a ordem, enviar apenas o parâmetro 'table'")
-    public OrderModel createOrder(@RequestBody OrderModel order){
+    public OrderModel createOrder(@RequestBody OrderModel order) {
         orderValidator.validateOrder(order);
         tableValidator.validateTable(order);
 
@@ -68,35 +66,36 @@ public class OrderController {
 
         return orderRepository.save(order);
     }
-    //Create a new withdraw for Drinks;
+
+    // Create a new withdraw for Drinks;
     @PostMapping("/order/{idOrder}/drink-withdrawal/{idDrink}")
     @Transactional
-    @ApiOperation(value="Retira a quantidade de estoque selecionado referente ao item desejado. Parâmetros de URL: id da comanda e id do produto. Parâmetros a serem enviados: 'quantity'")
+    @ApiOperation(value = "Retira a quantidade de estoque selecionado referente ao item desejado. Parâmetros de URL: id da comanda e id do produto. Parâmetros a serem enviados: 'quantity'")
     public ResponseEntity<String> drinksWithdraw(
             @RequestBody @Validated DrinkWithdrawal withdrawal,
-            @PathVariable(value="idOrder") long idOrder,
-            @PathVariable(value="idDrink") long idDrink
-    ){
-        withdrawValidator.validateDrinkWithdrawal(idOrder,idDrink,withdrawal);
+            @PathVariable(value = "idOrder") long idOrder) {
 
-        //Save Withdraw
+        long drinkId = withdrawal.getDrink().getId();
+        withdrawValidator.validateDrinkWithdrawal(idOrder, withdrawal);
+
+        // Save Withdraw
         OrderModel order = orderRepository.findById(idOrder);
-        Drink drink = drinkRepository.findById(idDrink);
+        Drink drink = drinkRepository.findById(drinkId);
 
         withdrawal.setOrder(order);
         withdrawal.setDrink(drink);
 
         drinkWithdrawsRepository.save(withdrawal);
 
-        //Associate Withdraw and Order
+        // Associate Withdraw and Order
         List<DrinkWithdrawal> associatedTransaction = drinkWithdrawsRepository.findById(withdrawal.getId());
         order.setDrinkWithdrawalList(associatedTransaction);
 
-        //Update Order total
-        order.setOrderTotal(order.getOrderTotal() + (withdrawal.getQuantity()*drink.getPrice()));
+        // Update Order total
+        order.setOrderTotal(order.getOrderTotal() + (withdrawal.getQuantity() * drink.getPrice()));
         orderRepository.save(order);
 
-        //Update Drink stockAmmount
+        // Update Drink stockAmmount
         Integer stockAvaliable = drink.getStockAmmount();
         Integer newStockQuantity = stockAvaliable - withdrawal.getQuantity();
         drink.setStockAmmount(newStockQuantity);
@@ -105,31 +104,30 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Saída contabilizada no estoque");
     }
 
-    //Get Commands by Id
+    // Get Commands by Id
     @GetMapping("/order/{id}")
     @Transactional
     @ApiOperation("Busca uma comanda por id")
-    public OrderModel getOrdersByID(@PathVariable(value="id") long id){
+    public OrderModel getOrdersByID(@PathVariable(value = "id") long id) {
         return orderRepository.findById(id);
     }
 
-    //Get All Commands
+    // Get All Commands
     @GetMapping("/order")
     @Transactional
     @ApiOperation("Busca todas as comandas abertas")
-    public List<OrderModel> getAllOrders(){
+    public List<OrderModel> getAllOrders() {
         return orderRepository.findAll();
     }
 
-    //Get All Open Commands
+    // Get All Open Commands
 
-    //Close Order
+    // Close Order
     @PutMapping("/order/close/{id}")
     @Transactional
     @ApiOperation("Fecha a comanda de uma mesa, tornando a mesa disponível novamente")
     public OrderModel closeOrder(
-            @PathVariable(value="id") long id
-    ){
+            @PathVariable(value = "id") long id) {
         OrderModel order = orderRepository.findById(id);
         order.setOpen(false);
         order.setClosingTime(Timestamp.from(Instant.now()));
@@ -140,20 +138,19 @@ public class OrderController {
         return orderRepository.save(order);
     }
 
-    //Return Drink from an Order and readd stock
+    // Return Drink from an Order and readd stock
     @PutMapping("/order/{idOrder}/drink-return/{idWithdraw}")
     @Transactional
     @ApiOperation("Adiciona ao estoque a quantidade correta ao cancelar um item 'bebida' de uma comanda")
     public ResponseEntity<String> returnDrinks(
-            @PathVariable(value="idOrder") long idOrder,
-            @PathVariable(value="idWithdraw") long idWithdraw
-    ){
+            @PathVariable(value = "idOrder") long idOrder,
+            @PathVariable(value = "idWithdraw") long idWithdraw) {
 
-        returnDrinkValidator.validateReturnDrink(idOrder,idWithdraw);
-        //Service
+        returnDrinkValidator.validateReturnDrink(idOrder, idWithdraw);
+        // Service
         DrinkWithdrawal deleteDrink = drinkWithdrawsRepository.findOneById(idWithdraw);
         OrderModel order = orderRepository.findById(idOrder);
-        List<DrinkWithdrawal> orderList= order.getDrinkWithdrawalList();
+        List<DrinkWithdrawal> orderList = order.getDrinkWithdrawalList();
 
         int index = orderList.indexOf(deleteDrink);
         DrinkWithdrawal e = orderList.get(index);
@@ -162,11 +159,11 @@ public class OrderController {
         Integer currentStock = drink.getStockAmmount();
         Integer readdStock = e.getQuantity();
 
-        drink.setStockAmmount(currentStock+readdStock);
+        drink.setStockAmmount(currentStock + readdStock);
         drinkRepository.save(drink);
 
         Float prevOrderTotal = order.getOrderTotal();
-        order.setOrderTotal(prevOrderTotal - (deleteDrink.getQuantity()*deleteDrink.getDrink().getPrice()));
+        order.setOrderTotal(prevOrderTotal - (deleteDrink.getQuantity() * deleteDrink.getDrink().getPrice()));
         drinkWithdrawsRepository.delete(deleteDrink);
         orderRepository.save(order);
 

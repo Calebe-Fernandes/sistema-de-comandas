@@ -17,33 +17,30 @@ public class DrinkWithdrawValidator {
     @Autowired
     OrderRepository orderRepository;
 
-
     public DrinkWithdrawValidator() {
     }
 
-    public void validateDrinkWithdrawal(long idOrder, long idDrink, DrinkWithdrawal withdrawal){
+    public void validateDrinkWithdrawal(long idOrder, DrinkWithdrawal withdrawal) {
 
         OrderModel order;
-        Drink drink;
+        Drink drink = withdrawal.getDrink();
 
-
-        if(orderRepository.existsById(idOrder) && drinkRepository.existsById(idDrink)){
-             order = orderRepository.findById(idOrder);
-             drink = drinkRepository.findById(idDrink);
-        }else{
+        if (orderRepository.existsById(idOrder) && drinkRepository.existsById(drink.getId())) {
+            order = orderRepository.findById(idOrder);
+        } else {
             throw new ApiRequestException("Não existe bebida ou comanda");
         }
 
-        if(!order.getOpen()){
+        if (!order.getOpen()) {
             throw new ApiRequestException("A comanda precisa estar aberta");
-        }else if(drink.getStockAmmount() < withdrawal.getQuantity()){
+        } else if (drink.getStockAmmount() < withdrawal.getQuantity()) {
             throw new ApiRequestException("Não existe estoque suficiente");
-        }else if(withdrawal.getQuantity() == 0){
+        } else if (withdrawal.getQuantity() == 0) {
             throw new ApiRequestException("O valor de itens a serem retirados deve ser maior que 0");
-        }if(withdrawal.getQuantity() <= 0){
+        }
+        if (withdrawal.getQuantity() <= 0) {
             throw new ApiRequestException("Você deve solicitar a compra de pelo menos um item");
         }
-
 
     }
 
