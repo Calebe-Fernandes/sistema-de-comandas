@@ -1,3 +1,4 @@
-import Component from "./example-component";
+import AddButtonComponent from "./AddButtonComponent";
+import HeaderComponent from "./Header";
 
-export { Component };
+export { AddButtonComponent, HeaderComponent };

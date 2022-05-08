@@ -45,6 +45,7 @@
         width: 70px;
         border: 2px solid;
         border-radius: 4px;
+        background: var(--black);
       }
     }
   
@@ -55,18 +56,17 @@
     
       button {
         width: 100%;
-        border: none;
         border-radius: 6px;
         padding: 20px;
-        background: #E6802F;
-        color: white;
+        background: var(--regular-orange);
+        color: var(--white);
         font-size: 18px;
         font-weight: 600;
         transition: all 500ms;
-      }
 
-      button:hover {
-        background: #f58f3c;
+        &:hover {
+          background: var(--regular-orange-hover);
+        }
       }
     }
   }
@@ -87,7 +87,7 @@
       width: 50vw;
       height: 100vh;
       display: unset;
-      background-color: #fafafa;
+      background-color: var(--off-white);
     }
   }
 }

@@ -1,0 +1,54 @@
+.command-container {
+  max-width: 800px;
+  min-height: calc(100vh - 120px);
+  margin: 0 auto;
+  padding: 0 30px;
+  position: relative;
+
+  p {
+    margin: 40px 0 20px;
+    text-align: center;
+  }
+
+  .search {
+    position: relative;
+
+    .search-icon {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 18px;
+      color:  var(--medium-grey);
+    }
+
+    .search-input {
+      width: 100%;
+      height: 50px;
+      border-radius: 10px;
+      border: 2px solid var(--light-grey);
+      padding: 0 16px;
+    }
+  }
+
+  .open-commands {
+    display: grid;
+    grid-gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+
+    .open-command {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 60px;
+      border-radius: 6px;
+      font-weight: 600;
+      background: var(--light-orange);
+      transition: all 300ms;
+
+      &:hover {
+        background: var(--medium-light-orange);
+        transition: all 300ms;
+      }
+    }
+  }
+}

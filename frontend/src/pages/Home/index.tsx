@@ -1,21 +1,33 @@
 import React from "react";
-import InitialImage from '../../assets/initial-image.webp';
-import './styles.scss';
+import { useNavigate } from "react-router";
+
+import InitialImage from "../../assets/initial-image.webp";
+import "./styles.scss";
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
+
+  const navigateToWaiterCommands = () => {
+    navigate("/garcom/comandas");
+  };
+
+  const navigateToCashierCommands = () => {
+    navigate("/caixa/comandas");
+  };
+
   return(
     <>
-      <body className="home-container">
+      <div className="home-container">
         <div className="image-container">
-          <img src={ InitialImage } alt=""/>
+          <img src={InitialImage} alt=""/>
           <div className="centered">
             <div className="title-container">
               <h3>Selecione seu usuário</h3>
               <hr/>
             </div>
             <div className="button-container">
-              <button>Garçom</button>
-              <button>Caixa</button>
+              <button onClick={navigateToWaiterCommands}>Garçom</button>
+              <button onClick={navigateToCashierCommands}>Caixa</button>
               <button>Gerente</button>
             </div>
           </div>
@@ -27,13 +39,13 @@ const Home: React.FC = () => {
               <hr/>
             </div>
             <div className="button-container">
-              <button>Garçom</button>
-              <button>Caixa</button>
+              <button onClick={navigateToWaiterCommands}>Garçom</button>
+              <button onClick={navigateToCashierCommands}>Caixa</button>
               <button>Gerente</button>
             </div>
           </div>
         </div>
-      </body>
+      </div>
     </>
   )
 }
