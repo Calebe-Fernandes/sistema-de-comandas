@@ -7,8 +7,12 @@ import "./styles.scss";
 const Home: React.FC = () => {
   const navigate = useNavigate();
 
-  const navigateToCommands = () => {
-    navigate("/comandas");
+  const navigateToWaiterCommands = () => {
+    navigate("/garcom/comandas");
+  };
+
+  const navigateToCashierCommands = () => {
+    navigate("/caixa/comandas");
   };
 
   return(
@@ -22,8 +26,8 @@ const Home: React.FC = () => {
               <hr/>
             </div>
             <div className="button-container">
-              <button onClick={navigateToCommands}>Garçom</button>
-              <button>Caixa</button>
+              <button onClick={navigateToWaiterCommands}>Garçom</button>
+              <button onClick={navigateToCashierCommands}>Caixa</button>
               <button>Gerente</button>
             </div>
           </div>
@@ -35,8 +39,8 @@ const Home: React.FC = () => {
               <hr/>
             </div>
             <div className="button-container">
-              <button onClick={navigateToCommands}>Garçom</button>
-              <button>Caixa</button>
+              <button onClick={navigateToWaiterCommands}>Garçom</button>
+              <button onClick={navigateToCashierCommands}>Caixa</button>
               <button>Gerente</button>
             </div>
           </div>
