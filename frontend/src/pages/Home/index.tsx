@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router";
 
-import InitialImage from '../../assets/initial-image.webp';
-import './styles.scss';
+import InitialImage from "../../assets/initial-image.webp";
+import "./styles.scss";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
