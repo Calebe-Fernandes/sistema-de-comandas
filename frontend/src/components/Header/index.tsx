@@ -23,7 +23,7 @@ const HeaderComponent: React.FC<Props> = ({ user, page }) => {
 
   return (
     <>
-      <header>
+      <header className="header">
         <button className="go-back-button" onClick={navigateToHome}>
           <FontAwesomeIcon icon={faArrowLeft} className="go-back-button-icon" />
         </button>
