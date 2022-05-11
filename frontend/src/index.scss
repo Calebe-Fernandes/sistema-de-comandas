@@ -62,19 +62,26 @@ table {
   width: 100%;
 
   tr {
-    border-bottom: solid 1px var(--medium-light-grey);
     height: 50px;
-
-    &:first-child{
-      border-bottom: solid 2px var(--black);
-    }
-
-    &:last-child{
-      border-bottom: none;
-    }
 
     th, td {
       padding: 5px;
+    }
+  }
+
+  thead {
+    tr {
+      border-bottom: solid 2px var(--black);
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: solid 1px var(--medium-light-grey);
+  
+      &:last-child{
+        border-bottom: none;
+      }
     }
   }
 }
