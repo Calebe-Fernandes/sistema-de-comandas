@@ -15,6 +15,10 @@ const Home: React.FC = () => {
     navigate("/caixa/comandas");
   };
 
+  const navigateToStock = () => {
+    navigate("/estoque");
+  };
+
   return(
     <>
       <div className="home-container">
@@ -28,7 +32,7 @@ const Home: React.FC = () => {
             <div className="button-container">
               <button onClick={navigateToWaiterCommands}>Garçom</button>
               <button onClick={navigateToCashierCommands}>Caixa</button>
-              <button>Gerente</button>
+              <button onClick={navigateToStock}>Gerente</button>
             </div>
           </div>
         </div>
@@ -41,7 +45,7 @@ const Home: React.FC = () => {
             <div className="button-container">
               <button onClick={navigateToWaiterCommands}>Garçom</button>
               <button onClick={navigateToCashierCommands}>Caixa</button>
-              <button>Gerente</button>
+              <button onClick={navigateToStock}>Gerente</button>
             </div>
           </div>
         </div>
