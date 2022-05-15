@@ -16,8 +16,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -49,6 +54,14 @@ public class OrderController {
 
     @Autowired
     ReturnDrinkValidator returnDrinkValidator;
+
+    public static Date toDate(String date) {
+        if (date == "")
+            return null;
+
+        return Timestamp.valueOf(date);
+
+    }
 
     // Create and Open a new Order
     @PostMapping("/order")
@@ -115,12 +128,30 @@ public class OrderController {
     // Get All Commands
     @GetMapping("/order")
     @Transactional
-    @ApiOperation("Busca todas as comandas abertas")
-    public List<OrderModel> getAllOrders() {
+    @ApiOperation("Busca todas as comandas registradas no sistema com filtro de period (yyyy-mm-dd)")
+    public List<OrderModel> getAllOrders(@RequestParam(value = "workDay", required = false) String workDay) {
+
+        if (workDay != null)
+            return orderRepository.getCommandsByWorkday(workDay);
+
         return orderRepository.findAll();
     }
 
     // Get All Open Commands
+    @GetMapping("/order/open")
+    @Transactional
+    @ApiOperation("Busca todas as comandas abertas")
+    public List<OrderModel> getOpenCommandsOrders() {
+        return orderRepository.findByIsOpen(true);
+    }
+
+    // Get All Closed Commands
+    @GetMapping("/order/closed")
+    @Transactional
+    @ApiOperation("Busca todas as comandas abertas")
+    public List<OrderModel> getClosedCommandsOrders() {
+        return orderRepository.findByIsOpen(false);
+    }
 
     // Close Order
     @PutMapping("/order/close/{id}")

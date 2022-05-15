@@ -3,15 +3,12 @@ package com.produtos.apirest.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.stereotype.Component;
 
-import org.springframework.stereotype.Component;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
-@Component
 @Entity
 @Component
 @Table(name = "TB_ORDER_MODEL")
