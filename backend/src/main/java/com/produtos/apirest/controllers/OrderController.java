@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -50,7 +51,7 @@ public class OrderController {
     TableValidator tableValidator;
 
     @Autowired
-    DrinkWithdrawValidator withdrawValidator;
+    DrinkWithdrawValidator drinkWithdrawValidator;
 
     @Autowired
     ReturnDrinkValidator returnDrinkValidator;
@@ -81,41 +82,76 @@ public class OrderController {
     }
 
     // Create a new withdraw for Drinks;
-    @PostMapping("/order/{idOrder}/drink-withdrawal/{idDrink}")
+
+    @PostMapping("/order/request-drink/{idOrder}")
     @Transactional
     @ApiOperation(value = "Retira a quantidade de estoque selecionado referente ao item desejado. Parâmetros de URL: id da comanda e id do produto. Parâmetros a serem enviados: 'quantity'")
-    public ResponseEntity<String> drinksWithdraw(
-            @RequestBody @Validated DrinkWithdrawal withdrawal,
-            @PathVariable(value = "idOrder") long idOrder) {
+    public ResponseEntity<String> drinksWithdraw(@RequestBody @Validated DrinkRequestObject request,
+            @PathVariable(value = "idOrder") long orderId) {
 
-        long drinkId = withdrawal.getDrink().getId();
-        withdrawValidator.validateDrinkWithdrawal(idOrder, withdrawal);
+        Drink requestDrink = drinkRepository.getById(request.getDrinkId());
+        DrinkWithdrawal withdraw = new DrinkWithdrawal(requestDrink, request.getDrinkAmount());
+        drinkWithdrawValidator.validateDrinkWithdrawal(orderId, withdraw);
+
+        OrderModel order = orderRepository.findById(orderId);
 
         // Save Withdraw
-        OrderModel order = orderRepository.findById(idOrder);
-        Drink drink = drinkRepository.findById(drinkId);
-
-        withdrawal.setOrder(order);
-        withdrawal.setDrink(drink);
-
-        drinkWithdrawsRepository.save(withdrawal);
-
-        // Associate Withdraw and Order
-        List<DrinkWithdrawal> associatedTransaction = drinkWithdrawsRepository.findById(withdrawal.getId());
-        order.setDrinkWithdrawalList(associatedTransaction);
+        withdraw.setOrder(order);
+        drinkWithdrawsRepository.save(withdraw);
 
         // Update Order total
-        order.setOrderTotal(order.getOrderTotal() + (withdrawal.getQuantity() * drink.getPrice()));
+        order.setOrderTotal(order.getOrderTotal() + (withdraw.getQuantity() * requestDrink.getPrice()));
         orderRepository.save(order);
 
         // Update Drink stockAmmount
-        Integer stockAvaliable = drink.getStockAmmount();
-        Integer newStockQuantity = stockAvaliable - withdrawal.getQuantity();
-        drink.setStockAmmount(newStockQuantity);
-        drinkRepository.save(drink);
+        Integer stockAvaliable = requestDrink.getStockAmmount();
+        Integer newStockQuantity = stockAvaliable - withdraw.getQuantity();
+        requestDrink.setStockAmmount(newStockQuantity);
+        drinkRepository.save(requestDrink);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Saída contabilizada no estoque");
     }
+
+    // @PostMapping("/order/{idOrder}/drink-withdrawal/{idDrink}")
+    // @Transactional
+    // @ApiOperation(value = "Retira a quantidade de estoque selecionado referente
+    // ao item desejado. Parâmetros de URL: id da comanda e id do produto.Parâmetros
+    // a serem enviados: 'quantity'")
+    // public ResponseEntity<String> drinksWithdraw(
+    // @RequestBody @Validated DrinkWithdrawal withdrawal,
+    // @PathVariable(value = "idOrder") long idOrder) {
+
+    // long drinkId = withdrawal.getDrink().getId();
+    // drinkWithdrawValidator.validateDrinkWithdrawal(idOrder, withdrawal);
+
+    // // Save Withdraw
+    // OrderModel order = orderRepository.findById(idOrder);
+    // Drink drink = drinkRepository.findById(drinkId);
+
+    // withdrawal.setOrder(order);
+    // withdrawal.setDrink(drink);
+
+    // drinkWithdrawsRepository.save(withdrawal);
+
+    // // Associate Withdraw and Order
+    // List<DrinkWithdrawal> associatedTransaction =
+    // drinkWithdrawsRepository.findById(withdrawal.getId());
+    // order.setDrinkWithdrawalList(associatedTransaction);
+
+    // // Update Order total
+    // order.setOrderTotal(order.getOrderTotal() + (withdrawal.getQuantity() *
+    // drink.getPrice()));
+    // orderRepository.save(order);
+
+    // // Update Drink stockAmmount
+    // Integer stockAvaliable = drink.getStockAmmount();
+    // Integer newStockQuantity = stockAvaliable - withdrawal.getQuantity();
+    // drink.setStockAmmount(newStockQuantity);
+    // drinkRepository.save(drink);
+
+    // return ResponseEntity.status(HttpStatus.ACCEPTED).body("Saída contabilizada
+    // no estoque");
+    // }
 
     // Get Commands by Id
     @GetMapping("/order/{id}")

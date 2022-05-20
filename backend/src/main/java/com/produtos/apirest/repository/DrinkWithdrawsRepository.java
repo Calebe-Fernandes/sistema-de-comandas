@@ -9,4 +9,5 @@ public interface DrinkWithdrawsRepository extends JpaRepository<DrinkWithdrawal,
     List<DrinkWithdrawal> findById(long id);
 
     DrinkWithdrawal findOneById(long id);
+
 }
