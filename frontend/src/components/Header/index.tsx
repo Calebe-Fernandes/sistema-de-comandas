@@ -21,6 +21,14 @@ const HeaderComponent: React.FC<Props> = ({ user, page }) => {
     navigate("/caixa/comandas");
   };
 
+  const navigateToStock = () => {
+    navigate("/estoque");
+  };
+
+  const navigateToHistory = () => {
+    navigate("/historico")
+  }
+
   return (
     <>
       <header className="header">
@@ -37,10 +45,14 @@ const HeaderComponent: React.FC<Props> = ({ user, page }) => {
               > Comandas </div>
               : null}
             {user === "manager" ?
-              <div className={page === "stock" ? "active" : ""}>Estoque</div>
+              <div className={page === "stock" ? "active" : ""}
+                onClick={navigateToStock}
+              > Estoque</div>
               : null}
             {user === "cashier" || user === "manager" ?
-              <div className={page === "history" ? "active" : ""}>Histórico</div>
+              <div className={page === "history" ? "active" : ""}
+              onClick={navigateToHistory}
+              > Histórico</div>
               : null}
           </div>
           : null}
