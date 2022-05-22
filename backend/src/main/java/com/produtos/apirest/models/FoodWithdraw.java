@@ -3,12 +3,12 @@ package com.produtos.apirest.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name="TB_FOOD_WITHDRAW")
+@Table(name = "TB_FOOD_WITHDRAW")
 public class FoodWithdraw {
-    private static final long serialVersionUID =1L;
+    private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @ManyToOne
@@ -16,13 +16,13 @@ public class FoodWithdraw {
     private FoodStuff food;
 
     @ManyToOne
-    @JoinColumn(name="comanda_id")
+    @JoinColumn(name = "comanda_id")
     private OrderModel comanda;
 
-    public FoodWithdraw(){}
+    public FoodWithdraw() {
+    }
 
-    public FoodWithdraw(long id, FoodStuff food, OrderModel comanda) {
-        this.id = id;
+    public FoodWithdraw(FoodStuff food, OrderModel comanda) {
         this.food = food;
         this.comanda = comanda;
     }

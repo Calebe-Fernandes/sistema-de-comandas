@@ -4,6 +4,7 @@ import com.produtos.apirest.exceptions.ApiRequestException;
 import com.produtos.apirest.models.*;
 import com.produtos.apirest.repository.*;
 import com.produtos.apirest.validators.DrinkWithdrawValidator;
+import com.produtos.apirest.validators.FoodWithdrawValidadator;
 import com.produtos.apirest.validators.OrderValidator;
 import com.produtos.apirest.validators.ReturnDrinkValidator;
 import com.produtos.apirest.validators.TableValidator;
@@ -36,6 +37,9 @@ public class OrderController {
     DrinkWithdrawsRepository drinkWithdrawsRepository;
 
     @Autowired
+    FoodStuffWithdrawRepository foodStuffWithdrawRepository;
+
+    @Autowired
     DrinkRepository drinkRepository;
 
     @Autowired
@@ -57,6 +61,9 @@ public class OrderController {
     DrinkWithdrawValidator drinkWithdrawValidator;
 
     @Autowired
+    FoodWithdrawValidadator foodWithdrawValidadator;
+
+    @Autowired
     ReturnDrinkValidator returnDrinkValidator;
 
     public static Date toDate(String date) {
@@ -66,7 +73,9 @@ public class OrderController {
         return Timestamp.valueOf(date);
 
     }
-    //-------------------------------------------------ORDERS OPERATIONS------------------------------------------------
+
+    // -------------------------------------------------ORDERS
+    // OPERATIONS------------------------------------------------
     // Create and Open a new Order
     @PostMapping("/order")
     @Transactional
@@ -138,16 +147,18 @@ public class OrderController {
         return orderRepository.save(order);
     }
 
-    //---------------------------------------------DRINKS OPERATIONS IN ORDER-------------------------------------------
+    // ---------------------------------------------DRINKS OPERATIONS IN
+    // ORDER-------------------------------------------
     // Create a new withdraw for Drinks;
     @PostMapping("/order/request-drink/{idOrder}")
     @Transactional
-    @ApiOperation(value = "Retira a quantidade de estoque selecionado referente ao item desejado. Parâmetros de URL: id da comanda e id do produto. " +
+    @ApiOperation(value = "Retira a quantidade de estoque selecionado referente ao item desejado. Parâmetros de URL: id da comanda e id do produto. "
+            +
             "Parâmetros a serem enviados:'drinkId' e 'drinkAmount'")
     public ResponseEntity<String> drinksWithdraw(@RequestBody @Validated List<DrinkRequestObject> requestArray,
-                                                 @PathVariable(value = "idOrder") long orderId) {
+            @PathVariable(value = "idOrder") long orderId) {
 
-        for(DrinkRequestObject request : requestArray ){
+        for (DrinkRequestObject request : requestArray) {
             Drink requestDrink = drinkRepository.getById(request.getDrinkId());
             DrinkWithdrawal withdraw = new DrinkWithdrawal(requestDrink, request.getDrinkAmount());
             drinkWithdrawValidator.validateDrinkWithdrawal(orderId, withdraw);
@@ -172,8 +183,10 @@ public class OrderController {
     }
 
     // Return Drink from an Order and readd stock
-    // Needs to update the method to be equal drinksWithdraw, also needs to modify implementations to edit quantity instead
-    // of deleting the witwdraw, if the items equals 0, then the withdraw can be deleted
+    // Needs to update the method to be equal drinksWithdraw, also needs to modify
+    // implementations to edit quantity instead
+    // of deleting the witwdraw, if the items equals 0, then the withdraw can be
+    // deleted
     @PutMapping("/order/{idOrder}/drink-return/{idWithdraw}")
     @Transactional
     @ApiOperation("Adiciona ao estoque a quantidade correta ao cancelar um item 'bebida' de uma comanda")
@@ -205,6 +218,61 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Retorno contabilizado no estoque");
     }
 
-    //----------------------------------------------FOOD OPERATIONS IN ORDER--------------------------------------------
+    // ----------------------------------------------FOOD OPERATIONS IN
+    // ORDER--------------------------------------------
 
+    @PostMapping("/order/request-food/{idOrder}")
+    @Transactional
+    @ApiOperation(value = "Retira a quantidade de estoque selecionado referente ao item desejado. Parâmetros de URL: id da comanda e id do produto. "
+            +
+            "Parâmetros a serem enviados:'drinkId' e 'drinkAmount'")
+    public ResponseEntity<String> foodWithdraw(@RequestBody @Validated List<FoodRequestObject> requestArray,
+            @PathVariable(value = "idOrder") long orderId) {
+
+        OrderModel order = orderRepository.findById(orderId);
+
+        for (FoodRequestObject request : requestArray) {
+            FoodStuff requestFood = foodStuffRepository.getById(request.getFoodId());
+            FoodWithdraw withdraw = new FoodWithdraw(requestFood, order);
+            foodWithdrawValidadator.validateFoodWithdraw(orderId, withdraw);
+
+            // Save Withdraw
+            withdraw.setComanda(order);
+            foodStuffWithdrawRepository.save(withdraw);
+
+            // Update Order total
+            order.setOrderTotal(order.getOrderTotal() + requestFood.getPrice());
+            orderRepository.save(order);
+        }
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Saída contabilizada no estoque");
+    }
+
+    // Return Drink from an Order and readd stock
+    // Needs to update the method to be equal drinksWithdraw, also needs to modify
+    // implementations to edit quantity instead
+    // of deleting the witwdraw, if the items equals 0, then the withdraw can be
+    // deleted
+    @PutMapping("/order/{idOrder}/food-return/{idWithdraw}")
+    @Transactional
+    @ApiOperation("Cancelar um item 'comida' de uma comanda")
+    public ResponseEntity<String> returnFoodStuff(
+            @PathVariable(value = "idOrder") long idOrder,
+            @PathVariable(value = "idWithdraw") long idWithdraw) {
+
+        returnDrinkValidator.validateReturnDrink(idOrder, idWithdraw);
+        // Service
+        FoodWithdraw deleteFood = foodStuffWithdrawRepository.findOneById(idWithdraw);
+        OrderModel order = orderRepository.findById(idOrder);
+        List<FoodWithdraw> orderList = order.getFoodWithdrawalList();
+
+        orderList.remove(deleteFood);
+        order.setFoodWithdrawalList(orderList);
+
+        Float prevOrderTotal = order.getOrderTotal();
+        order.setOrderTotal(prevOrderTotal - (deleteFood.getFood().getPrice()));
+        foodStuffWithdrawRepository.delete(deleteFood);
+        orderRepository.save(order);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Retorno contabilizado no estoque");
+    }
 }
