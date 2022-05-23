@@ -1,43 +1,94 @@
-import React from "react";
-import { CommandHeaderComponent } from "../../components";
+import React, { useEffect, useState } from "react";
+import { CommandHeaderComponent, Loader } from "../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareCheck, faSquare } from "@fortawesome/free-regular-svg-icons";
+import { api } from "../../services/api";
+import EmptyContent from "../../components/EmptyContent";
+
+import $ from 'jquery';
 import "./styles.scss";
 
+interface drink {
+  "id": number,
+  "price": number,
+  "productName": string,
+  "description": string,
+  "stockAmmount": number,
+  "alcoholic": boolean
+}
+
+interface food {
+  "id": number,
+  "price": number,
+  "productName": string,
+  "description": string,
+  "isAvaliable": boolean
+}
+
 const NovaComanda: React.FC = () => {
-  const items = [
-    {
-      "id": 22,
-      "price": 35.0,
-      "productName": "Batata com Cheddar e Bacon Grande",
-      "description": "Porção para até 4 pessoas da melhor batata da região!",
-      "isAvaliable": true
-    },
-    {
-      "id": 19,
-      "price": 6.0,
-      "productName": "Coca Cola Lata",
-      "description": "Coquinha geladinha hmmmm",
-      "stockAmmount": null,
-      "alcoholic": false
-    },
-    {
-      "id": 24,
-      "price": 6.0,
-      "productName": "Fanta Laranja",
-      "description": "Hmmmmm",
-      "stockAmmount": 90,
-      "alcoholic": false
-    },
-    {
-      "id": 2,
-      "price": 8.0,
-      "productName": "teste",
-      "description": "teste",
-      "stockAmmount": 80,
-      "alcoholic": false
-    }
-  ];
+
+  var [drinks, setDrinks] = useState<drink[]>([])
+  var [foods, setFoods] = useState<food[]>([])
+  var [showDrinks, setShowDrinks] = useState<boolean>(true)
+  var [waitingApiResponse, setWaitingApiResponse] = useState<boolean>(true);
+
+  useEffect(() => {
+    api.get("/drinks")
+        .then(response => {
+          setDrinks(response.data);
+        })
+        .catch(error => {
+          console.log(error)
+        })
+        .then( () => {
+          setWaitingApiResponse(false);
+        }
+        )
+  },[])
+
+  function getFoodList(){
+    
+    var activeButton = $('.menu-option')[1];
+    $('.menu-option').removeClass('active');
+    $(activeButton).addClass('active');
+
+    setWaitingApiResponse(true);
+    setShowDrinks(false);
+
+    api.get("/food")
+        .then(response => {
+          setFoods(response.data);
+        })
+        .catch(error => {
+          console.log(error)
+        })
+        .then( () => {
+          setWaitingApiResponse(false);
+        }
+        )
+  }
+
+  function getDrinkList(){
+
+    var activeButton = $('.menu-option')[0];
+    $('.menu-option').removeClass('active');
+    $(activeButton).addClass('active');
+
+    setWaitingApiResponse(true);
+    setShowDrinks(true);
+
+    api.get("/drinks")
+        .then(response => {
+          setDrinks(response.data);
+        })
+        .catch(error => {
+          console.log(error)
+        })
+        .then( () => {
+          setWaitingApiResponse(false);
+        }
+        )
+  }
 
   const checkbox = document.getElementById(
     'subscribe',
@@ -62,32 +113,77 @@ const NovaComanda: React.FC = () => {
         <input type="text" id="table" name="table"/>
 
         <div className="menu-options">
-          <div className="menu-option active"><p>Porções</p></div>
-          <div className="menu-option"><p>Bebidas</p></div>
+          <button onClick={getDrinkList} className="menu-option active"><p>Bebidas</p></button>
+          <button onClick={getFoodList} className="menu-option"><p>Porções</p></button>
         </div>
 
-        <form action="">
-          <table>
-            <thead>
-              <tr>
-                <th></th>
-                <th>Item</th>
-                <th>Quant.</th>
-              </tr>
-            </thead>
-            <tbody>
-            {items.map((item) => {
-              return <>
+        {waitingApiResponse && <Loader/>}
+
+        {!waitingApiResponse && drinks.length === 0 && 
+          <>
+            <p>Não há itens nessa categoria</p>
+            <EmptyContent/> 
+          </>
+        }
+
+        {!waitingApiResponse && drinks.length !== 0 && showDrinks &&
+          <div>
+            <table>
+              <thead>
                 <tr>
-                  <td><FontAwesomeIcon icon={faSquare} /></td>
-                  <td>{ item.productName }</td>
-                  <td><input type="text" /></td>
+                  <th></th>
+                  <th>Item</th>
+                  <th>Quant.</th>
                 </tr>
-              </>
-            })}
-            </tbody>
-          </table>
-        </form>
+              </thead>
+              <tbody>
+                {drinks.map((drink) => {
+                  return <>
+                    <tr>
+                      <td><input type="checkbox" className="selectItemCheckbox"/></td>
+                      <td>{ drink.productName }</td>
+                      <td><input type="text" /></td>
+                    </tr>
+                  </>
+                })}
+              </tbody>
+             </table>
+          </div>
+        }
+
+        {!waitingApiResponse && foods.length === 0 && !showDrinks &&
+          <>
+            <p>Não há itens nessa categoria</p>
+            <EmptyContent/> 
+          </>
+        }
+
+        {!waitingApiResponse && foods.length !== 0 && !showDrinks &&
+          <div>
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Item</th>
+                  <th>Quant.</th>
+                </tr>
+              </thead>
+              <tbody>
+                {foods.map((food) => {
+                  return <>
+                    <tr>
+                      <td><input type="checkbox" className="selectItemCheckbox"/></td>
+                      <td>{ food.productName }</td>
+                      <td><input type="text" /></td>
+                    </tr>
+                  </>
+                })}
+              </tbody>
+             </table>
+          </div>
+        }
+
+
         <button className="btn">Realizar pedido</button>
       </div>
     </>

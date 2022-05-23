@@ -20,6 +20,10 @@
     border: solid 2px var(--light-grey);
   }
 
+  p{
+    text-align: center;
+  }
+
   .menu-options {
     display: flex;
     align-items: center;
@@ -35,6 +39,7 @@
       align-items: center;
       justify-content: center;
       padding: 8px 20px;
+      cursor: pointer;
 
       p {
         font-size: 18px;
@@ -49,5 +54,9 @@
         background: var(--light-orange);
       }
     }
+  }
+  .selectItemCheckbox{
+    height: 26px;
+    margin-left: 0;
   }
 }

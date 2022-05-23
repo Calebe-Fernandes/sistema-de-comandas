@@ -2,13 +2,13 @@ import React, { Component, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { AddButtonComponent, HeaderComponent } from "../../components";
+import { AddButtonComponent, HeaderComponent, Loader } from "../../components";
 import { api } from "../../services/api";
-import noOpenCommandsImage from "../../assets/no-open-commands.svg";
 import "./styles.scss";
+import EmptyContent from "../../components/EmptyContent";
 
 
-function Comandas(){
+const Comandas:React.FC = ()=> {
   var [searchValue, setSearchValue] = useState("");
   var [openCommands, setOpenCommands] = useState<number[]>([]);
   var [waitingApiResponse, setWaitingApiResponse] = useState<boolean>(true);
@@ -75,20 +75,8 @@ function Comandas(){
           {!areThereOpenCommands && !waitingApiResponse && "Não há comandas abertas no momento"}
         </p>
 
-        {waitingApiResponse &&
-        <div className="loader-wrapper">
-          <div className="wave-loader">
-            <div></div>
-            <div></div>
-          </div>
-        </div>
-        }
-        {!waitingApiResponse && !areThereOpenCommands &&
-
-          <div className="no-open-commands">
-              <img src={noOpenCommandsImage} alt="Prancheta vazia" />
-          </div>
-        }
+        {waitingApiResponse && <Loader/>}
+        {!waitingApiResponse && !areThereOpenCommands && <EmptyContent/>}
         {!waitingApiResponse && areThereOpenCommands &&
           <div className="open-commands">
             {openCommands.filter(filterCommands).map((tableNumber) => {
