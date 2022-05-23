@@ -70,11 +70,19 @@ function Comandas(){
         </div>
 
         <p>
+          {waitingApiResponse && "Carregando comandas"}
           {areThereOpenCommands && "Selecione uma mesa para ver seus detalhes"}
-          {!areThereOpenCommands && "Não há comandas abertas no momento"}
+          {!areThereOpenCommands && !waitingApiResponse && "Não há comandas abertas no momento"}
         </p>
 
-        {waitingApiResponse && <h1>Carregando comandas</h1>}
+        {waitingApiResponse &&
+        <div className="loader-wrapper">
+          <div className="wave-loader">
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+        }
         {!waitingApiResponse && !areThereOpenCommands &&
 
           <div className="no-open-commands">
