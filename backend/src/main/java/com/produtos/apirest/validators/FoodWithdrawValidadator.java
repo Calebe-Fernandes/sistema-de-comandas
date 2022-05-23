@@ -19,7 +19,7 @@ public class FoodWithdrawValidadator {
     @Autowired
     OrderRepository orderRepository;
 
-    public void validateFoodWithdraw(Long idOrder, FoodWithdraw withdraw) {
+    public void validateFoodWithdraw(long idOrder, FoodWithdraw withdraw) {
         OrderModel order;
         FoodStuff food = withdraw.getFood();
 
