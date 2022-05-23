@@ -49,8 +49,8 @@ function Comandas(){
 
   const navigate = useNavigate();
 
-  const navigateToHome = () => {
-    navigate("/");
+  const navigateToNewCommand = () => {
+    navigate("/garcom/comandas/nova_comanda");
   };
   
   return (
@@ -102,7 +102,7 @@ function Comandas(){
         }
 
         {user === "waiter" ?
-          <AddButtonComponent navigate={navigateToHome} />
+          <AddButtonComponent navigate={navigateToNewCommand} />
           : null}
       </div>
     </>
