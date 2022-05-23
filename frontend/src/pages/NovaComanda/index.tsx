@@ -27,10 +27,18 @@ interface food {
 
 const NovaComanda: React.FC = () => {
 
+  var [checkedFood, setCheckedFood] = useState<string[]>([]);
+  var [checkedDrinks, setCheckedDrinks] = useState<string[]>([]);
   var [drinks, setDrinks] = useState<drink[]>([])
   var [foods, setFoods] = useState<food[]>([])
   var [showDrinks, setShowDrinks] = useState<boolean>(true)
   var [waitingApiResponse, setWaitingApiResponse] = useState<boolean>(true);
+
+  var request:any = {
+    "table": 4,
+    "drinkWithdrawalList": null,
+    "foodWithdrawalList": null,
+  }
 
   useEffect(() => {
     api.get("/drinks")
@@ -90,17 +98,40 @@ const NovaComanda: React.FC = () => {
         )
   }
 
-  const checkbox = document.getElementById(
-    'subscribe',
-  ) as HTMLInputElement | null;
-  
-  if (checkbox != null) {
-    // ✅ Set checkbox checked
-    checkbox.checked = true;
-    // 👇️ true
-    console.log(checkbox.checked);
-    // ✅ Set checkbox unchecked
-    checkbox.checked = false;
+  function handleCheckDrinks(e:any){
+    var updatedList = [...checkedDrinks]
+    if(e.target.checked){
+      updatedList = [...checkedDrinks, e.target.value];
+    }else{
+    updatedList.splice(checkedDrinks.indexOf(e.target.value), 1);
+    }
+    setCheckedDrinks(updatedList);
+  }
+
+  function handleCheckFood(e:any){
+    var updatedList = [...checkedFood]
+    if(e.target.checked){
+      updatedList = [...checkedFood, e.target.value];
+      
+    }else{
+      updatedList.splice(checkedFood.indexOf(e.target.value), 1);
+    console.log(e.target.value)
+    }
+    setCheckedFood(updatedList);
+    console.log(checkedFood)
+  }
+
+  function postOrder (){
+    request.table = $('#table').val();
+    var order;
+
+    api.post("/order",request)
+        .then(response => {
+          order = response.data;
+          console.log(response)
+          //api.post(`/order/request-drink/${order.id}`)
+        })
+        .catch(error => { console.log(error)})   
   }
 
   return (
@@ -184,7 +215,7 @@ const NovaComanda: React.FC = () => {
         }
 
 
-        <button className="btn">Realizar pedido</button>
+        <button className="btn" onClick={postOrder}>Realizar pedido</button>
       </div>
     </>
   )
