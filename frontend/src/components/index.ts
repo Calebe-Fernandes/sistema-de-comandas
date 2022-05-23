@@ -1,4 +1,5 @@
 import AddButtonComponent from "./AddButtonComponent";
+import CommandHeaderComponent from "./CommandHeader";
 import HeaderComponent from "./Header";
 
-export { AddButtonComponent, HeaderComponent };
+export { AddButtonComponent, CommandHeaderComponent, HeaderComponent };

@@ -25,8 +25,8 @@ const Comandas: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const navigateToHome = () => {
-    navigate("/");
+  const navigateToNewCommand = () => {
+    navigate("/garcom/comandas/nova_comanda");
   };
 
   return (
@@ -57,7 +57,7 @@ const Comandas: React.FC = () => {
         </div>
 
         {user === "waiter" ?
-          <AddButtonComponent navigate={navigateToHome} />
+          <AddButtonComponent navigate={navigateToNewCommand} />
           : null}
       </div>
     </>

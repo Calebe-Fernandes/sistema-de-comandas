@@ -1,4 +1,5 @@
-import Home from "./Home";
 import Comandas from "./Comandas";
+import Home from "./Home";
+import NovaComanda from "./NovaComanda";
 
-export { Home, Comandas };
+export { Comandas, Home, NovaComanda };
