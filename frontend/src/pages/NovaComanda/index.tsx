@@ -54,6 +54,10 @@ const NovaComanda: React.FC = () => {
         )
   },[])
 
+  useEffect(() => {
+    validateOrder();
+ }, [checkedDrinks,checkedFood]);
+
   function getFoodList(){
     
     var activeButton = $('.menu-option')[1];
@@ -101,24 +105,40 @@ const NovaComanda: React.FC = () => {
   function validateOrder(){
     var tableField = (document.getElementById('table') as HTMLInputElement).value
     var sendFormBtn = document.querySelector('.btn');
+    var quantityFields = document.querySelectorAll('.quantityInput')
+    var fieldsValid = 0;
 
-    console.log('c')
     if(parseInt(tableField) > 0){
-      console.log('b')
-      var quantityFields = document.querySelectorAll('.quantityInput')
-
+      
       for (let index = 0; index < quantityFields.length; index++) {
-        console.log('a')
         var value = (quantityFields[index] as HTMLInputElement).value
-        console.log(index)
         if(parseInt(value) > 0){
-          console.log('desabilita o botão')
           sendFormBtn !== null && sendFormBtn.removeAttribute('disabled') 
-          break
+          break;
         }else{
           sendFormBtn !== null && sendFormBtn.setAttribute("disabled", "disabled");
         }
       }
+
+      for (let index = 0; index < quantityFields.length; index++) {
+        var value = (quantityFields[index] as HTMLInputElement).value
+        if(parseInt(value) > 0){
+          fieldsValid++;
+        }
+      }
+
+      if(checkedDrinks.length+checkedFood.length === fieldsValid && fieldsValid>0 ){
+        console.log('destravou')
+        console.log(checkedDrinks.length+checkedFood.length)
+        console.log(fieldsValid)
+        sendFormBtn !== null && sendFormBtn.removeAttribute('disabled') 
+      }else{
+        console.log('travou')
+        console.log(checkedDrinks.length+checkedFood.length)
+        console.log(fieldsValid)
+        sendFormBtn !== null && sendFormBtn.setAttribute("disabled", "disabled");
+      }
+  
     }else{
       sendFormBtn !== null && sendFormBtn.setAttribute("disabled", "disabled");
     }
@@ -135,7 +155,6 @@ const NovaComanda: React.FC = () => {
     updatedList.splice(checkedDrinks.indexOf(e.target.value), 1);
       input != null && input.setAttribute("disabled", "disabled");
       (input as HTMLInputElement).value = '';
-      validateOrder();
     }
     setCheckedDrinks(updatedList);
   }
@@ -150,10 +169,8 @@ const NovaComanda: React.FC = () => {
       updatedList.splice(checkedFood.indexOf(e.target.value), 1);
       input != null && input.setAttribute("disabled", "disabled");
       (input as HTMLInputElement).value = '';
-      validateOrder();
     }
     setCheckedFood(updatedList);
-    console.log(checkedFood)
   }
 
   function postOrder (){
