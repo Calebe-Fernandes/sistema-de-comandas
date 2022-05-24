@@ -3,9 +3,12 @@ import { CommandHeaderComponent, Loader } from "../../components";
 import { useNavigate } from "react-router";
 import { api } from "../../services/api";
 import EmptyContent from "../../components/EmptyContent";
+import { ToastContainer, toast } from 'react-toastify';
 
 import $ from 'jquery';
 import "./styles.scss";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 interface drink {
   "id": number,
@@ -26,6 +29,7 @@ interface food {
 
 
 const NovaComanda: React.FC = () => {
+  
 
   const navigate = useNavigate();
 
@@ -187,8 +191,28 @@ const NovaComanda: React.FC = () => {
           order = response.data;
           postDrinks(order.id)
           //postFood(order.id)
+          toast.success('Comanda criada com sucesso!', {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
         })
-        .catch(error => { console.log(error)})
+        .catch(error => { 
+          console.log(error)
+          toast.error(error.response.data.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
+        })
         .then(() => {
           navigate("/garcom/comandas");
         })   
@@ -256,6 +280,17 @@ const NovaComanda: React.FC = () => {
         }
         
         <>
+            <ToastContainer
+              position="top-center"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
             <div id="drinkList" className="hidden">
               <table>
                 <thead>
