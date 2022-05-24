@@ -2,22 +2,22 @@ package com.produtos.apirest.models;
 
 public class FoodRequestObject {
 
-    private Long orderId;
-    private Long foodId;
+    private long orderId;
+    private long foodId;
 
-    public Long getOrderId() {
+    public long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Long orderId) {
+    public void setOrderId(long orderId) {
         this.orderId = orderId;
     }
 
-    public Long getFoodId() {
+    public long getFoodId() {
         return foodId;
     }
 
-    public void setFoodId(Long foodId) {
+    public void setFoodId(long foodId) {
         this.foodId = foodId;
     }
 }

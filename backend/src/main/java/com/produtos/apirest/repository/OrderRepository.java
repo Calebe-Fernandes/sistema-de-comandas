@@ -11,6 +11,8 @@ public interface OrderRepository extends JpaRepository<OrderModel, Long> {
 
     OrderModel findById(long id);
 
+    OrderModel findByTable(int table);
+
     @Query("SELECT o FROM OrderModel o where  date(o.openingTime) = '2022-05-12'")
     List<OrderModel> getCommandsByWorkday(String openingTime);
 

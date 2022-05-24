@@ -18,7 +18,7 @@ public class OrderModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private Integer table;
+    private int table;
     private Boolean isOpen;
     private Date openingTime;
     private Date closingTime;
@@ -35,7 +35,7 @@ public class OrderModel {
     public OrderModel() {
     }
 
-    public OrderModel(long id, Integer table, Boolean isOpen, Date openingTime, Date closingTime,
+    public OrderModel(long id, int table, Boolean isOpen, Date openingTime, Date closingTime,
             List<DrinkWithdrawal> drinkWithdrawalList, List<FoodWithdraw> foodWithdrawalList) {
         this.id = id;
         this.table = table;
@@ -61,11 +61,11 @@ public class OrderModel {
         this.id = id;
     }
 
-    public Integer getTable() {
+    public int getTable() {
         return table;
     }
 
-    public void setTable(Integer table) {
+    public void setTable(int table) {
         this.table = table;
     }
 

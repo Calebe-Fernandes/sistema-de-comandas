@@ -30,7 +30,7 @@ public class FoodWithdrawValidadator {
 
         if (!order.getOpen())
             throw new ApiRequestException("A comanda precisa estar aberta");
-        else if (food.getIsAvaliable())
+        else if (!food.getIsAvaliable())
             throw new ApiRequestException("Comida não disponivel");
 
     }

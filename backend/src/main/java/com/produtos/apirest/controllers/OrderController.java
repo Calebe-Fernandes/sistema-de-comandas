@@ -221,20 +221,20 @@ public class OrderController {
     // ----------------------------------------------FOOD OPERATIONS IN
     // ORDER--------------------------------------------
 
-    @PostMapping("/order/request-food/{idOrder}")
+    @PostMapping("/order/request-food/{tableNumber}")
     @Transactional
     @ApiOperation(value = "Retira a quantidade de estoque selecionado referente ao item desejado. Parâmetros de URL: id da comanda e id do produto. "
             +
             "Parâmetros a serem enviados:'drinkId' e 'drinkAmount'")
     public ResponseEntity<String> foodWithdraw(@RequestBody @Validated List<FoodRequestObject> requestArray,
-            @PathVariable(value = "idOrder") long orderId) {
+            @PathVariable(value = "tableNumber") int tableNumber) {
 
-        OrderModel order = orderRepository.findById(orderId);
+        OrderModel order = orderRepository.findById(tableNumber);
 
         for (FoodRequestObject request : requestArray) {
-            FoodStuff requestFood = foodStuffRepository.getById(request.getFoodId());
+            FoodStuff requestFood = foodStuffRepository.findById(request.getFoodId());
             FoodWithdraw withdraw = new FoodWithdraw(requestFood, order);
-            foodWithdrawValidadator.validateFoodWithdraw(orderId, withdraw);
+            foodWithdrawValidadator.validateFoodWithdraw(request.getOrderId(), withdraw);
 
             // Save Withdraw
             withdraw.setComanda(order);
