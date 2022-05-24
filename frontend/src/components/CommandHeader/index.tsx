@@ -12,13 +12,13 @@ const CommandHeaderComponent: React.FC<Props> = ({ title }) => {
 
   const navigate = useNavigate();
 
-  const navigateToHome = () => {
+  const navigateToCommands = () => {
     navigate("/garcom/comandas");
   };
   return (
     <>
       <header className="command-header">
-        <button className="go-back-button" onClick={navigateToHome}>
+        <button className="go-back-button" onClick={navigateToCommands}>
           <FontAwesomeIcon icon={faArrowLeft} className="go-back-button-icon" />
         </button>
 
