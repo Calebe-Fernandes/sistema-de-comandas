@@ -5,7 +5,7 @@ import { faSquareCheck, faSquare } from "@fortawesome/free-regular-svg-icons";
 import { api } from "../../services/api";
 import EmptyContent from "../../components/EmptyContent";
 
-import $ from 'jquery';
+import $, { post } from 'jquery';
 import "./styles.scss";
 
 interface drink {
@@ -25,6 +25,7 @@ interface food {
   "isAvaliable": boolean
 }
 
+
 const NovaComanda: React.FC = () => {
 
   var [checkedFood, setCheckedFood] = useState<string[]>([]);
@@ -35,9 +36,7 @@ const NovaComanda: React.FC = () => {
   var [waitingApiResponse, setWaitingApiResponse] = useState<boolean>(true);
 
   var request:any = {
-    "table": 4,
-    "drinkWithdrawalList": null,
-    "foodWithdrawalList": null,
+    "table": 0,
   }
 
   useEffect(() => {
@@ -106,6 +105,8 @@ const NovaComanda: React.FC = () => {
     updatedList.splice(checkedDrinks.indexOf(e.target.value), 1);
     }
     setCheckedDrinks(updatedList);
+
+    console.log(checkedDrinks)
   }
 
   function handleCheckFood(e:any){
@@ -129,9 +130,46 @@ const NovaComanda: React.FC = () => {
         .then(response => {
           order = response.data;
           console.log(response)
-          //api.post(`/order/request-drink/${order.id}`)
+          postDrinks(order.id)
         })
         .catch(error => { console.log(error)})   
+  }
+
+  function postDrinks(orderId:number){
+
+    var orderedDrinks:any[] = []
+
+    checkedDrinks.forEach((drinkID) =>{
+        var requestDrink:any = {
+          "drinkId":drinkID,
+          "drinkAmount": $(`#quantity-for-${drinkID}`).val()
+        }
+        orderedDrinks.push(requestDrink)
+    })
+
+    api.post(`/order/request-drink/${orderId}`,orderedDrinks)
+        .then(response => {
+          console.log(response)
+       })
+        .catch(error => { console.log(error)})  
+  }
+
+  function postFood(orderId:number){
+    var orderedFood:any[] = []
+
+    checkedFood.forEach((foodID) =>{
+        var requestFood:any = {
+          "drinkId":foodID,
+        }
+        orderedFood.push(requestFood)
+    })
+
+    api.post(`/order/request-drink/${orderId}`,orderedFood)
+        .then(response => {
+          console.log(response)
+       })
+        .catch(error => { console.log(error)})  
+
   }
 
   return (
@@ -171,9 +209,9 @@ const NovaComanda: React.FC = () => {
                 {drinks.map((drink) => {
                   return <>
                     <tr>
-                      <td><input type="checkbox" className="selectItemCheckbox"/></td>
+                      <td><input type="checkbox" className="selectItemCheckbox" value={drink.id} onChange={handleCheckDrinks}/></td>
                       <td>{ drink.productName }</td>
-                      <td><input type="text" /></td>
+                      <td><input type="text" id={`quantity-for-${drink.id}`}/></td>
                     </tr>
                   </>
                 })}
@@ -196,16 +234,16 @@ const NovaComanda: React.FC = () => {
                 <tr>
                   <th></th>
                   <th>Item</th>
-                  <th>Quant.</th>
+                  <th>Disponível</th>
                 </tr>
               </thead>
               <tbody>
                 {foods.map((food) => {
                   return <>
                     <tr>
-                      <td><input type="checkbox" className="selectItemCheckbox"/></td>
+                      <td><input type="checkbox" className="selectItemCheckbox" value={food.id} onChange={handleCheckFood}/></td>
                       <td>{ food.productName }</td>
-                      <td><input type="text" /></td>
+                      <td>{ food.isAvaliable ? "Sim" : "Não"}</td>
                     </tr>
                   </>
                 })}
