@@ -58,6 +58,18 @@ const NovaComanda: React.FC = () => {
     validateOrder();
  }, [checkedDrinks,checkedFood]);
 
+ useEffect(()=>{
+  document.getElementById('drinkList')?.classList.add('hidden') ;
+  document.getElementById('foodList')?.classList.add('hidden');
+   if(!waitingApiResponse){
+    if(!showDrinks){
+      foods.length > 0 && document.getElementById('foodList')?.classList.remove('hidden');
+    }else if(showDrinks){
+      drinks.length > 0 && document.getElementById('drinkList')?.classList.remove('hidden'); 
+    }
+   }
+ },[showDrinks,waitingApiResponse])
+
   function getFoodList(){
     
     var activeButton = $('.menu-option')[1];
@@ -128,14 +140,8 @@ const NovaComanda: React.FC = () => {
       }
 
       if(checkedDrinks.length+checkedFood.length === fieldsValid && fieldsValid>0 ){
-        console.log('destravou')
-        console.log(checkedDrinks.length+checkedFood.length)
-        console.log(fieldsValid)
         sendFormBtn !== null && sendFormBtn.removeAttribute('disabled') 
       }else{
-        console.log('travou')
-        console.log(checkedDrinks.length+checkedFood.length)
-        console.log(fieldsValid)
         sendFormBtn !== null && sendFormBtn.setAttribute("disabled", "disabled");
       }
   
@@ -161,7 +167,7 @@ const NovaComanda: React.FC = () => {
 
   function handleCheckFood(e:any){
     var input =  document.getElementById(`quantity-for-${e.target.value}`)
-    var updatedList = [...checkedDrinks]
+    var updatedList = [...checkedFood]
     if(e.target.checked){
       updatedList = [...checkedFood, e.target.value];
       input != null && input.removeAttribute('disabled') 
@@ -176,11 +182,9 @@ const NovaComanda: React.FC = () => {
   function postOrder (){
     request.table = $('#table').val();
     var order;
-
     api.post("/order",request)
         .then(response => {
           order = response.data;
-          console.log(response)
           postDrinks(order.id)
           //postFood(order.id)
         })
@@ -201,7 +205,6 @@ const NovaComanda: React.FC = () => {
         }
         orderedDrinks.push(requestDrink)
     })
-    console.log(orderedDrinks)
 
     api.post(`/order/request-drink/${orderId}`,orderedDrinks)
         .then(response => {
@@ -251,41 +254,32 @@ const NovaComanda: React.FC = () => {
             <EmptyContent/> 
           </>
         }
+        
+        <>
+            <div id="drinkList" className="hidden">
+              <table>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Item</th>
+                    <th>Quant.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {drinks.map((drink) => {
+                    return <>
+                      <tr>
+                        <td><input type="checkbox" className="selectItemCheckbox" value={drink.id} onChange={handleCheckDrinks}/></td>
+                        <td>{ drink.productName }</td>
+                        <td><input disabled type="text" className= "quantityInput" id={`quantity-for-${drink.id}`} onChange={validateOrder}/></td>
+                      </tr>
+                    </>
+                  })}
+                </tbody>
+              </table>
+            </div>
 
-        {!waitingApiResponse && drinks.length !== 0 && showDrinks &&
-          <div>
-            <table>
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Item</th>
-                  <th>Quant.</th>
-                </tr>
-              </thead>
-              <tbody>
-                {drinks.map((drink) => {
-                  return <>
-                    <tr>
-                      <td><input type="checkbox" className="selectItemCheckbox" value={drink.id} onChange={handleCheckDrinks}/></td>
-                      <td>{ drink.productName }</td>
-                      <td><input disabled type="text" className= "quantityInput" id={`quantity-for-${drink.id}`} onChange={validateOrder}/></td>
-                    </tr>
-                  </>
-                })}
-              </tbody>
-             </table>
-          </div>
-        }
-
-        {!waitingApiResponse && foods.length === 0 && !showDrinks &&
-          <>
-            <p>Não há itens nessa categoria</p>
-            <EmptyContent/> 
-          </>
-        }
-
-        {!waitingApiResponse && foods.length !== 0 && !showDrinks &&
-          <div>
+            <div id="foodList" className="hidden">
             <table>
               <thead>
                 <tr>
@@ -300,17 +294,24 @@ const NovaComanda: React.FC = () => {
                     <tr>
                       <td><input type="checkbox" className="selectItemCheckbox" value={food.id} onChange={handleCheckFood}/></td>
                       <td>{ food.productName }</td>
-                      <td><input disabled type="text" id={`quantity-for-${food.id}`}/></td>
+                      <td><input disabled type="text" className= "quantityInput" id={`quantity-for-${food.id}`} onChange={validateOrder}/></td>
                     </tr>
                   </>
                 })}
               </tbody>
              </table>
           </div>
+        </>
+
+
+        {!waitingApiResponse && foods.length === 0 && !showDrinks &&
+          <>
+            <p>Não há itens nessa categoria</p>
+            <EmptyContent/> 
+          </>
         }
 
-
-        <button disabled className="btn" onClick={postOrder}>Realizar pedido</button>
+        <button className="btn" onClick={function(){postOrder()}}>Realizar pedido</button>
       </div>
     </>
   )
