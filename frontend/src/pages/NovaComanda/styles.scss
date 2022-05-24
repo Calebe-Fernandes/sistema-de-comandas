@@ -23,6 +23,9 @@
       cursor:not-allowed;
     }
   }
+  input[type=checkbox] {
+    accent-color: var(--regular-orange-hover);
+  }
 
   p{
     text-align: center;
