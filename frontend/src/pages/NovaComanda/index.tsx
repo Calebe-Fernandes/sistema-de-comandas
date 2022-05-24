@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { CommandHeaderComponent, Loader } from "../../components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSquareCheck, faSquare } from "@fortawesome/free-regular-svg-icons";
+import { useNavigate } from "react-router";
 import { api } from "../../services/api";
 import EmptyContent from "../../components/EmptyContent";
 
-import $, { post } from 'jquery';
+import $ from 'jquery';
 import "./styles.scss";
 
 interface drink {
@@ -27,6 +26,8 @@ interface food {
 
 
 const NovaComanda: React.FC = () => {
+
+  const navigate = useNavigate();
 
   var [checkedFood, setCheckedFood] = useState<string[]>([]);
   var [checkedDrinks, setCheckedDrinks] = useState<string[]>([]);
@@ -97,26 +98,59 @@ const NovaComanda: React.FC = () => {
         )
   }
 
+  function validateOrder(){
+    var tableField = (document.getElementById('table') as HTMLInputElement).value
+    var sendFormBtn = document.querySelector('.btn');
+
+    console.log('c')
+    if(parseInt(tableField) > 0){
+      console.log('b')
+      var quantityFields = document.querySelectorAll('.quantityInput')
+
+      for (let index = 0; index < quantityFields.length; index++) {
+        console.log('a')
+        var value = (quantityFields[index] as HTMLInputElement).value
+        console.log(index)
+        if(parseInt(value) > 0){
+          console.log('desabilita o botão')
+          sendFormBtn !== null && sendFormBtn.removeAttribute('disabled') 
+          break
+        }else{
+          sendFormBtn !== null && sendFormBtn.setAttribute("disabled", "disabled");
+        }
+      }
+    }else{
+      sendFormBtn !== null && sendFormBtn.setAttribute("disabled", "disabled");
+    }
+
+  }
+
   function handleCheckDrinks(e:any){
+    var input =  document.getElementById(`quantity-for-${e.target.value}`)
     var updatedList = [...checkedDrinks]
     if(e.target.checked){
       updatedList = [...checkedDrinks, e.target.value];
+        input != null && input.removeAttribute('disabled') 
     }else{
     updatedList.splice(checkedDrinks.indexOf(e.target.value), 1);
+      input != null && input.setAttribute("disabled", "disabled");
+      (input as HTMLInputElement).value = '';
+      validateOrder();
     }
     setCheckedDrinks(updatedList);
-
-    console.log(checkedDrinks)
   }
 
   function handleCheckFood(e:any){
-    var updatedList = [...checkedFood]
+    var input =  document.getElementById(`quantity-for-${e.target.value}`)
+    var updatedList = [...checkedDrinks]
     if(e.target.checked){
       updatedList = [...checkedFood, e.target.value];
-      
+      input != null && input.removeAttribute('disabled') 
     }else{
       updatedList.splice(checkedFood.indexOf(e.target.value), 1);
-    console.log(e.target.value)
+      input != null && input.setAttribute("disabled", "disabled");
+      (input as HTMLInputElement).value = '';
+      validateOrder();
     }
     setCheckedFood(updatedList);
     console.log(checkedFood)
@@ -131,8 +165,12 @@ const NovaComanda: React.FC = () => {
           order = response.data;
           console.log(response)
           postDrinks(order.id)
+          //postFood(order.id)
         })
-        .catch(error => { console.log(error)})   
+        .catch(error => { console.log(error)})
+        .then(() => {
+          navigate("/garcom/comandas");
+        })   
   }
 
   function postDrinks(orderId:number){
@@ -146,6 +184,7 @@ const NovaComanda: React.FC = () => {
         }
         orderedDrinks.push(requestDrink)
     })
+    console.log(orderedDrinks)
 
     api.post(`/order/request-drink/${orderId}`,orderedDrinks)
         .then(response => {
@@ -160,11 +199,12 @@ const NovaComanda: React.FC = () => {
     checkedFood.forEach((foodID) =>{
         var requestFood:any = {
           "drinkId":foodID,
+          "foodAmmount":$(`#quantity-for-${foodID}`).val()
         }
         orderedFood.push(requestFood)
     })
 
-    api.post(`/order/request-drink/${orderId}`,orderedFood)
+    api.post(`/order/request-food/${orderId}`,orderedFood)
         .then(response => {
           console.log(response)
        })
@@ -179,7 +219,7 @@ const NovaComanda: React.FC = () => {
       <div className="new-command-container">
 
         <label htmlFor="table">Mesa</label>
-        <input type="text" id="table" name="table"/>
+        <input type="text" id="table" name="table" onChange={validateOrder}/>
 
         <div className="menu-options">
           <button onClick={getDrinkList} className="menu-option active"><p>Bebidas</p></button>
@@ -188,7 +228,7 @@ const NovaComanda: React.FC = () => {
 
         {waitingApiResponse && <Loader/>}
 
-        {!waitingApiResponse && drinks.length === 0 && 
+        {!waitingApiResponse && drinks.length === 0 && showDrinks &&
           <>
             <p>Não há itens nessa categoria</p>
             <EmptyContent/> 
@@ -211,7 +251,7 @@ const NovaComanda: React.FC = () => {
                     <tr>
                       <td><input type="checkbox" className="selectItemCheckbox" value={drink.id} onChange={handleCheckDrinks}/></td>
                       <td>{ drink.productName }</td>
-                      <td><input type="text" id={`quantity-for-${drink.id}`}/></td>
+                      <td><input disabled type="text" className= "quantityInput" id={`quantity-for-${drink.id}`} onChange={validateOrder}/></td>
                     </tr>
                   </>
                 })}
@@ -234,7 +274,7 @@ const NovaComanda: React.FC = () => {
                 <tr>
                   <th></th>
                   <th>Item</th>
-                  <th>Disponível</th>
+                  <th>Quant.</th>
                 </tr>
               </thead>
               <tbody>
@@ -243,7 +283,7 @@ const NovaComanda: React.FC = () => {
                     <tr>
                       <td><input type="checkbox" className="selectItemCheckbox" value={food.id} onChange={handleCheckFood}/></td>
                       <td>{ food.productName }</td>
-                      <td>{ food.isAvaliable ? "Sim" : "Não"}</td>
+                      <td><input disabled type="text" id={`quantity-for-${food.id}`}/></td>
                     </tr>
                   </>
                 })}
@@ -253,7 +293,7 @@ const NovaComanda: React.FC = () => {
         }
 
 
-        <button className="btn" onClick={postOrder}>Realizar pedido</button>
+        <button disabled className="btn" onClick={postOrder}>Realizar pedido</button>
       </div>
     </>
   )

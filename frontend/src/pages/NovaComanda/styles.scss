@@ -18,6 +18,10 @@
     border-radius: 10px;
     margin-left: 16px;
     border: solid 2px var(--light-grey);
+
+    &:disabled{
+      cursor:not-allowed;
+    }
   }
 
   p{
@@ -62,4 +66,9 @@
   .hide-element{
     display: none;
   }
+
+  .btn:disabled{
+    
+  }
+
 }
