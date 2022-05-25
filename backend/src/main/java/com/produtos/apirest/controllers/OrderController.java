@@ -226,7 +226,7 @@ public class OrderController {
 
         for (FoodRequestObject request : requestArray) {
             FoodStuff requestFood = foodStuffRepository.findById(request.getFoodId());
-            FoodWithdraw withdraw = new FoodWithdraw(requestFood);
+            FoodWithdraw withdraw = new FoodWithdraw(requestFood, request.getQuantity());
             foodWithdrawValidadator.validateFoodWithdraw(orderId, withdraw);
 
             OrderModel order = orderRepository.findById(orderId);
@@ -236,7 +236,7 @@ public class OrderController {
             foodStuffWithdrawRepository.save(withdraw);
 
             // Update Order total
-            order.setOrderTotal(order.getOrderTotal() + requestFood.getPrice());
+            order.setOrderTotal(order.getOrderTotal() + (requestFood.getPrice()*request.getQuantity()));
             orderRepository.save(order);
         }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Saída contabilizada no estoque");

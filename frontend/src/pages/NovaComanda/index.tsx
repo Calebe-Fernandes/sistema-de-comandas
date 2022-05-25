@@ -190,7 +190,7 @@ const NovaComanda: React.FC = () => {
         .then(response => {
           order = response.data;
           postDrinks(order.id)
-          //postFood(order.id)
+          postFood(order.id)
           toast.success('Comanda criada com sucesso!', {
             position: "top-center",
             autoClose: 3000,
@@ -200,6 +200,7 @@ const NovaComanda: React.FC = () => {
             draggable: true,
             progress: undefined,
             });
+            navigate("/garcom/comandas");
         })
         .catch(error => { 
           console.log(error)
@@ -213,9 +214,6 @@ const NovaComanda: React.FC = () => {
             progress: undefined,
             });
         })
-        .then(() => {
-          navigate("/garcom/comandas");
-        })   
   }
 
   function postDrinks(orderId:number){
@@ -242,8 +240,8 @@ const NovaComanda: React.FC = () => {
 
     checkedFood.forEach((foodID) =>{
         var requestFood:any = {
-          "drinkId":foodID,
-          "foodAmmount":$(`#quantity-for-${foodID}`).val()
+          "foodId":foodID,
+          "quantity":$(`#quantity-for-${foodID}`).val()
         }
         orderedFood.push(requestFood)
     })
@@ -253,7 +251,6 @@ const NovaComanda: React.FC = () => {
           console.log(response)
        })
         .catch(error => { console.log(error)})  
-
   }
 
   return (

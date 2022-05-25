@@ -19,11 +19,14 @@ public class FoodWithdraw {
     @JoinColumn(name = "comanda_id")
     private OrderModel comanda;
 
+    private Integer quantity;
+
     public FoodWithdraw() {
     }
 
-    public FoodWithdraw(FoodStuff food) {
+    public FoodWithdraw(FoodStuff food, int quantity) {
         this.food = food;
+        this.quantity = quantity;
     }
 
     public long getId() {
@@ -48,5 +51,13 @@ public class FoodWithdraw {
 
     public void setOrder(OrderModel order) {
         this.comanda = order;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }
