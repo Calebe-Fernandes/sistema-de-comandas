@@ -22,7 +22,6 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
-
 @RestController
 @RequestMapping(value = "/api")
 @Api(value = "API REST Produtos")
@@ -146,13 +145,13 @@ public class OrderController {
     // ---------------------------------------------DRINKS OPERATIONS IN
     // ORDER-------------------------------------------
     // Create a new withdraw for Drinks;
-    @PostMapping("/order/request-drink/{idOrder}")
+    @PostMapping("/order/request-drink/{orderId}")
     @Transactional
     @ApiOperation(value = "Adiciona um drink na comanda e retira a quantidade de estoque selecionado referente ao item desejado. Parâmetros de URL: id da comanda e id do produto. "
             +
             "Parâmetros a serem enviados:'drinkId' e 'drinkAmount'")
     public ResponseEntity<String> drinksWithdraw(@RequestBody @Validated List<DrinkRequestObject> requestArray,
-            @PathVariable(value = "idOrder") long orderId) {
+            @PathVariable(value = "orderId") long orderId) {
 
         for (DrinkRequestObject request : requestArray) {
             Drink requestDrink = drinkRepository.getById(request.getDrinkId());
@@ -217,23 +216,23 @@ public class OrderController {
     // ----------------------------------------------FOOD OPERATIONS IN
     // ORDER--------------------------------------------
 
-    @PostMapping("/order/request-food/{tableNumber}")
+    @PostMapping("/order/request-food/{orderId}")
     @Transactional
     @ApiOperation(value = "Adiciona uma porção na comanda e retira a quantidade de estoque selecionado referente ao item desejado. Parâmetros de URL: id da comanda e id do produto. "
             +
             "Parâmetros a serem enviados:'drinkId' e 'drinkAmount'")
     public ResponseEntity<String> foodWithdraw(@RequestBody @Validated List<FoodRequestObject> requestArray,
-            @PathVariable(value = "tableNumber") int tableNumber) {
-
-        OrderModel order = orderRepository.findById(tableNumber);
+            @PathVariable(value = "orderId") long orderId) {
 
         for (FoodRequestObject request : requestArray) {
             FoodStuff requestFood = foodStuffRepository.findById(request.getFoodId());
-            FoodWithdraw withdraw = new FoodWithdraw(requestFood, order);
-            foodWithdrawValidadator.validateFoodWithdraw(request.getOrderId(), withdraw);
+            FoodWithdraw withdraw = new FoodWithdraw(requestFood);
+            foodWithdrawValidadator.validateFoodWithdraw(orderId, withdraw);
+
+            OrderModel order = orderRepository.findById(orderId);
 
             // Save Withdraw
-            withdraw.setComanda(order);
+            withdraw.setOrder(order);
             foodStuffWithdrawRepository.save(withdraw);
 
             // Update Order total

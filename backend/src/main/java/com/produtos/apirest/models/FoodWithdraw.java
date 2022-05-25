@@ -22,9 +22,8 @@ public class FoodWithdraw {
     public FoodWithdraw() {
     }
 
-    public FoodWithdraw(FoodStuff food, OrderModel comanda) {
+    public FoodWithdraw(FoodStuff food) {
         this.food = food;
-        this.comanda = comanda;
     }
 
     public long getId() {
@@ -43,11 +42,11 @@ public class FoodWithdraw {
         this.food = food;
     }
 
-    public OrderModel getComanda() {
+    public OrderModel getOrder() {
         return comanda;
     }
 
-    public void setComanda(OrderModel comanda) {
-        this.comanda = comanda;
+    public void setOrder(OrderModel order) {
+        this.comanda = order;
     }
 }
