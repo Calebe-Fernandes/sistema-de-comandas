@@ -1,0 +1,35 @@
+header.command-header {
+  margin-bottom: 50px;
+  background: var(--regular-orange);
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  height: 70px;
+  box-shadow: 0 2px 10px #00000040;
+  border-radius: 0 0 10px 10px;
+  width: 100%;
+
+  .go-back-button {
+    position: absolute;
+    left: 30px;
+    min-width: 30px;
+    height: 30px;
+    border-radius: 100px;
+    background: var(--medium-light-orange);
+  
+    .go-back-button-icon {
+      color: var(--white);
+    }
+  
+    &:hover{
+      background: var(--light-orange);
+    }
+  }
+
+  p {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    margin: 0 auto;
+  }
+}

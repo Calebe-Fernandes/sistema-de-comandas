@@ -1,0 +1,15 @@
+.no-response{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    img {
+      width: 286px;
+      margin-top: 42px;
+
+      @media only screen and (max-width: 380px){
+        width: 220px;
+      }
+    }
+  }

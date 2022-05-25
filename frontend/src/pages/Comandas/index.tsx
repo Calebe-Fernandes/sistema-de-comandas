@@ -1,15 +1,39 @@
-import React, { useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { AddButtonComponent, HeaderComponent } from "../../components";
+import { AddButtonComponent, HeaderComponent, Loader } from "../../components";
+import { api } from "../../services/api";
 import "./styles.scss";
+import EmptyContent from "../../components/EmptyContent";
 
-const Comandas: React.FC = () => {
-  const [searchValue, setSearchValue] = useState("");
 
-  const openCommands = [1, 2, 3, 4, 5, 11, 10];
+const Comandas:React.FC = ()=> {
+  var [searchValue, setSearchValue] = useState("");
+  var [openCommands, setOpenCommands] = useState<number[]>([]);
+  var [waitingApiResponse, setWaitingApiResponse] = useState<boolean>(true);
+  var [areThereOpenCommands, setAreThereOpenCommands] = useState<boolean>(false);
+  var openCommandsResponse;
 
+  useEffect(() => {
+    api.get("/order/open")
+        .then((response) => {
+          openCommandsResponse = response.data;
+          openCommandsResponse.forEach((command:any) => {
+            setOpenCommands( arr => { return [...arr,command.table]})
+          });
+        })
+        .catch(error => {
+          console.log(error)
+        })
+        .then(() => {
+          setWaitingApiResponse(false);
+          if(openCommandsResponse.length > 0){
+            setAreThereOpenCommands(true);
+          }
+        })
+  },[])
+  
   const filterCommands = (value: any) => {
     return value.toString().indexOf(searchValue) !== -1;
   };
@@ -25,10 +49,10 @@ const Comandas: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const navigateToHome = () => {
-    navigate("/");
+  const navigateToNewCommand = () => {
+    navigate("/garcom/comandas/nova_comanda");
   };
-
+  
   return (
     <>
       <HeaderComponent user={user} page="commands" />
@@ -45,19 +69,28 @@ const Comandas: React.FC = () => {
           />
         </div>
 
-        <p>Selecione uma mesa para ver seus detalhes</p>
-        <div className="open-commands">
-          {openCommands.filter(filterCommands).map((command) => {
-            return <>
-              <div className="open-command">
-                {command}
-              </div>
-            </>
-          })}
-        </div>
+        <p>
+          {waitingApiResponse && "Carregando comandas"}
+          {areThereOpenCommands && "Selecione uma mesa para ver seus detalhes"}
+          {!areThereOpenCommands && !waitingApiResponse && "Não há comandas abertas no momento"}
+        </p>
+
+        {waitingApiResponse && <Loader/>}
+        {!waitingApiResponse && !areThereOpenCommands && <EmptyContent/>}
+        {!waitingApiResponse && areThereOpenCommands &&
+          <div className="open-commands">
+            {openCommands.filter(filterCommands).map((tableNumber) => {
+              return <>
+                <div className="open-command">
+                  {tableNumber}
+                </div>
+              </>
+            })}
+          </div>
+        }
 
         {user === "waiter" ?
-          <AddButtonComponent navigate={navigateToHome} />
+          <AddButtonComponent navigate={navigateToNewCommand} />
           : null}
       </div>
     </>
