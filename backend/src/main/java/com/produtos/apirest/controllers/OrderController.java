@@ -1,6 +1,5 @@
 package com.produtos.apirest.controllers;
 
-import com.produtos.apirest.exceptions.ApiRequestException;
 import com.produtos.apirest.models.*;
 import com.produtos.apirest.repository.*;
 import com.produtos.apirest.validators.DrinkWithdrawValidator;
@@ -19,13 +18,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping(value = "/api")
@@ -152,7 +148,7 @@ public class OrderController {
     // Create a new withdraw for Drinks;
     @PostMapping("/order/request-drink/{idOrder}")
     @Transactional
-    @ApiOperation(value = "Retira a quantidade de estoque selecionado referente ao item desejado. Parâmetros de URL: id da comanda e id do produto. "
+    @ApiOperation(value = "Adiciona um drink na comanda e retira a quantidade de estoque selecionado referente ao item desejado. Parâmetros de URL: id da comanda e id do produto. "
             +
             "Parâmetros a serem enviados:'drinkId' e 'drinkAmount'")
     public ResponseEntity<String> drinksWithdraw(@RequestBody @Validated List<DrinkRequestObject> requestArray,
@@ -223,7 +219,7 @@ public class OrderController {
 
     @PostMapping("/order/request-food/{tableNumber}")
     @Transactional
-    @ApiOperation(value = "Retira a quantidade de estoque selecionado referente ao item desejado. Parâmetros de URL: id da comanda e id do produto. "
+    @ApiOperation(value = "Adiciona uma porção na comanda e retira a quantidade de estoque selecionado referente ao item desejado. Parâmetros de URL: id da comanda e id do produto. "
             +
             "Parâmetros a serem enviados:'drinkId' e 'drinkAmount'")
     public ResponseEntity<String> foodWithdraw(@RequestBody @Validated List<FoodRequestObject> requestArray,
