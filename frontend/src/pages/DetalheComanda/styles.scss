@@ -1,0 +1,67 @@
+
+.command-details-page{
+    
+  p:nth-child(2){
+    word-spacing: 8px
+  }
+    
+  .command-details-container{
+    max-width: 800px;
+    min-height: calc(100vh - 120px);
+    margin: 0 auto;
+    padding: 0 30px;
+    position: relative;
+        
+    .delete-tiem-container{
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+    }
+
+    label {
+      font-weight: 600;
+    }
+      
+    input {
+      height: 36px;
+      padding: 0 10px;
+      text-align: center;
+      min-width: 80px;
+      width: 80px;
+      border-radius: 10px;
+      margin-left: 16px;
+      border: solid 2px var(--light-grey);
+      
+      &:disabled{
+        cursor:not-allowed;
+      }
+    }
+
+    p{
+      text-align: center;
+    }
+        
+    .selectItemCheckbox{
+      height: 26px;
+      margin-left: 0;
+    }
+    
+    .order-total{
+      position: absolute;
+      bottom: 40px;
+      left: 30px;
+      width: 200px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--light-orange);
+      border-radius: 6px;
+    
+      p{
+        word-spacing: 12px;
+        font-weight: 600;
+      }
+    }
+  }
+}

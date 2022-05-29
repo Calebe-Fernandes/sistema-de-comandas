@@ -90,3 +90,8 @@ table {
     }
   }
 }
+
+input[type=checkbox] {
+  accent-color: var(--regular-orange-hover);
+  cursor: pointer;
+}

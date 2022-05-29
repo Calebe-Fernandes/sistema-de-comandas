@@ -23,9 +23,6 @@
       cursor:not-allowed;
     }
   }
-  input[type=checkbox] {
-    accent-color: var(--regular-orange-hover);
-  }
 
   p{
     text-align: center;
@@ -65,9 +62,6 @@
   .selectItemCheckbox{
     height: 26px;
     margin-left: 0;
-  }
-  .hide-element{
-    display: none;
   }
 
   .hidden{
