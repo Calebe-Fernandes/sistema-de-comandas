@@ -33,9 +33,11 @@ const Estoque: React.FC = () => {
         <>
             <HeaderComponent user={"manager"} page="history" />
             {Commands.map((command)=>{
-                return  <>
-                        <h5>{command.id}</h5>
-                    </>    
+                return <>
+                    <div className="historyContainer">
+                    
+                    </div>
+                </>    
                 console.log(command.id)
             })}
 
