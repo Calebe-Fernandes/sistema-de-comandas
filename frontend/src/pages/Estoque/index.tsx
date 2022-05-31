@@ -174,7 +174,7 @@ const Estoque: React.FC = () => {
                                             </select> :
                                             <select disabled className="atr">
                                                 <option value="1">Sim</option>
-                                                <option selected="selected" value="2">Não</option>
+                                                <option selected value="2">Não</option>
                                             </select> 
                                         }
                                         <h5>Preço *</h5>
