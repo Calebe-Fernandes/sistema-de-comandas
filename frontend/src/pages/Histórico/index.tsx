@@ -17,7 +17,6 @@ const Estoque: React.FC = () => {
         api.get("/order/closed")
         .then(response => {
             setCommands(response.data);
-            console.log(Commands)
         })
         .catch(error => {
             console.log(error)
@@ -33,9 +32,11 @@ const Estoque: React.FC = () => {
     return(
         <>
             <HeaderComponent user={"manager"} page="history" />
-            
-            {Commands.map((any)=>{
-                <h5>{any.closingTime}</h5>
+            {Commands.map((command)=>{
+                return  <>
+                        <h5>{command.id}</h5>
+                    </>    
+                console.log(command.id)
             })}
 
         </>
