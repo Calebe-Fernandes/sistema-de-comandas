@@ -1,0 +1,204 @@
+.dateInput{
+    margin: 0 5%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    h2{
+        margin-right: 10px;
+        font-size: 16px;
+    }
+    div{
+        align-items: center;
+        border: 2px solid rgba(157, 157, 157, 1);
+        border-radius: 15px;
+        width: 180px;
+        height: 40px;
+    }
+    input{
+        position:absolute;
+        border: none;
+        width: 128px;
+        height: 38px;
+        background: transparent;
+        padding-left: 20px;
+        outline: none;
+
+    }
+    .calendarButton{
+        position: absolute;
+        margin-left: 135px;
+        margin-top: 10px;
+    }
+}
+.historyHeader{
+    display: flex;
+    justify-content: space-around;
+    margin-right: 21.5%;
+    margin-left: 5%;
+    padding-bottom: 10px;
+    padding-right: 16px;
+    h1{
+        font-weight: 700;
+        font-size: 16px;
+    }
+}
+hr{
+    margin: 0 5%;
+    color: black;
+}
+.historyContainer{
+    .hidden{
+        display: none;
+    }
+    .command{
+        display: flex;
+        justify-content: space-around;
+        padding: 20px;
+        margin: 0 3%;
+        h2{
+            font-size: 16px;
+        }
+        .viewButton{
+            height: 16px;
+            cursor: pointer;
+        }
+    }
+    hr{
+        color: lightgrey;
+    }
+    .modal{
+        z-index: 1;
+        background-color: rgba(0,0,0, 0.3);
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        bottom: 0;
+
+        .detalhesContainer{
+            position: absolute;
+            z-index: 1;
+            display: flex;
+            background-color: #FFFFFF;
+            border-radius: 15px;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            flex-direction: column;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 80%;
+            width: 80%;
+            margin: auto;
+
+            .detalhesHeader{
+                width: 100%;
+                height: 10%;
+                border-radius: 15px 15px 0 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: #F2BE95;
+                div{
+                    display: flex;
+                    align-items: center;
+                    margin-left: 3%;
+                }
+                h2{
+                    font-size: 24px;
+                    font-weight: 500;
+                }
+                h3{
+                    font-size: 16px;
+                    margin-right: 10px;
+                }
+    
+                .closeModal{
+                    background-color: rgba(255, 255, 255, 0.4);
+                    margin-right: 3%;
+                    border-radius: 50px;
+                    padding: 6px 10px;
+                    height: min-content;
+                }
+            }
+            h1{
+                margin-top: 2%;
+                color: #E5802F;
+                font-size: 18px;
+                margin-left: 2%;
+            }
+            .detalhesInformaçõesGerais{
+                margin-left: 3%;
+                margin-top: 2%;
+                display: flex;
+                div{
+                    padding-right: 10px;
+                    .atrWrapper{
+                        display: flex;
+                        h3{
+                            padding-right: 10px; 
+                            font-weight: 400;
+                        } & :first-of-type{
+                            font-weight: 700;
+                        }
+                    }
+                }
+            }
+            .detalhesInformaçõesPedido{
+                margin: 2% 5%;
+                .infoHeader{
+                    display: flex;
+                    justify-content: space-between;
+                    h3{
+                        width: 90px;
+                    }
+                }
+                hr{
+                    margin: 1% 0;
+                    height: 2px;
+                    background-color: black;
+                }
+                .item{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    h3{
+                        width: 90px;
+                        font-weight: 400;
+                    } & :first-of-type{
+                        max-width: 90px;
+                    }
+                }
+                .itemLine{
+                    height: 1px;
+                    background-color: gray;
+                }
+                div{
+                    overflow-x: hidden;
+                    overflow-y: auto;
+                }
+            }
+        }
+        .modalBackground{
+            position: absolute;
+            z-index: -1;
+            height: 100%;
+            width: 100%;
+        }    
+    }
+    ::-webkit-scrollbar {
+        width: 5px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #888; 
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+      }
+}

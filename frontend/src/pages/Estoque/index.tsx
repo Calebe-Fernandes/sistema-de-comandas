@@ -1,15 +1,11 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router";
 import { useState } from "react";
 import "./styles.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons"
-import { faX } from "@fortawesome/free-solid-svg-icons"
+import { faEye, faX } from "@fortawesome/free-solid-svg-icons"
 import { AddButtonComponent, HeaderComponent, Loader } from "../../components";
 import { api } from "../../services/api"; 
-import EmptyContent from "../../components/EmptyContent";
 import $ from 'jquery';
-import { Form } from 'react-bootstrap';
 
 type drink = {
     "id": number,
