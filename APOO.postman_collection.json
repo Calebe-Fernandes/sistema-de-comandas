@@ -1,0 +1,422 @@
+{
+	"info": {
+		"_postman_id": "9124d279-3178-4520-ab73-d16dd8d7209b",
+		"name": "APOO",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16757223"
+	},
+	"item": [
+		{
+			"name": "Bebidas",
+			"item": [
+				{
+					"name": "Buscar todas as Bebidas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/drinks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"drinks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Bebidas por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/drinks/{id}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"drinks",
+								"{id}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar Bebida",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"alcoholic\": false,\r\n  \"description\": \"Coquinha geladinha hmmmm\",\r\n  \"price\": 6,\r\n  \"productName\": \"Coca Cola Lata\",\r\n  \"stockAmmount\": 90\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/drinks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"drinks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar uma Bebida",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 20,\r\n    \"price\": 6.0,\r\n    \"productName\": \"Coca Cola Lata\",\r\n    \"description\": \"Coquinha geladinha hmmmm\",\r\n    \"stockAmmount\": 90,\r\n    \"alcoholic\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/drinks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"drinks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar dados Bebida",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"price\": 6.0,\r\n    \"productName\": \"Coca Cola Lata\",\r\n    \"description\": \"Coquinha geladinha hmmmm\",\r\n    \"stockAmmount\": 90,\r\n    \"alcoholic\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/drinks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"drinks"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comandas",
+			"item": [
+				{
+					"name": "Criar comanda",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"table\":47\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/order",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar bebida na comanda",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"quantity\":12\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/order/{idPedido}/drink-withdrawal/{idProduto}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"order",
+								"{idPedido}",
+								"drink-withdrawal",
+								"{idProduto}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar comanda por Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/order/{id}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"order",
+								"{id}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancelar um item em uma comanda",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/order/{idPedido}/drink-return/{idRetiradaDeItem}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"order",
+								"{idPedido}",
+								"drink-return",
+								"{idRetiradaDeItem}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fechar uma comanda",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Comandas fechadas",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Comandas abertas",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Porções",
+			"item": [
+				{
+					"name": "Buscar todas as porções",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/food",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"food"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Busca porções por Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/food/{id}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"food",
+								"{id}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar porção",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"description\": \"Porção para até 4 pessoas da melhor batata da região!\",\r\n  \"isAvaliable\": true,\r\n  \"price\": 35,\r\n  \"productName\": \"Batata com Cheddar e Bacon Grande\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/food",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"food"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar uma porção",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"id\": 22,\r\n        \"price\": 35.0,\r\n        \"productName\": \"Batata com Cheddar e Bacon Grande\",\r\n        \"description\": \"Porção para até 4 pessoas da melhor batata da região!\",\r\n        \"isAvaliable\": true\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/food",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"food"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar dados Porção",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"id\": 22,\r\n        \"price\": 35.0,\r\n        \"productName\": \"Batata com Cheddar e Bacon Grande\",\r\n        \"description\": \"Porção para até 4 pessoas da melhor batata da região!\",\r\n        \"isAvaliable\": true\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/food",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"food"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

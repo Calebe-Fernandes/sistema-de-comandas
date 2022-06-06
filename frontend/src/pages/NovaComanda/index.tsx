@@ -35,9 +35,9 @@ const NovaComanda: React.FC = () => {
 
   var [checkedFood, setCheckedFood] = useState<string[]>([]);
   var [checkedDrinks, setCheckedDrinks] = useState<string[]>([]);
-  var [drinks, setDrinks] = useState<drink[]>([])
-  var [foods, setFoods] = useState<food[]>([])
-  var [showDrinks, setShowDrinks] = useState<boolean>(true)
+  var [drinks, setDrinks] = useState<drink[]>([]);
+  var [foods, setFoods] = useState<food[]>([]);
+  var [showDrinks, setShowDrinks] = useState<boolean>(true);
   var [waitingApiResponse, setWaitingApiResponse] = useState<boolean>(true);
 
   var request:any = {
