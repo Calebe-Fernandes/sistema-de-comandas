@@ -13,9 +13,11 @@ import "./styles.scss";
 const DetalheComanda:React.FC = () => {
   const navigate = useNavigate();
   const params = useParams();
-  const navigateToMenu = () => {
-    navigate("/");
+
+  const navigateToProductMenu = () =>{
+    navigate(`/garcom/comandas/detalhes/menu/${params.id}`);
   };
+
   var requestCommand;
   var [command,setCommand] = useState<any>();
   var [drinks,setDrinks] = useState<any[]>([]);
@@ -26,7 +28,7 @@ const DetalheComanda:React.FC = () => {
     api.get(`/order/${params.id}`) 
         .then(response => {
           requestCommand = response.data;
-          setCommand(requestCommand)
+          setCommand(requestCommand);
 
           requestCommand.drinkWithdrawalList.forEach((drink:any) => {
             setDrinks(arr => {return [...arr,drink]});
@@ -93,7 +95,7 @@ const DetalheComanda:React.FC = () => {
               <div className="order-total">
                 <p>R${command.orderTotal}</p>
               </div>
-              <AddButtonComponent navigate={navigateToMenu}/>
+              <AddButtonComponent navigate={navigateToProductMenu}/>
             </div>
           </div>  
         }   
