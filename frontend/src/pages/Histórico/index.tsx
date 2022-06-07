@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./styles.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { HeaderComponent } from "../../components";
+import { HeaderComponent, Loader } from "../../components";
 import { api } from "../../services/api"; 
 import { faEye, faX, faCalendar } from "@fortawesome/free-solid-svg-icons" 
 
@@ -59,8 +59,9 @@ const Estoque: React.FC = () => {
                 <h1>Saída</h1>
             </div>
             <hr />
-
+        
             <div className="historyContainer">
+                {waitingApiResponse && <div className="loaderWrapper"><Loader/></div>}
                 {Commands.map((command)=>{
                     return <>
                     <div className={command.closingTime.split("T", 1)[0] === filterDate ? "" : "hidden"}>
@@ -137,6 +138,7 @@ const Estoque: React.FC = () => {
                     </div>
                     </>    
                 })}
+                
             </div>
         </>
     )

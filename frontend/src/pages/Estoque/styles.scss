@@ -167,7 +167,7 @@
             }
             
             .atrContainer{
-                margin-bottom: 15px;
+                margin-bottom: 8%;
                 overflow-y: auto;
                 overflow-x: visible;
 
@@ -184,7 +184,11 @@
             .buttonContainer{
                 display: flex;
                 justify-content: space-between;
-
+                position: absolute;
+                bottom: 0px;
+                left: 0px;
+                right: 0px;
+                margin-right: 1%;
                 button:first-of-type{
                     background-color: #FF2626;
                 }
@@ -194,6 +198,10 @@
                     margin: 20px;
                     padding: 10px;
                     border-radius: 10px;
+                    bottom: 0;
+                }
+                .addItemButton{
+                    background-color: #E5802F !important; 
                 }
             }
 

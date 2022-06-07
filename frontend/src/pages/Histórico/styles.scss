@@ -187,6 +187,11 @@ hr{
             width: 100%;
         }    
     }
+    .loaderWrapper{
+        box-sizing: border-box;
+        padding-left: 8%;
+        padding-top: 5%;
+    }
     ::-webkit-scrollbar {
         width: 5px;
       }
