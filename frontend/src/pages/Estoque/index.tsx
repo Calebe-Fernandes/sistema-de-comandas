@@ -13,7 +13,8 @@ interface drink {
     "productName": string,
     "description": string,
     "stockAmmount": number,
-    "alcoholic": boolean
+    "alcoholic": boolean,
+    "active": boolean
 }
   
   interface food {
@@ -21,7 +22,8 @@ interface drink {
     "price": number,
     "productName": string,
     "description": string,
-    "isAvaliable": boolean
+    "isAvaliable": boolean,
+    "active": boolean
 }
 
 const Estoque: React.FC = () => {
@@ -136,6 +138,7 @@ const Estoque: React.FC = () => {
                 "description": "",
                 "stockAmmount": 0,
                 "alcoholic": false,
+                "active": true
             };
             newDrink.price = parseFloat((document.getElementById("item-addItem-price") as HTMLInputElement).value);
             newDrink.productName = (document.getElementById("item-addItem-name") as HTMLInputElement).value;
@@ -158,6 +161,11 @@ const Estoque: React.FC = () => {
                     draggable: true,
                     progress: undefined,
                     });
+                (document.getElementById("item-addItem-price") as HTMLInputElement).value = "";
+                (document.getElementById("item-addItem-name") as HTMLInputElement).value = "";
+                (document.getElementById("item-addItem-description") as HTMLInputElement).value = "";
+                (document.getElementById("item-addItem-stockAmount") as HTMLInputElement).value = "";
+                (document.getElementById("item-addItem-alcoholic") as HTMLInputElement).value = "2";
             })
             .then(()=>{getDrinkList();})
             .catch(error => {
@@ -177,7 +185,8 @@ const Estoque: React.FC = () => {
                 "price": 0,
                 "productName": "",
                 "description": "",
-                "isAvaliable": false,
+                "isAvaliable": true,
+                "active": true
             };
             newFood.price = parseFloat((document.getElementById("item-addItem-price") as HTMLInputElement).value);
             newFood.productName = (document.getElementById("item-addItem-name") as HTMLInputElement).value;
@@ -199,6 +208,10 @@ const Estoque: React.FC = () => {
                     draggable: true,
                     progress: undefined,
                     });
+                (document.getElementById("item-addItem-price") as HTMLInputElement).value = "";
+                (document.getElementById("item-addItem-name") as HTMLInputElement).value  = "";
+                (document.getElementById("item-addItem-description") as HTMLInputElement).value  = "";
+                (document.getElementById("item-addItem-isAvaliable") as HTMLInputElement).value  = "1"; 
             })
             .then(()=>{getFoodList();})
             .catch(error => {
@@ -216,9 +229,46 @@ const Estoque: React.FC = () => {
     }
 
     function removeItem(item:any){
-
-        console.log(item);
-
+        item.active = false;
+        api.put("/drinks", item)
+            .then(response => {
+                toast.success('Item excluído com sucesso!', {
+                    position: "top-center",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+                    toggle(item.id)
+            })
+            .catch(error => {
+                api.put("/food", item)
+                    .then(response => {
+                        toast.success('Item excluído com sucesso!', {
+                            position: "top-center",
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            });
+                        toggle(item.id)
+                    })
+                    .catch(error => {
+                        toast.error(error.response.data.message, {
+                            position: "top-center",
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            });
+                    });
+            });
     }
 
     function updateDrink(drink:drink){
@@ -343,6 +393,7 @@ const Estoque: React.FC = () => {
                     
                 <div id="drinkList" className="hidden">
                     {drinks.map((drink) => {
+                        if(drink.active ===true){
                         return <>
                             <div className="item">
                                 <h2>{drink.productName}</h2>
@@ -389,57 +440,58 @@ const Estoque: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
-                        </>
+                        </>}
                     })}
                 </div>
 
                 <div id="foodList" className="hidden">
                     {foods.map((food) => {
-                            return <>
-                                <div className="item">
-                                    <h2>{food.productName}</h2>
-                                    <FontAwesomeIcon icon={faEye} className="viewButton" onClick={()=> toggle(food.id)}/>
-                                </div>
-                                <hr className="line" />
+                        if(food.active ===true){
+                        return <>
+                            <div className="item">
+                                <h2>{food.productName}</h2>
+                                <FontAwesomeIcon icon={faEye} className="viewButton" onClick={()=> toggle(food.id)}/>
+                            </div>
+                            <hr className="line" />
 
-                                <div id={`item-${food.id}`} className="modal hidden" >
-                                    <div className="modalBackground" onClick={()=> toggle(food.id)}></div>  
-                                    <div className="detalhesContainer">
-                                        <div className="detalhesHeader">
-                                            <div>
-                                                <h3>Detalhes do item</h3>
-                                                <h4>{food.productName}</h4>   
-                                            </div>
-                                            <button className="closeModal" onClick={()=> toggle(food.id)}>
-                                                <FontAwesomeIcon icon={faX} className="closeButton"/>
-                                            </button> 
+                            <div id={`item-${food.id}`} className="modal hidden" >
+                                <div className="modalBackground" onClick={()=> toggle(food.id)}></div>  
+                                <div className="detalhesContainer">
+                                    <div className="detalhesHeader">
+                                        <div>
+                                            <h3>Detalhes do item</h3>
+                                            <h4>{food.productName}</h4>   
                                         </div>
-                                        
-                                        <div className="atrContainer">
-                                            <h5>Preço *</h5>
-                                            <input id={`item-${food.id}-price`} type="number" min="1" step="any" placeholder={`R$ ${food.price.toFixed(2)}`} className="atr"/>
-                                            <h5>Descrição *</h5>
-                                            <input id={`item-${food.id}-description`} className="atr" type="text" placeholder={`${food.description}`} />
-                                            <h5>Disponibilidade</h5>
-                                            {food.isAvaliable ?
-                                                <select id={`item-${food.id}-isAvaliable`} className="atr">
-                                                    <option value="1">Sim</option>
-                                                    <option value="2">Não</option>
-                                                </select> :
-                                                <select id={`item-${food.id}-isAvaliable`} defaultValue={2} className="atr">
-                                                    <option value="1">Sim</option>
-                                                    <option value="2">Não</option>
-                                                </select> 
-                                            }
-                                        </div>
+                                        <button className="closeModal" onClick={()=> toggle(food.id)}>
+                                            <FontAwesomeIcon icon={faX} className="closeButton"/>
+                                        </button> 
+                                    </div>
+                                    
+                                    <div className="atrContainer">
+                                        <h5>Preço *</h5>
+                                        <input id={`item-${food.id}-price`} type="number" min="1" step="any" placeholder={`R$ ${food.price.toFixed(2)}`} className="atr"/>
+                                        <h5>Descrição *</h5>
+                                        <input id={`item-${food.id}-description`} className="atr" type="text" placeholder={`${food.description}`} />
+                                        <h5>Disponibilidade</h5>
+                                        {food.isAvaliable ?
+                                            <select id={`item-${food.id}-isAvaliable`} className="atr">
+                                                <option value="1">Sim</option>
+                                                <option value="2">Não</option>
+                                            </select> :
+                                            <select id={`item-${food.id}-isAvaliable`} defaultValue={2} className="atr">
+                                                <option value="1">Sim</option>
+                                                <option value="2">Não</option>
+                                            </select> 
+                                        }
+                                    </div>
 
-                                        <div className="buttonContainer">
-                                            <button onClick={()=>removeItem(food)}>Excluir item</button>
-                                            <button onClick={()=>updateFood(food)}>Atualizar item</button>
-                                        </div>
+                                    <div className="buttonContainer">
+                                        <button onClick={()=>removeItem(food)}>Excluir item</button>
+                                        <button onClick={()=>updateFood(food)}>Atualizar item</button>
                                     </div>
                                 </div>
-                            </>
+                            </div>
+                        </>}
                     })}
                 </div>
                 <div id={"item-addItem"} className="modal hidden" >
@@ -478,7 +530,7 @@ const Estoque: React.FC = () => {
                             </div>
                             <div id="food-addItem" className="hidden">
                                 <h5>Disponibilidade</h5>
-                                <select id="item-addItem-isAvaliable" defaultValue={2} className="atr">
+                                <select id="item-addItem-isAvaliable" defaultValue={1} className="atr">
                                     <option value="1">Sim</option>
                                     <option value="2">Não</option>
                                 </select> 
