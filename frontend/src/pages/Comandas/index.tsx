@@ -47,7 +47,7 @@ const Comandas:React.FC = ()=> {
   } else if (window.location.href.indexOf("caixa") > -1) {
     user = "cashier";
   } else {
-    user = "waiter";
+    user = "manager";
   }
 
 

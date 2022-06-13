@@ -23,6 +23,15 @@ const DetalheComanda:React.FC = () => {
   var [drinks,setDrinks] = useState<any[]>([]);
   var [foods,setFoods] = useState<any[]>([]);
 
+  var user;
+  if (window.location.href.indexOf("garcom") > -1) {
+    user = "waiter";
+  } else if (window.location.href.indexOf("caixa") > -1) {
+    user = "cashier";
+  } else {
+    user = "manager";
+  }
+  console.log(user)
 
   useEffect(() => {
     api.get(`/order/${params.id}`) 
@@ -92,10 +101,16 @@ const DetalheComanda:React.FC = () => {
                 </tbody>
               </table>
 
-              <div className="order-total">
-                <p>R${command.orderTotal}</p>
+              <div className="footer">
+                <div className="order-total">
+                  <p>R${command.orderTotal}</p>
+                </div>
+                <AddButtonComponent navigate={navigateToProductMenu}/>
+
+                
+                { user === 'cashier'  && <button className="btn" onClick={function(){}}>Fechar comanda</button> }
               </div>
-              <AddButtonComponent navigate={navigateToProductMenu}/>
+
             </div>
           </div>  
         }   
