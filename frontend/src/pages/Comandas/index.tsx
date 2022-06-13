@@ -41,7 +41,7 @@ const Comandas:React.FC = ()=> {
     return value.toString().indexOf(searchValue) !== -1;
   };
 
-  let user;
+  let user: string;
   if (window.location.href.indexOf("garcom") > -1) {
     user = "waiter";
   } else if (window.location.href.indexOf("caixa") > -1) {
@@ -57,7 +57,7 @@ const Comandas:React.FC = ()=> {
 
   const navigateToCommandDetails = (tableNumber:number) => {
     const id = getCommand(tableNumber)
-    navigate(`/garcom/comandas/detalhes/${id}`);
+    user === "cashier" ? navigate(`/caixa/comandas/detalhes/${id}`) :  navigate(`/garcom/comandas/detalhes/${id}`);
   }
   
   const getCommand = (tableNumber:number) =>{

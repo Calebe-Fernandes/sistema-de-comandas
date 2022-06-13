@@ -14,6 +14,7 @@ const Router = () => {
       <Route path="/garcom/comandas/detalhes/:id" element={<DetalheComanda/>} />
       <Route path="/garcom/comandas/detalhes/menu/:id" element={<MenuProdutos/>} />   
       <Route path="/caixa/comandas" element={<Comandas/>}/>
+      <Route path="/caixa/comandas/detalhes/:id" element={<DetalheComanda/>} />  
       <Route path="/estoque" element={<Estoque/>}/>  
       <Route path="/historico" element={<Histórico/>}/>  
     </Routes>
