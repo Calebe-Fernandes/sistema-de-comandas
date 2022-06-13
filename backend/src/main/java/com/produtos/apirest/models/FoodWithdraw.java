@@ -2,6 +2,8 @@ package com.produtos.apirest.models;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.OnDelete;
+
 @Entity
 @Table(name = "TB_FOOD_WITHDRAW")
 public class FoodWithdraw {

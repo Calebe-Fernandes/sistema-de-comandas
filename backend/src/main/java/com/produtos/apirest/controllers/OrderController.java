@@ -155,6 +155,8 @@ public class OrderController {
 
         for (DrinkRequestObject request : requestArray) {
             Drink requestDrink = drinkRepository.getById(request.getDrinkId());
+            if (!requestDrink.isActive())
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Item não disponibilizado para consumo!");
             DrinkWithdrawal withdraw = new DrinkWithdrawal(requestDrink, request.getDrinkAmount());
             drinkWithdrawValidator.validateDrinkWithdrawal(orderId, withdraw);
 
@@ -226,6 +228,8 @@ public class OrderController {
 
         for (FoodRequestObject request : requestArray) {
             FoodStuff requestFood = foodStuffRepository.findById(request.getFoodId());
+            if (!requestFood.isActive())
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Item não disponibilizado para consumo!");
             FoodWithdraw withdraw = new FoodWithdraw(requestFood, request.getQuantity());
             foodWithdrawValidadator.validateFoodWithdraw(orderId, withdraw);
 
@@ -236,7 +240,7 @@ public class OrderController {
             foodStuffWithdrawRepository.save(withdraw);
 
             // Update Order total
-            order.setOrderTotal(order.getOrderTotal() + (requestFood.getPrice()*request.getQuantity()));
+            order.setOrderTotal(order.getOrderTotal() + (requestFood.getPrice() * request.getQuantity()));
             orderRepository.save(order);
         }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Saída contabilizada no estoque");

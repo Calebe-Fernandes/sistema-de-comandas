@@ -48,6 +48,14 @@ public class ProductController {
         return drinkRepository.save(drink);
     }
 
+    @PostMapping("/drinks/disable")
+    @ApiOperation(value = "Desabilita um item do cardapio nao podendo adicionar em uma nova comanda")
+    public Drink disableDrink(@RequestBody Drink drink) {
+        drinkValidator.valdiateDrink(drink);
+        drink.setActive(false);
+        return drinkRepository.save(drink);
+    }
+
     @DeleteMapping("/drinks")
     @ApiOperation(value = "Deleta uma bebida (de acordo com id)")
     public void deleteDrink(@RequestBody Drink drink) {
@@ -82,6 +90,14 @@ public class ProductController {
     @ApiOperation(value = "Cadastra um novo alimento. Ao cadastrar, omitir o campo 'id' do payload, pois este é gerado automaticamente pelo banco")
     public FoodStuff registerNewFoodStuff(@RequestBody FoodStuff food) {
         foodValidator.validateFood(food);
+        return foodStuffRepository.save(food);
+    }
+
+    @PostMapping("/food/disable")
+    @ApiOperation(value = "Desabilita um item do cardapio nao podendo adicionar em uma nova commanda")
+    public FoodStuff disableFoodStuff(@RequestBody FoodStuff food) {
+        foodValidator.validateFood(food);
+        food.setActive(false);
         return foodStuffRepository.save(food);
     }
 
