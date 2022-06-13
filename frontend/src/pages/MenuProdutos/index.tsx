@@ -227,7 +227,19 @@ const MenuProdutos:React.FC  = () => {
         .then(response => {
           console.log(response);
        })
-        .catch(error => { console.log(error)})  
+        .catch(error => { 
+          console.log(error)
+          toast.warning("Falha ao adicionar porção:" + error.response.data.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
+          return false;  
+        });  
   }
 
 

@@ -29,8 +29,6 @@ const DetalheComanda:React.FC = () => {
     user = "manager";
   }
 
-
-
   useEffect(() => {
     api.get(`/order/${params.id}`) 
         .then(response => {
@@ -99,7 +97,7 @@ const DetalheComanda:React.FC = () => {
             <CommandHeaderComponent title={`Mesa  ${command.table}`} />
             <div className="command-details-container">
               <div className="delete-tiem-container">
-                <p>Excluir Item</p>
+                <p onClick={function(){alert('excluiu')}}>Excluir Item</p>
               </div>
 
               <table>
