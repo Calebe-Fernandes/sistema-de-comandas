@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {useParams} from "react-router"
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 
 import { AddButtonComponent, CommandHeaderComponent, Loader } from "../../components";
 import { api } from "../../services/api";
@@ -8,22 +9,18 @@ import { api } from "../../services/api";
 import "./styles.scss";
 
 
-
-
 const DetalheComanda:React.FC = () => {
   const navigate = useNavigate();
   const params = useParams();
 
-  const navigateToProductMenu = () =>{
-    navigate(`/garcom/comandas/detalhes/menu/${params.id}`);
-  };
+
 
   var requestCommand;
   var [command,setCommand] = useState<any>();
   var [drinks,setDrinks] = useState<any[]>([]);
   var [foods,setFoods] = useState<any[]>([]);
 
-  var user;
+  var user : string;
   if (window.location.href.indexOf("garcom") > -1) {
     user = "waiter";
   } else if (window.location.href.indexOf("caixa") > -1) {
@@ -31,7 +28,8 @@ const DetalheComanda:React.FC = () => {
   } else {
     user = "manager";
   }
-  console.log(user)
+
+
 
   useEffect(() => {
     api.get(`/order/${params.id}`) 
@@ -48,11 +46,54 @@ const DetalheComanda:React.FC = () => {
           });
 
         })
-        .catch(error => {console.log(error)}) 
-    },[])
+        .catch(error => {console.log(error)})
+    },[]);
+
+  const navigateToProductMenu = () =>{
+    navigate(`/garcom/comandas/detalhes/menu/${params.id}`);
+  };
+
+  const closeCommand = ()=>{
+    api.put(`/order/close/${params.id}`).then( response => {
+            toast.success('Comanda fechada com sucesso!', {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              });
+              navigate("/caixa/comandas");
+          }
+        ).catch(error => {
+          console.error();
+          toast.error('Um erro inesperado ocorreu', {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
+          }
+        );
+  }
    
     return (
       <>
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         { command !== undefined && 
           <div className="command-details-page">
             <CommandHeaderComponent title={`Mesa  ${command.table}`} />
@@ -100,18 +141,13 @@ const DetalheComanda:React.FC = () => {
 
                 </tbody>
               </table>
-
-              <div className="footer">
-                <div className="order-total">
-                  <p>R${command.orderTotal}</p>
-                </div>
-                <AddButtonComponent navigate={navigateToProductMenu}/>
-
-                
-                { user === 'cashier'  && <button className="btn" onClick={function(){}}>Fechar comanda</button> }
+              
+              <div className="order-total">
+                <p>R${command.orderTotal}</p>
               </div>
-
+              <AddButtonComponent navigate={navigateToProductMenu}/>
             </div>
+            { user === 'cashier'  &&  <button className="btn closeCommandButton" onClick={closeCommand}>Fechar comanda</button>}           
           </div>  
         }   
       </>

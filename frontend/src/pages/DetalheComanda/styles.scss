@@ -45,7 +45,7 @@
       height: 26px;
       margin-left: 0;
     }
-    
+
     .order-total{
       position: absolute;
       bottom: 40px;
@@ -63,5 +63,25 @@
         font-weight: 600;
       }
     }
+    
+  }
+  
+  @media only screen and (max-width: 900px){
+    .closeCommandButton{
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      border-radius: 0;
+    }
+  
+    .order-total{
+      bottom: 90px !important;
+    }
+  
+    .add-button{
+      bottom: 90px !important;
+    }
+  
   }
 }
+
