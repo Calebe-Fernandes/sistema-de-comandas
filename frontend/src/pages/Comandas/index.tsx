@@ -9,16 +9,19 @@ import EmptyContent from "../../components/EmptyContent";
 
 
 const Comandas:React.FC = ()=> {
+  const navigate = useNavigate();
   var [searchValue, setSearchValue] = useState("");
   var [openCommands, setOpenCommands] = useState<number[]>([]);
   var [waitingApiResponse, setWaitingApiResponse] = useState<boolean>(true);
   var [areThereOpenCommands, setAreThereOpenCommands] = useState<boolean>(false);
-  var openCommandsResponse;
+  var [commands, setCommands] = useState<any>();
+  var openCommandsResponse:any;
 
   useEffect(() => {
     api.get("/order/open")
         .then((response) => {
           openCommandsResponse = response.data;
+          setCommands(response.data)
           openCommandsResponse.forEach((command:any) => {
             setOpenCommands( arr => { return [...arr,command.table]})
           });
@@ -38,21 +41,38 @@ const Comandas:React.FC = ()=> {
     return value.toString().indexOf(searchValue) !== -1;
   };
 
-  let user;
+  let user: string;
   if (window.location.href.indexOf("garcom") > -1) {
     user = "waiter";
   } else if (window.location.href.indexOf("caixa") > -1) {
     user = "cashier";
   } else {
-    user = "waiter";
+    user = "manager";
   }
 
-  const navigate = useNavigate();
 
   const navigateToNewCommand = () => {
     navigate("/garcom/comandas/nova_comanda");
   };
+
+  const navigateToCommandDetails = (tableNumber:number) => {
+    const id = getCommand(tableNumber)
+    user === "cashier" ? navigate(`/caixa/comandas/detalhes/${id}`) :  navigate(`/garcom/comandas/detalhes/${id}`);
+  }
   
+  const getCommand = (tableNumber:number) =>{
+    var id;
+
+    commands.forEach((command:any) => {
+      if(command.table === tableNumber){
+        id = command.id;
+      }
+    });
+
+    return id;
+  }
+
+
   return (
     <>
       <HeaderComponent user={user} page="commands" />
@@ -81,7 +101,7 @@ const Comandas:React.FC = ()=> {
           <div className="open-commands">
             {openCommands.filter(filterCommands).map((tableNumber) => {
               return <>
-                <div className="open-command">
+                <div className="open-command" onClick={()=>{navigateToCommandDetails(tableNumber)}}>
                   {tableNumber}
                 </div>
               </>

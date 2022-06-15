@@ -13,7 +13,7 @@ const CommandHeaderComponent: React.FC<Props> = ({ title }) => {
   const navigate = useNavigate();
 
   const navigateToCommands = () => {
-    navigate("/garcom/comandas");
+    navigate(-1);
   };
   return (
     <>

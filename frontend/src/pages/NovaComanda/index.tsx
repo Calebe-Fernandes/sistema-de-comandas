@@ -35,9 +35,9 @@ const NovaComanda: React.FC = () => {
 
   var [checkedFood, setCheckedFood] = useState<string[]>([]);
   var [checkedDrinks, setCheckedDrinks] = useState<string[]>([]);
-  var [drinks, setDrinks] = useState<drink[]>([])
-  var [foods, setFoods] = useState<food[]>([])
-  var [showDrinks, setShowDrinks] = useState<boolean>(true)
+  var [drinks, setDrinks] = useState<drink[]>([]);
+  var [foods, setFoods] = useState<food[]>([]);
+  var [showDrinks, setShowDrinks] = useState<boolean>(true);
   var [waitingApiResponse, setWaitingApiResponse] = useState<boolean>(true);
 
   var request:any = {
@@ -230,7 +230,7 @@ const NovaComanda: React.FC = () => {
 
     api.post(`/order/request-drink/${orderId}`,orderedDrinks)
         .then(response => {
-          console.log(response)
+          console.log(response);
        })
         .catch(error => { console.log(error)})  
   }
@@ -248,7 +248,7 @@ const NovaComanda: React.FC = () => {
 
     api.post(`/order/request-food/${orderId}`,orderedFood)
         .then(response => {
-          console.log(response)
+          console.log(response);
        })
         .catch(error => { console.log(error)})  
   }
