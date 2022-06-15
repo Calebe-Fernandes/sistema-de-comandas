@@ -258,7 +258,6 @@ public class OrderController {
             @PathVariable(value = "idOrder") long idOrder,
             @PathVariable(value = "idWithdraw") long idWithdraw) {
 
-        returnDrinkValidator.validateReturnDrink(idOrder, idWithdraw);
         // Service
         FoodWithdraw deleteFood = foodStuffWithdrawRepository.findOneById(idWithdraw);
         OrderModel order = orderRepository.findById(idOrder);

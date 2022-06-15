@@ -19,6 +19,10 @@ const DetalheComanda:React.FC = () => {
   var [command,setCommand] = useState<any>();
   var [drinks,setDrinks] = useState<any[]>([]);
   var [foods,setFoods] = useState<any[]>([]);
+  var [checkedDrinks, setCheckedDrinks] = useState<string[]>([]);
+  var [checkedFood, setCheckedFood] = useState<string[]>([]);
+
+
 
   var user : string;
   if (window.location.href.indexOf("garcom") > -1) {
@@ -30,6 +34,10 @@ const DetalheComanda:React.FC = () => {
   }
 
   useEffect(() => {
+      getOrderItens();
+    },[]);
+
+  const getOrderItens = () => {
     api.get(`/order/${params.id}`) 
         .then(response => {
           requestCommand = response.data;
@@ -45,7 +53,7 @@ const DetalheComanda:React.FC = () => {
 
         })
         .catch(error => {console.log(error)})
-    },[]);
+  }
 
   const navigateToProductMenu = () =>{
     navigate(`/garcom/comandas/detalhes/menu/${params.id}`);
@@ -66,38 +74,128 @@ const DetalheComanda:React.FC = () => {
           }
         ).catch(error => {
           console.error();
-          toast.error('Um erro inesperado ocorreu', {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            });
+            toast.error('Um erro inesperado ocorreu', {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              });
           }
         );
+  }
+
+  const handleCheckDrinks = (e:any) =>{
+    var input =  document.getElementById(`quantity-for-${e.target.value}`)
+    var updatedList = [...checkedDrinks]
+    if(e.target.checked){
+      updatedList = [...checkedDrinks, e.target.value];
+        input != null && input.removeAttribute('disabled') 
+    }else{
+    updatedList.splice(checkedDrinks.indexOf(e.target.value), 1);
+      input != null && input.setAttribute("disabled", "disabled");
+      (input as HTMLInputElement).value = '';
+    }
+    setCheckedDrinks(updatedList);
+  }
+
+  function handleCheckFood(e:any){
+    var input =  document.getElementById(`quantity-for-${e.target.value}`)
+    var updatedList = [...checkedFood]
+    if(e.target.checked){
+      updatedList = [...checkedFood, e.target.value];
+      input != null && input.removeAttribute('disabled') 
+    }else{
+      updatedList.splice(checkedFood.indexOf(e.target.value), 1);
+      input != null && input.setAttribute("disabled", "disabled");
+      (input as HTMLInputElement).value = '';
+    }
+    setCheckedFood(updatedList);
+  }
+  
+  const removeItemsFromOrder = () => {
+    if(checkedDrinks.length > 0 || checkedFood.length > 0){
+      checkedDrinks.forEach(drinkID => {
+        api.put(`/order/${params.id}/drink-return/${drinkID}`)
+            .then( response => {
+              toast.success('Item removido com sucesso', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            })
+            .catch( error => {
+              console.log(error);
+              toast.error('Um erro inesperado ocorreu', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            });
+      });
+      checkedFood.forEach(foodID => {
+        api.put(`/order/${params.id}/food-return/${foodID}`)
+            .then( response => {
+              toast.success('Item removido com sucesso', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            })
+            .catch( error => {
+              console.log(error);
+              toast.error('Um erro inesperado ocorreu', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            });
+      });
+
+      //Component is not updating, palliative solution to force re-render of the iterms list
+      setTimeout(() => {
+        window.location.reload();
+      }, 2500);
+
+    }else{
+      toast.warning('Selecione ao menos um item para excluir', {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
   }
    
     return (
       <>
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
         { command !== undefined && 
           <div className="command-details-page">
             <CommandHeaderComponent title={`Mesa  ${command.table}`} />
             <div className="command-details-container">
-              <div className="delete-tiem-container">
-                <p onClick={function(){alert('excluiu')}}>Excluir Item</p>
+              <div className="delete-item-option-container">
+                <p onClick={removeItemsFromOrder}>Excluir Item</p>
               </div>
 
               <table>
@@ -112,10 +210,10 @@ const DetalheComanda:React.FC = () => {
                 { drinks.map(drink => {
                       return (
                         <>            
-                          <tr>
-                            <td><input type="checkbox" className="selectItemCheckbox" /></td>
+                          <tr key={drink.id}>
+                            <td><input type="checkbox" className="selectItemCheckbox" value={drink.id} onChange={handleCheckDrinks}/></td>
                             <td>{drink.drink.productName}</td>
-                            <td><input disabled type="text" className= "quantityInput" value={drink.quantity}/></td>
+                            <td><input disabled type="text" id={`quantity-for-${drink.id}`} className="quantityInput" value={drink.quantity}/></td>
                           </tr>
                         </>
                       )
@@ -126,10 +224,10 @@ const DetalheComanda:React.FC = () => {
                   foods.map(food => {
                     return (
                       <>            
-                        <tr>
-                          <td><input type="checkbox" className="selectItemCheckbox" /></td>
+                        <tr key={food.id}>
+                          <td><input type="checkbox" className="selectItemCheckbox" value={food.id} onChange={handleCheckFood}/></td>
                           <td>{food.food.productName}</td>
-                          <td><input disabled type="text" className= "quantityInput" value={food.quantity}/></td>
+                          <td><input disabled type="text" id={`quantity-for-${food.id}`} className="quantityInput" value={food.quantity}/></td>
                         </tr>
                       </>
                     )
