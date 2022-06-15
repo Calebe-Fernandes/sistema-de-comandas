@@ -156,7 +156,13 @@ public class OrderController {
         for (DrinkRequestObject request : requestArray) {
             Drink requestDrink = drinkRepository.getById(request.getDrinkId());
             if (!requestDrink.isActive())
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Item não disponibilizado para consumo!");
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("Item {" + requestDrink.getProductName() + "} não disponibilizado para consumo!");
+        }
+
+        for (DrinkRequestObject request : requestArray) {
+            Drink requestDrink = drinkRepository.getById(request.getDrinkId());
+
             DrinkWithdrawal withdraw = new DrinkWithdrawal(requestDrink, request.getDrinkAmount());
             drinkWithdrawValidator.validateDrinkWithdrawal(orderId, withdraw);
 
@@ -229,7 +235,13 @@ public class OrderController {
         for (FoodRequestObject request : requestArray) {
             FoodStuff requestFood = foodStuffRepository.findById(request.getFoodId());
             if (!requestFood.isActive())
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Item não disponibilizado para consumo!");
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("Item {" + requestFood.getProductName() + "} não disponibilizado para consumo!");
+        }
+
+        for (FoodRequestObject request : requestArray) {
+            FoodStuff requestFood = foodStuffRepository.findById(request.getFoodId());
+
             FoodWithdraw withdraw = new FoodWithdraw(requestFood, request.getQuantity());
             foodWithdrawValidadator.validateFoodWithdraw(orderId, withdraw);
 
@@ -242,6 +254,7 @@ public class OrderController {
             // Update Order total
             order.setOrderTotal(order.getOrderTotal() + (requestFood.getPrice() * request.getQuantity()));
             orderRepository.save(order);
+
         }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Saída contabilizada no estoque");
     }
