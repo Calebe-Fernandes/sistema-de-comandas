@@ -370,17 +370,6 @@ const Estoque: React.FC = () => {
         <>
             <HeaderComponent user={"manager"} page="stock" />
             <AddButtonComponent navigate={toggleAddItem} />
-            <ToastContainer
-              position="top-center"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
             <div className="stock-container">
                 <div className="menu-options">
                     <button onClick={getDrinkList} className="menu-option active"><p>Bebidas</p></button>
