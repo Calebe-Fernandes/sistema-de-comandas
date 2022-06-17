@@ -25,8 +25,12 @@ const HeaderComponent: React.FC<Props> = ({ user, page }) => {
     navigate("/estoque");
   };
 
-  const navigateToHistory = () => {
-    navigate("/historico")
+  const navigateToCashierHistory = () => {
+    navigate("../caixa/historico")
+  }
+
+  const navigateToManagerHistory = () => {
+    navigate("../gerente/historico")
   }
 
   return (
@@ -49,9 +53,14 @@ const HeaderComponent: React.FC<Props> = ({ user, page }) => {
                 onClick={navigateToStock}
               > Estoque</div>
               : null}
-            {user === "cashier" || user === "manager" ?
+            {user === "cashier"?
               <div className={page === "history" ? "active" : ""}
-              onClick={navigateToHistory}
+              onClick={navigateToCashierHistory}
+              > Histórico</div>
+              : null}
+            {user === "manager"?
+              <div className={page === "history" ? "active" : ""}
+              onClick={navigateToManagerHistory}
               > Histórico</div>
               : null}
           </div>

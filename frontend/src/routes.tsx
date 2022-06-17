@@ -1,7 +1,7 @@
 import React from 'react'
 import { Routes, Route } from "react-router-dom";
 
-import { Home, Comandas, Estoque, Histórico, NovaComanda, MenuProdutos} from './pages';
+import { Home, Comandas, Estoque, HistóricoCaixa, HistóricoGerente, NovaComanda, MenuProdutos} from './pages';
 import DetalheComanda from './pages/DetalheComanda';
 
 const Router = () => {
@@ -16,7 +16,8 @@ const Router = () => {
       <Route path="/caixa/comandas" element={<Comandas/>}/>
       <Route path="/caixa/comandas/detalhes/:id" element={<DetalheComanda/>} />  
       <Route path="/estoque" element={<Estoque/>}/>  
-      <Route path="/historico" element={<Histórico/>}/>  
+      <Route path="caixa/historico" element={<HistóricoCaixa/>}/>  
+      <Route path="gerente/historico" element={<HistóricoGerente/>}/> 
     </Routes>
   );
 };

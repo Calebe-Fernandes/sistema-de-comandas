@@ -3,10 +3,13 @@ import "./styles.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HeaderComponent, Loader } from "../../components";
 import { api } from "../../services/api"; 
-import { faEye, faX, faCalendar } from "@fortawesome/free-solid-svg-icons" 
+import { faEye, faX } from "@fortawesome/free-solid-svg-icons" 
 
+interface Props {
+    user: string;
+  }
 
-const Estoque: React.FC = () => {
+const Histórico: React.FC<Props> = ({ user }) => {
 
     const [isActive, setActive] = useState(false);
     var [Commands, setCommands] = useState<any[]>([]);
@@ -43,12 +46,12 @@ const Estoque: React.FC = () => {
 
     return(
         <>
-            <HeaderComponent user={"manager"} page="history" />
+            <HeaderComponent user={user} page="history" />
             <div className="dateInput">
                 <h2>Data</h2>
                 <div>
                     <input type="date" defaultValue={date} max={date} id="date" onChange={(event) => setFilter(event.target.value)}/>
-                    <FontAwesomeIcon className="calendarButton" icon={faCalendar} />
+                    
                 </div> 
             </div>
             
@@ -143,4 +146,4 @@ const Estoque: React.FC = () => {
         </>
     )
 }
-export default Estoque;
+export default Histórico;
