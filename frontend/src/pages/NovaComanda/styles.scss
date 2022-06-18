@@ -4,26 +4,13 @@
   padding: 0 30px;
   position: relative;
 
-  .relative-position {
-    position: relative;
-  }
-
   .table-container {
-    height: calc(100vh - 356px);
+    height: calc(100vh - 346px);
     overflow:auto;
-
-    thead {
-      box-shadow: 0px 1px 0px #000000;
-      position: -webkit-sticky;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-      background: #fff;
-    }
   }
 
   .empty-content-container {
-    height: calc(100vh - 356px);
+    height: calc(100vh - 346px);
   }
   
   label {
@@ -85,19 +72,4 @@
     height: 26px;
     margin-left: 0;
   }
-
-  *::-webkit-scrollbar {
-    width: 12px;
-  }
-  
-  *::-webkit-scrollbar-track {
-    background: #F1F1F1;
-  }
-  
-  *::-webkit-scrollbar-thumb {
-    background-color: #C4C4C4;
-    border-radius: 20px;
-    border: 3px solid #F1F1F1;
-  }
-
 }
