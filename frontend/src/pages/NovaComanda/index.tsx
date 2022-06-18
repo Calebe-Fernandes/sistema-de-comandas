@@ -257,7 +257,7 @@ const NovaComanda: React.FC = () => {
     <>
       <CommandHeaderComponent title="Nova Comanda" />
 
-      <div className="new-command-container">
+      <body className="new-command-container">
 
         <label htmlFor="table">Mesa</label>
         <input type="text" id="table" name="table" onChange={validateOrder}/>
@@ -277,63 +277,69 @@ const NovaComanda: React.FC = () => {
         }
         
         <>
-            <div id="drinkList" className="hidden">
-              <table>
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th>Item</th>
-                    <th>Quant.</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {drinks.map((drink) => {
-                    return <>
-                      <tr>
-                        <td><input type="checkbox" className="selectItemCheckbox" value={drink.id} onChange={handleCheckDrinks}/></td>
-                        <td>{ drink.productName }</td>
-                        <td><input disabled type="text" className= "quantityInput" id={`quantity-for-${drink.id}`} onChange={validateOrder}/></td>
-                      </tr>
-                    </>
-                  })}
-                </tbody>
-              </table>
+            <div id="drinkList" className="relative-position">
+              <div className="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Item</th>
+                      <th>Quant.</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {drinks.map((drink) => {
+                      return <>
+                        <tr>
+                          <td><input type="checkbox" className="selectItemCheckbox" value={drink.id} onChange={handleCheckDrinks}/></td>
+                          <td>{ drink.productName }</td>
+                          <td><input disabled type="text" className= "quantityInput" id={`quantity-for-${drink.id}`} onChange={validateOrder}/></td>
+                        </tr>
+                      </>
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
 
-            <div id="foodList" className="hidden">
-            <table>
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Item</th>
-                  <th>Quant.</th>
-                </tr>
-              </thead>
-              <tbody>
-                {foods.map((food) => {
-                  return <>
+            <div id="foodList" className="hidden relative-position">
+              <div className="table-container">
+                <table>
+                  <thead>
                     <tr>
-                      <td><input type="checkbox" className="selectItemCheckbox" value={food.id} onChange={handleCheckFood}/></td>
-                      <td>{ food.productName }</td>
-                      <td><input disabled type="text" className= "quantityInput" id={`quantity-for-${food.id}`} onChange={validateOrder}/></td>
+                      <th></th>
+                      <th>Item</th>
+                      <th>Quant.</th>
                     </tr>
-                  </>
-                })}
-              </tbody>
-             </table>
+                  </thead>
+                  <tbody>
+                    {foods.map((food) => {
+                      return <>
+                        <tr>
+                          <td><input type="checkbox" className="selectItemCheckbox" value={food.id} onChange={handleCheckFood}/></td>
+                          <td>{ food.productName }</td>
+                          <td><input disabled type="text" className= "quantityInput" id={`quantity-for-${food.id}`} onChange={validateOrder}/></td>
+                        </tr>
+                      </>
+                    })}
+                  </tbody>
+                </table>
+              </div>
           </div>
         </>
 
 
         {!waitingApiResponse && foods.length === 0 && !showDrinks &&
           <>
-            <p>Não há itens nessa categoria</p>
-            <EmptyContent/> 
+            <div className="empty-content-container">
+              <p>Não há itens nessa categoria</p>
+              <EmptyContent/>
+            </div> 
           </>
         }
 
         <button className="btn" onClick={function(){postOrder()}}>Realizar pedido</button>
-      </div>
+      </body>
     </>
   )
 }
