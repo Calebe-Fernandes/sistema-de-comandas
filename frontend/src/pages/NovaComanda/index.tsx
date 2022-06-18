@@ -267,10 +267,7 @@ const NovaComanda: React.FC = () => {
         {waitingApiResponse && <Loader />}
 
         {!waitingApiResponse && drinks.length === 0 && showDrinks &&
-          <>
-            <p>Não há itens nessa categoria</p>
-            <EmptyContent />
-          </>
+          <EmptyContent />
         }
 
         <>
@@ -327,12 +324,9 @@ const NovaComanda: React.FC = () => {
 
 
         {!waitingApiResponse && foods.length === 0 && !showDrinks &&
-          <>
-            <div className="empty-content-container">
-              <p>Não há itens nessa categoria</p>
-              <EmptyContent />
-            </div>
-          </>
+          <div className="empty-content-container">
+            <EmptyContent />
+          </div>
         }
 
         <button className="btn" onClick={function () { postOrder() }}>Realizar pedido</button>

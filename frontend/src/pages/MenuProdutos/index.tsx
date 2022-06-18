@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { CommandHeaderComponent, Loader, EmptyContent } from "../../components";
 import { api } from "../../services/api";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useNavigate } from "react-router";
 
 import "./styles.scss";
@@ -247,10 +247,7 @@ const MenuProdutos: React.FC = () => {
         {waitingApiResponse && <Loader />}
 
         {!waitingApiResponse && drinks.length === 0 && showDrinks &&
-          <>
-            <p>Não há itens nessa categoria</p>
-            <EmptyContent />
-          </>
+          <EmptyContent />
         }
 
         <>
@@ -306,10 +303,7 @@ const MenuProdutos: React.FC = () => {
         </>
 
         {!waitingApiResponse && foods.length === 0 && !showDrinks &&
-          <>
-            <p>Não há itens nessa categoria</p>
-            <EmptyContent />
-          </>
+          <EmptyContent />
         }
 
         <button className="btn" onClick={function () { addProducts(command.id) }}>Adicionar itens na comanda</button>
