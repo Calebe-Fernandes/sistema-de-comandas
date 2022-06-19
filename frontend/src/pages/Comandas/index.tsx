@@ -92,7 +92,6 @@ const Comandas:React.FC = ()=> {
         <p>
           {waitingApiResponse && "Carregando comandas"}
           {areThereOpenCommands && "Selecione uma mesa para ver seus detalhes"}
-          {!areThereOpenCommands && !waitingApiResponse && "Não há comandas abertas no momento"}
         </p>
 
         {waitingApiResponse && <Loader/>}
