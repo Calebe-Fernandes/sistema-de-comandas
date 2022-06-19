@@ -218,7 +218,7 @@ const DetalheComanda: React.FC = () => {
                             <tr key={food.id}>
                               <td><input type="checkbox" className="selectItemCheckbox" value={food.id} onChange={handleCheckFood} /></td>
                               <td>{food.food.productName}</td>
-                              <td><input disabled type="text" id={`quantity-for-${food.id}`} className="quantityInput" value={food.quantity} /></td>
+                              <td>{food.quantity}</td>
                             </tr>
                           </>
                         )
