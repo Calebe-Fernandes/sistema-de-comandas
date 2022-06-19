@@ -34,7 +34,7 @@ public class DrinkWithdrawValidator {
         if (!order.getOpen()) {
             throw new ApiRequestException("A comanda precisa estar aberta");
         } else if (drink.getStockAmmount() < withdrawal.getQuantity()) {
-            throw new ApiRequestException("Não existe estoque suficiente");
+            throw new ApiRequestException("Não existe estoque suficiente, por favor selecione outro item");
         } else if (withdrawal.getQuantity() == 0) {
             throw new ApiRequestException("O valor de itens a serem retirados deve ser maior que 0");
         }
