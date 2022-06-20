@@ -4,7 +4,8 @@ import { useNavigate } from "react-router";
 import { api } from "../../services/api";
 import EmptyContent from "../../components/EmptyContent";
 import { toast } from 'react-toastify';
-
+import Checkbox from '@mui/material/Checkbox';
+ 
 import $ from 'jquery';
 import "./styles.scss";
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,7 +16,8 @@ interface Drink {
   "productName": string,
   "description": string,
   "stockAmmount": number,
-  "alcoholic": boolean
+  "alcoholic": boolean,
+  "active": boolean
 }
 
 interface Food {
@@ -23,7 +25,8 @@ interface Food {
   "price": number,
   "productName": string,
   "description": string,
-  "isAvaliable": boolean
+  "isAvaliable": boolean,
+  "active": boolean
 }
 
 const NovaComanda: React.FC = () => {
@@ -170,10 +173,10 @@ const NovaComanda: React.FC = () => {
     var updatedList = [...checkedDrinks]
     if (e.target.checked) {
       updatedList = [...checkedDrinks, e.target.value];
-      input != null && input.removeAttribute('disabled')
+      input != null && input.classList.remove('hidden');
     } else {
       updatedList.splice(checkedDrinks.indexOf(e.target.value), 1);
-      input != null && input.setAttribute("disabled", "disabled");
+      input != null && input.classList.add('hidden');
       (input as HTMLInputElement).value = '';
     }
     setCheckedDrinks(updatedList);
@@ -184,10 +187,10 @@ const NovaComanda: React.FC = () => {
     var updatedList = [...checkedFood]
     if (e.target.checked) {
       updatedList = [...checkedFood, e.target.value];
-      input != null && input.removeAttribute('disabled')
+      input != null && input.classList.remove('hidden');
     } else {
       updatedList.splice(checkedFood.indexOf(e.target.value), 1);
-      input != null && input.setAttribute("disabled", "disabled");
+      input != null && input.classList.add('hidden');
       (input as HTMLInputElement).value = '';
     }
     setCheckedFood(updatedList);
@@ -279,7 +282,7 @@ const NovaComanda: React.FC = () => {
     <>
       <CommandHeaderComponent title="Nova Comanda" />
 
-      <body className="new-command-container">
+      <div className="new-command-container">
 
         <label htmlFor="table">Mesa</label>
         <input type="text" id="table" name="table" onChange={validateOrder} />
@@ -308,13 +311,24 @@ const NovaComanda: React.FC = () => {
                 </thead>
                 <tbody>
                   {drinks.map((drink) => {
-                    return <>
-                      <tr>
-                        <td><input type="checkbox" className="selectItemCheckbox" value={drink.id} onChange={handleCheckDrinks} /></td>
-                        <td>{drink.productName}</td>
-                        <td><input disabled type="text" className="quantityInput" id={`quantity-for-${drink.id}`} onChange={validateOrder} /></td>
-                      </tr>
-                    </>
+                    if (drink.active) {
+                      return <>
+                        <tr>
+                          <td>
+                            <Checkbox 
+                              style ={{color: "#E5802F", transform: "scale(1.1)"}}
+                              className="selectItemCheckbox"
+                              value={drink.id}
+                              onChange={handleCheckDrinks}
+                            />
+                          </td>
+                          <td>{drink.productName}</td>
+                          <td><div className="input-container">
+                            <input type="text" className="quantityInput hidden" id={`quantity-for-${drink.id}`} onChange={validateOrder} />
+                          </div></td>
+                        </tr>
+                      </>
+                    }
                   })}
                 </tbody>
               </table>
@@ -333,13 +347,26 @@ const NovaComanda: React.FC = () => {
                 </thead>
                 <tbody>
                   {foods.map((food) => {
-                    return <>
+                    if (food.active) {
+                      return <>
                       <tr>
-                        <td><input type="checkbox" className="selectItemCheckbox" value={food.id} onChange={handleCheckFood} /></td>
+                        <td>
+                          <Checkbox
+                            style ={{color: "#E5802F", transform: "scale(1.1)"}}
+                            className="selectItemCheckbox" 
+                            value={food.id}
+                            onChange={handleCheckFood}
+                          />
+                        </td>
                         <td>{food.productName}</td>
-                        <td><input disabled type="text" className="quantityInput" id={`quantity-for-${food.id}`} onChange={validateOrder} /></td>
+                        <td>
+                          <div className="input-container">
+                            <input type="text" className="quantityInput hidden" id={`quantity-for-${food.id}`} onChange={validateOrder} />
+                          </div>
+                        </td>
                       </tr>
                     </>
+                    }
                   })}
                 </tbody>
               </table>
@@ -355,7 +382,7 @@ const NovaComanda: React.FC = () => {
         }
 
         <button className="btn" onClick={function () { postOrder() }}>Realizar pedido</button>
-      </body>
+      </div>
     </>
   )
 }

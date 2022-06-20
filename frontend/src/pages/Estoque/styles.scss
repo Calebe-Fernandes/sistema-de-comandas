@@ -33,133 +33,14 @@
                 background: var(--light-orange);
             }
         }
-      }
-
-    h1 {
-        margin: 10px 5%;
-        width: 33px;
-        height: 19px;
-        left: 30px;
-        top: 188px;
-        font-weight: 700;
-        font-size: 16px;
-        line-height: 19px;
-        color: #000000;
     }
 
-    .item {
-        margin: 20px;
-        margin-left: 5%;
-        display: flex;
-        justify-content: space-between;
-
-            h2 {
-                height: 19px;
-                left: 34px;
-                top: 20px;
-                font-weight: 400;
-                font-size: 16px;
-                line-height: 19px;
-        
-                color: #000000;
-            }
-
-            .viewButton {
-                cursor: pointer;
-                margin: auto;
-                margin-right: 5%;
-            }
-    }
-
-    .line {
-        margin: 0px 5%;
-        color: #9D9D9D;
-        opacity: 40%;
+    td.visualize {
+        text-align: end;
+        padding-right: 20px;
     }
 
     .loaderWrapper {
         box-sizing: border-box;
-    }
-
-    .modal {
-        .modal-container {
-            padding: 20px;
-
-            .modal-header{
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 30px;
-
-                p {
-                    font-style: normal;
-                    font-weight: 400;
-                    font-size: 14px;
-                    color: rgba(0, 0, 0, 0.6);
-                    padding-bottom: 4px;
-                }
-
-                h4 {
-                    font-style: normal;
-                    font-weight: 800;
-                    font-size: 20px;
-                    color: #000000;
-                }
-            }
-
-            .modal-content {
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                height: 100%;
-                max-height: 100%;
-                overflow: auto;
-            }
-
-            .form-container {
-                overflow-y: auto;
-
-                label {
-                    color: #898989;
-                }
-
-                input, select {
-                    margin: 8px 0 20px;
-                    padding: 10px;
-                    width:100%;
-                    border-radius: 5px;
-                    border-color: #EFEFEF;
-                    border-style: solid;
-                    background-color: #EFEFEF;
-                }
-            }
-
-            .buttonContainer{
-                display: flex;
-                column-gap: 20px;
-                justify-content: space-between;
-                width: 100%;
-                padding: 20px 0 0;
-                background-color: white;
-
-                button{
-                    background-color: #309E34;
-                    color: white;
-                    padding: 8px 16px;
-                    border-radius: 6px;
-                    bottom: 0;
-                    font-weight: 600;
-                    font-size: 14px;
-                }
-
-                button:first-of-type{
-                    background-color: #FF2626;
-                }
-
-                .addItemButton{
-                    background-color: #E5802F !important; 
-                }
-            }
-        }
     }
 }
