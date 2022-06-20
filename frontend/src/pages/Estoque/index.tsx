@@ -219,7 +219,7 @@ const Estoque: React.FC = () => {
                         </thead>
                         <tbody>
                             {drinks.map((drink) => {
-                                if (drink.active === true) {
+                                if (drink.active) {
                                     return <tr key={drink.id}>
                                         <td>{drink.productName}</td>
                                         <td className="visualize"><FontAwesomeIcon icon={faEye} className="viewButton" onClick={() => handleDrinkModal(drink)} /></td>
@@ -242,7 +242,7 @@ const Estoque: React.FC = () => {
                         </thead>
                         <tbody>
                             {foods.map((food) => {
-                                if (food.active === true) {
+                                if (food.active) {
                                     return <tr key={food.id}>
                                         <td>{food.productName}</td>
                                         <td className="visualize"><FontAwesomeIcon icon={faEye} className="viewButton" onClick={() => handleFoodModal(food)} /></td>
