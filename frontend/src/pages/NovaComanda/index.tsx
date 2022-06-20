@@ -39,10 +39,23 @@ const NovaComanda: React.FC = () => {
   var [foods, setFoods] = useState<Food[]>([]);
   var [showDrinks, setShowDrinks] = useState<boolean>(true);
   var [waitingApiResponse, setWaitingApiResponse] = useState<boolean>(true);
+  var [order,setOrder] = useState<any>({});
+  var [drinksPosted, setDrinksPosted] =  useState<boolean>(false);
 
   var request: any = {
     "table": 0,
   }
+  useEffect(()=>{
+    if(Object.keys(order).length !== 0){
+      postDrinks(order.id);
+    }
+  },[order]);
+
+  useEffect(()=>{
+    if(drinksPosted){
+      postFood(order.id);
+    }
+  },[drinksPosted]);
 
   useEffect(() => {
     api.get("/drinks")
@@ -183,40 +196,25 @@ const NovaComanda: React.FC = () => {
     setCheckedFood(updatedList);
   }
 
-  function postOrder() {
+  async function postOrder() {
     request.table = $('#table').val();
-    var order;
-    api.post("/order", request)
-      .then(response => {
-        order = response.data;
-        postDrinks(order.id)
-        postFood(order.id)
-        toast.success('Comanda criada com sucesso!', {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        navigate("/garcom/comandas");
-      })
-      .catch(error => {
-        console.log(error)
-        toast.error(error.response.data.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      })
+    const response:any = await api.post("/order", request).catch(error => {
+      console.log(error)
+      toast.error(error.response.data.message, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+    const orderCreated = response.data;
+    setOrder(orderCreated);
   }
 
-  function postDrinks(orderId: number) {
+  async function postDrinks(orderId: number) {
 
     var orderedDrinks: any[] = []
 
@@ -227,15 +225,24 @@ const NovaComanda: React.FC = () => {
       }
       orderedDrinks.push(requestDrink)
     })
-
-    api.post(`/order/request-drink/${orderId}`, orderedDrinks)
-      .then(response => {
-        console.log(response);
-      })
-      .catch(error => { console.log(error) })
+    await api.post(`/order/request-drink/${orderId}`, orderedDrinks).then(()=>{
+      console.log('drinks ordered');
+    }).catch(error => { 
+      console.log(error);
+      toast.warning(error.response.data.message, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });  
+    });
+    setDrinksPosted(true);
   }
 
-  function postFood(orderId: number) {
+  async function postFood(orderId: number) {
     var orderedFood: any[] = []
 
     checkedFood.forEach((foodID) => {
@@ -246,11 +253,29 @@ const NovaComanda: React.FC = () => {
       orderedFood.push(requestFood)
     })
 
-    api.post(`/order/request-food/${orderId}`, orderedFood)
-      .then(response => {
-        console.log(response);
-      })
-      .catch(error => { console.log(error) })
+    await api.post(`/order/request-food/${orderId}`, orderedFood).then(()=>{
+      toast.success('Comanda criada com sucesso!', {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      navigate(`/garcom/comandas/detalhes/${order.id}`)
+    }).catch(error => { 
+      console.log(error);
+      toast.warning(error.response.data.message, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }); 
+    });
   }
 
   return (

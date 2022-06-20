@@ -280,7 +280,7 @@ public class OrderController {
         order.setFoodWithdrawalList(orderList);
 
         Float prevOrderTotal = order.getOrderTotal();
-        order.setOrderTotal(prevOrderTotal - (deleteFood.getFood().getPrice()));
+        order.setOrderTotal(prevOrderTotal - (deleteFood.getFood().getPrice() * deleteFood.getQuantity()));
         foodStuffWithdrawRepository.delete(deleteFood);
         orderRepository.save(order);
 
