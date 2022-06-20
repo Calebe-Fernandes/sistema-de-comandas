@@ -4,6 +4,7 @@ import { CommandHeaderComponent, Loader, EmptyContent } from "../../components";
 import { api } from "../../services/api";
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router";
+import Checkbox from '@mui/material/Checkbox';
 
 import "./styles.scss";
 import $ from 'jquery';
@@ -14,7 +15,8 @@ interface drink {
   "productName": string,
   "description": string,
   "stockAmmount": number,
-  "alcoholic": boolean
+  "alcoholic": boolean,
+  "active": boolean
 }
 
 interface food {
@@ -22,7 +24,8 @@ interface food {
   "price": number,
   "productName": string,
   "description": string,
-  "isAvaliable": boolean
+  "isAvaliable": boolean,
+  "active": boolean
 }
 
 const MenuProdutos: React.FC = () => {
@@ -113,10 +116,10 @@ const MenuProdutos: React.FC = () => {
     var updatedList = [...checkedDrinks]
     if (e.target.checked) {
       updatedList = [...checkedDrinks, e.target.value];
-      input != null && input.removeAttribute('disabled')
+      input != null && input.classList.remove('hidden');
     } else {
       updatedList.splice(checkedDrinks.indexOf(e.target.value), 1);
-      input != null && input.setAttribute("disabled", "disabled");
+      input != null && input.classList.add('hidden');
       (input as HTMLInputElement).value = '';
     }
     setCheckedDrinks(updatedList);
@@ -127,10 +130,10 @@ const MenuProdutos: React.FC = () => {
     var updatedList = [...checkedFood]
     if (e.target.checked) {
       updatedList = [...checkedFood, e.target.value];
-      input != null && input.removeAttribute('disabled')
+      input != null && input.classList.remove('hidden');
     } else {
       updatedList.splice(checkedFood.indexOf(e.target.value), 1);
-      input != null && input.setAttribute("disabled", "disabled");
+      input != null && input.classList.add('hidden');
       (input as HTMLInputElement).value = '';
     }
     setCheckedFood(updatedList);
@@ -167,7 +170,7 @@ const MenuProdutos: React.FC = () => {
 
   function addProducts(orderId: number) {
 
-    var orderedDrinks: any[] = []
+    var orderedDrinks: any[] = [];
 
     checkedDrinks.forEach((drinkID) => {
       var requestDrink: any = {
@@ -175,7 +178,7 @@ const MenuProdutos: React.FC = () => {
         "drinkAmount": $(`#quantity-for-${drinkID}`).val()
       }
       orderedDrinks.push(requestDrink)
-    })
+    });
 
     api.post(`/order/request-drink/${orderId}`, orderedDrinks)
       .then(response => {
@@ -189,7 +192,6 @@ const MenuProdutos: React.FC = () => {
           draggable: true,
           progress: undefined,
         });
-        navigate(`/garcom/comandas/detalhes/${params.id}`);
       })
       .catch(error => {
         console.log(error);
@@ -206,7 +208,7 @@ const MenuProdutos: React.FC = () => {
   }
 
   function postFood(orderId: number) {
-    var orderedFood: any[] = []
+    var orderedFood: any[] = [];
 
     checkedFood.forEach((foodID) => {
       var requestFood: any = {
@@ -214,11 +216,12 @@ const MenuProdutos: React.FC = () => {
         "quantity": $(`#quantity-for-${foodID}`).val()
       }
       orderedFood.push(requestFood)
-    })
+    });
 
     api.post(`/order/request-food/${orderId}`, orderedFood)
       .then(response => {
         console.log(response);
+        navigate(`/garcom/comandas/detalhes/${params.id}`);
       })
       .catch(error => {
         console.log(error)
@@ -231,7 +234,6 @@ const MenuProdutos: React.FC = () => {
           draggable: true,
           progress: undefined,
         });
-        return false;
       });
   }
 
@@ -263,13 +265,28 @@ const MenuProdutos: React.FC = () => {
                 </thead>
                 <tbody>
                   {drinks.map((drink) => {
-                    return <>
-                      <tr key={drink.id}>
-                        <td><input type="checkbox" className="selectItemCheckbox" value={drink.id} onChange={handleCheckDrinks} /></td>
-                        <td>{drink.productName}</td>
-                        <td><input disabled type="text" className="quantityInput" id={`quantity-for-${drink.id}`} onChange={validateOrder} /></td>
-                      </tr>
-                    </>
+                    if (drink.active) {
+                      return <>
+                        <tr key={drink.id}>
+                          <td>
+                            <Checkbox
+                              style={{ color: "#E5802F", transform: "scale(1.1)" }}
+                              className="selectItemCheckbox"
+                              value={drink.id}
+                              onChange={handleCheckDrinks}
+                            />
+                          </td>
+                          <td>{drink.productName}</td>
+                          <td>
+                            <div className="input-container">
+                              <input type="text" className="quantityInput hidden" id={`quantity-for-${drink.id}`} onChange={validateOrder} />
+                            </div>
+                          </td>
+                        </tr>
+                      </>
+                    } else {
+                      return <></>
+                    }
                   })}
                 </tbody>
               </table>
@@ -288,13 +305,28 @@ const MenuProdutos: React.FC = () => {
                 </thead>
                 <tbody>
                   {foods.map((food) => {
-                    return <>
-                      <tr key={food.id}>
-                        <td><input type="checkbox" className="selectItemCheckbox" value={food.id} onChange={handleCheckFood} /></td>
-                        <td>{food.productName}</td>
-                        <td><input disabled type="text" className="quantityInput" id={`quantity-for-${food.id}`} onChange={validateOrder} /></td>
-                      </tr>
-                    </>
+                    if (food.active) {
+                      return <>
+                        <tr key={food.id}>
+                          <td>
+                            <Checkbox
+                              style={{ color: "#E5802F", transform: "scale(1.1)" }}
+                              className="selectItemCheckbox"
+                              value={food.id}
+                              onChange={handleCheckFood}
+                            />
+                          </td>
+                          <td>{food.productName}</td>
+                          <td>
+                            <div className="input-container">
+                              <input type="text" className="quantityInput hidden" id={`quantity-for-${food.id}`} onChange={validateOrder} />
+                            </div>
+                          </td>
+                        </tr>
+                      </>
+                    } else {
+                      return <></>
+                    }
                   })}
                 </tbody>
               </table>
