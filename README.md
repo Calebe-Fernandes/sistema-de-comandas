@@ -1,13 +1,6 @@
-<h1>
-<img src="https://github.com/Dangocan/duka/blob/master/.github/Assets/Images/Logo-BG.svg?raw=true"
-width="33.33%" height="auto" alt="Mobile"><img src="https://github.com/Dangocan/duka/blob/master/.github/Assets/Images/Logo.svg?raw=true"
-width="33.33%" height="auto" alt="Mobile"><img src="https://github.com/Dangocan/duka/blob/master/.github/Assets/Images/Logo-BG.svg?raw=true"
-width="33.33%" height="auto" alt="Mobile">
-</h1>
 
-<img src="https://github.com/Dangocan/duka/blob/master/.github/Assets/3D%20Models/Home.png?raw=true"
-width="20%" height="auto" alt="Mobile"><img src="https://github.com/Dangocan/duka/blob/master/.github/Assets/Images/padding.png?raw=true"
-width="10%" height="auto" alt=""><img src="https://github.com/Dangocan/duka/blob/master/.github/Assets/Images/DashBoard_P.png?raw=true" width="70%" height="auto" alt="Dashboard">
+
+<img src="https://github.com/Calebe-Fernandes/sistema-de-comandas/blob/master/Thumbnail.svg" width="100%" height="auto" alt="Thumbnail">
 
 > A plataforma de gerenciamento de estoque e comandas foi um projeto desenvolvido durante a disciplina de Análise e Projeto Orientado a Objetos durante o curso de Engenharia da Computação da UTFPR-CP
 
@@ -22,7 +15,7 @@ A plataforma foi construída utilizando React.Js e Java SpringBoot, e nela você
 
 ## 💻 Tecnologias
 
-<h3>Frontend - React.Js - TS - SASS</h3>
+<h3>Frontend - React.Js - TypeScript - SASS</h3>
 <h3><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
 width="5%" height="auto">&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg"
 width="5%" height="auto">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;<img src="https://sass-lang.com/assets/img/styleguide/seal-color-aef0354c.png"
