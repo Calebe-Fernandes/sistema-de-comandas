@@ -70,11 +70,22 @@ Para o backend, a tecnologia Java utilzando o SpringBoot foi escolhida devido à
 
 ## 🤝 Colaboradores e seus papéis no projeto
 
-* Calebe Fernandes : Desenvolvedor Frontend e Backend / Líder de projeto; <a href="https://www.w3schools.com"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/LinkedIn_icon_circle.svg/2048px-LinkedIn_icon_circle.svg.png"
-width="5%" height="auto"></a>
-* Felipe Bueno: Desenvolvedor Backend;
-* Felipe Kauã  : Desenvolvedor Frontend;
-* Luanda Vital : Desenvolvedora Frontend e Designer de Interface;
+### Calebe Fernandes
+* Desenvolvedor Frontend e Backend  
+* Líder de projeto;
+* <a href="https://www.linkedin.com/in/calebe-fernandes-de-oliveira-a841ba1b0/">Linkedin</a>
 
+### Felipe Bueno
+* Desenvolvedor Backend 
+* <a href="https://www.linkedin.com/in/felipe-bueno-de-souza-0a29091b8/">Linkedin</a>
+
+### Felipe Kauã  
+* Desenvolvedor Frontend
+* <a href="https://www.linkedin.com/in/felipe-kau%C3%A3-de-lima-a8785a20a/">Linkedin</a>
+
+### Luanda Vital
+* Desenvolvedora Frontend
+* Designer de Interface
+* <a href="https://www.linkedin.com/in/luanda-vital/">Linkedin</a>
 
 <br>
