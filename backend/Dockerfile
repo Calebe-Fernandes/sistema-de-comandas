@@ -1,7 +1,7 @@
 #
 # Build stage
 #
-FROM maven:3.1.0-alpine AS build
+FROM eclipse-temurin:17-jdk-alpine AS build
 COPY . .
 RUN mvn clean package
 
