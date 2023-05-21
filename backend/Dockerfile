@@ -1,7 +1,7 @@
 #
 # Build stage
 #
-FROM maven:3.1.0-jdk-11-slim AS build
+FROM maven:3.1.0-alpine AS build
 COPY . .
 RUN mvn clean package
 
