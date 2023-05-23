@@ -5,6 +5,7 @@ REQUERIMENTOS
 Build the jar file:
 
 Windows -> navegue até o 'backend' e execute 'build.bat'
+
 Linux   -> navegue até o 'backend' e execute './build.sh'
 
 
