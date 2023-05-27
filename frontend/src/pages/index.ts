@@ -6,6 +6,18 @@ import HistóricoGerente from "./HistóricoGerente";
 import NovaComanda from "./NovaComanda";
 import DetalheComanda from "./DetalheComanda";
 import MenuProdutos from "./MenuProdutos";
+import Administracao from "./Administracao";
+import QuadroUsuarios from "./QuadroUsuarios";
 
-export { Home, Comandas, Estoque, HistóricoCaixa, HistóricoGerente, NovaComanda, DetalheComanda, MenuProdutos};
-
+export {
+  Home,
+  Comandas,
+  Estoque,
+  HistóricoCaixa,
+  HistóricoGerente,
+  NovaComanda,
+  DetalheComanda,
+  MenuProdutos,
+  Administracao,
+  QuadroUsuarios
+};

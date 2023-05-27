@@ -1,14 +1,24 @@
 import React from 'react'
 import { Routes, Route } from "react-router-dom";
 
-import { Home, Comandas, Estoque, HistóricoCaixa, HistóricoGerente, NovaComanda, MenuProdutos} from './pages';
+import { 
+  Home,
+  Comandas,
+  NovaComanda,
+  MenuProdutos,
+  HistóricoCaixa,
+  HistóricoGerente,
+  Estoque,
+  Administracao,
+  QuadroUsuarios
+} from './pages';
 import DetalheComanda from './pages/DetalheComanda';
 
 const Router = () => {
   
   return (
     <Routes>
-      <Route path="/" element={<Home/>}/> 
+      <Route path="/" element={<Administracao/>}/>
       <Route path="/garcom/comandas" element={<Comandas/>}/>
       <Route path="/garcom/comandas/nova_comanda" element={<NovaComanda/>}/>
       <Route path="/garcom/comandas/detalhes/:id" element={<DetalheComanda/>} />
@@ -17,7 +27,8 @@ const Router = () => {
       <Route path="/caixa/comandas/detalhes/:id" element={<DetalheComanda/>} />  
       <Route path="/estoque" element={<Estoque/>}/>  
       <Route path="caixa/historico" element={<HistóricoCaixa/>}/>  
-      <Route path="gerente/historico" element={<HistóricoGerente/>}/> 
+      <Route path="gerente/historico" element={<HistóricoGerente/>}/>
+      <Route path="/adm/quadro_de_usuarios" element={<QuadroUsuarios/>}/>
     </Routes>
   );
 };

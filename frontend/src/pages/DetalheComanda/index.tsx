@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
-import { AddButtonComponent, CommandHeaderComponent } from "../../components";
+import { AddButtonComponent, FlatHeaderComponent } from "../../components";
 import { api } from "../../services/api";
 import "./styles.scss";
 
@@ -148,7 +148,7 @@ return (
   <>
     {command !== undefined &&
       <div className="command-details-page">
-        <CommandHeaderComponent title={`Mesa  ${command.table}`} />
+        <FlatHeaderComponent title={`Mesa  ${command.table}`} />
         <div className="command-details-container">
 
           <div id="drinkList" className="relative-position">

@@ -1,0 +1,72 @@
+.adm-header {
+  display: flex;
+  height: 80px;
+  background-color: #E6873B;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+
+  .adm-header-title {
+    display: flex;
+    gap: 16px;
+    color: white;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .logout-button {
+    display: flex;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: white;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
+.adm-container {
+  padding: 40px 32px;
+
+  .adm-card {
+    display: flex;
+    flex-direction: column;
+    background: #FAEDE4;
+    border-radius: 12px;
+    padding: 16px 24px;
+
+    .adm-card-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .adm-card-text {
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    button {
+      display: flex;
+      padding: 8px 16px;
+      gap: 8px;
+      background: #AF4D00;
+      border-radius: 100px;
+      color: white;
+      margin-top: 20px;
+      align-self: end;
+      align-items: center;
+
+      p {
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .arrow-icon {
+        font-size: 18px;
+      }
+    }
+  }
+}

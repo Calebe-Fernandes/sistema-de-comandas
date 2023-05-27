@@ -1,0 +1,14 @@
+.modal-novo-usuario {
+  display: flex;
+  flex-direction: column;
+
+  button {
+    background-color: #D34F05;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    align-self: self-end;
+    font-weight: 600;
+    font-size: 16px;
+  }
+}

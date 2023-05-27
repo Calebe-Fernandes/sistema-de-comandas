@@ -1,0 +1,72 @@
+.modal-usuario {
+  display: flex;
+  flex-direction: column;
+
+  .form-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .password-input {
+      position: relative;
+
+      input {
+        width: 100%;
+        padding-right: 40px;
+      }
+
+      button {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -12px;
+        height: 24px;
+        width: 24px;
+        margin-right: 8px;
+        border-radius: 8px;
+      }
+    }
+  }
+
+  hr {
+    border: 1px solid #DADADA;
+    border-radius: 10px;
+    margin: 28px 0 20px;
+  }
+
+  .historic-section{
+    margin-bottom: 32px;
+
+    h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    p {
+      font-size: 16px;
+      font-weight: 300;
+    }
+
+    p:first-of-type {
+      margin-bottom: 8px;
+    }
+  }
+
+  .main-button {
+    background-color: #D34F05;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    align-self: self-end;
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  .main-button:disabled,
+  .main-button[disabled]{
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+  }
+}
