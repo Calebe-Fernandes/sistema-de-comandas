@@ -10,7 +10,7 @@ const Router = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login/>}/>
-        <Route path="/" element={<ProtectedRoute><Home/></ProtectedRoute>}/> 
+        <Route path="/" element={<Home/>}/> 
         <Route path="/garcom/comandas" element={<ProtectedRoute><Comandas/></ProtectedRoute>}/>
         <Route path="/garcom/comandas/nova_comanda" element={<ProtectedRoute><NovaComanda/></ProtectedRoute>}/>
         <Route path="/garcom/comandas/detalhes/:id" element={<ProtectedRoute><DetalheComanda/></ProtectedRoute>} />

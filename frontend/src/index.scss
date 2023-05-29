@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
 
 * {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
 }
@@ -21,6 +21,11 @@
   --medium-light-grey: #DADADA;
   --medium-grey: #9D9D9D;
   --svg-orange: #F9A826;
+  --form-text:#767676;
+  --form-input-background:#F4F4F4;
+  --form-input-border: #E6E6E6;
+  --placeholder-color: #9D9D9D;
+
 }
 
 *, 
@@ -98,6 +103,8 @@ table {
     }
   }
 }
+
+
 
 input[type=checkbox] {
   accent-color: var(--regular-orange-hover);

@@ -33,6 +33,7 @@ const Home: React.FC = () => {
               <button onClick={navigateToWaiterCommands}>Garçom</button>
               <button onClick={navigateToCashierCommands}>Caixa</button>
               <button onClick={navigateToStock}>Gerente</button>
+              <button onClick={navigateToStock}>Administrador</button>
             </div>
           </div>
         </div>
@@ -46,6 +47,7 @@ const Home: React.FC = () => {
               <button onClick={navigateToWaiterCommands}>Garçom</button>
               <button onClick={navigateToCashierCommands}>Caixa</button>
               <button onClick={navigateToStock}>Gerente</button>
+              <button onClick={navigateToStock}>Administrador</button>
             </div>
           </div>
         </div>

@@ -11,7 +11,7 @@ interface Props {
 
 const Histórico: React.FC<Props> = ({ user }) => {
 
-    const [isActive, setActive] = useState(false);
+    const [isActive, setActive] = useState<boolean>(false);
     var [Commands, setCommands] = useState<any[]>([]);
     var [waitingApiResponse, setWaitingApiResponse] = useState<boolean>(true);
 
