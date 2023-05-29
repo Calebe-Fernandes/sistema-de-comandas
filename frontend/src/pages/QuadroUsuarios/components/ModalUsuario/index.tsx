@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import "./styles.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+
+import "./styles.scss";
 
 interface User {
   [name: string]: string;
@@ -80,80 +81,77 @@ const ModalUsuario: React.FC<Props> = ({user}) => {
 
   return (
     <div className="modal-usuario">
-      <div className="form-wrapper">
-        <div className="form-field">
-          <label>Nome *</label>
-          <input
-            id="user-name"
-            type="text"
-            defaultValue={user.name}
-            onChange={(e) => checkChanges(e.target.value, "name")}
-          />
-        </div>
-
-        <div className="form-field">
-          <label>Função *</label>
-          <select
-            id="user-role"
-            defaultValue={user.role}
-            onChange={(e) => checkChanges(e.target.value, "role")}
-          >
-            <option value="waiter">Garçom</option>
-            <option value="cashier">Caixa</option>
-            <option value="manager">Gerente</option>
-          </select>
-        </div>
-
-        <div className="form-field">
-          <label>E-mail *</label>
-          <input
-            id="user-email"
-            type="email"
-            defaultValue={user.email}
-            onChange={(e) => checkChanges(e.target.value, "email")}
-          />
-        </div>
-
-        <div className="form-field">
-          <label>Senha *</label>
-
-          <div className="password-input">
+      <div className="user-info">
+        <div className="form-wrapper">
+          <div className="form-field">
+            <label>Nome *</label>
             <input
-              id="user-password"
-              type={passwordVisibility ? "text" : "password"}
-              defaultValue={user.password}
-              onChange={(e) => checkChanges(e.target.value, "password")}
+              type="text"
+              defaultValue={user.name}
+              onChange={(e) => checkChanges(e.target.value, "name")}
             />
+          </div>
 
-            <button onClick={() => setPasswordVisibility(!passwordVisibility)}>
-              {
-                passwordVisibility  ? 
-                <FontAwesomeIcon icon={faEyeSlash} />
-                : <FontAwesomeIcon icon={faEye} />
-              }
-            </button>
+          <div className="form-field">
+            <label>Função *</label>
+            <select
+              defaultValue={user.role}
+              onChange={(e) => checkChanges(e.target.value, "role")}
+            >
+              <option value="waiter">Garçom</option>
+              <option value="cashier">Caixa</option>
+              <option value="manager">Gerente</option>
+            </select>
+          </div>
+
+          <div className="form-field">
+            <label>E-mail *</label>
+            <input
+              type="email"
+              defaultValue={user.email}
+              onChange={(e) => checkChanges(e.target.value, "email")}
+            />
+          </div>
+
+          <div className="form-field">
+            <label>Senha *</label>
+
+            <div className="password-input">
+              <input
+                type={passwordVisibility ? "text" : "password"}
+                defaultValue={user.password}
+                onChange={(e) => checkChanges(e.target.value, "password")}
+              />
+
+              <button onClick={() => setPasswordVisibility(!passwordVisibility)}>
+                {
+                  passwordVisibility  ? 
+                  <FontAwesomeIcon icon={faEyeSlash} />
+                  : <FontAwesomeIcon icon={faEye} />
+                }
+              </button>
+            </div>
+          </div>
+
+          <div className="form-field">
+            <label>Status *</label>
+            <select
+              defaultValue={user.status}
+              onChange={(e) => checkChanges(e.target.value, "status")}
+            >
+              <option value="active">Ativo</option>
+              <option value="inactive">Inativo</option>
+            </select>
           </div>
         </div>
 
-        <div className="form-field">
-          <label>Status *</label>
-          <select
-            id="user-status"
-            defaultValue={user.status}
-            onChange={(e) => checkChanges(e.target.value, "status")}
-          >
-            <option value="active">Ativo</option>
-            <option value="inactive">Inativo</option>
-          </select>
+        <hr />
+
+        <div className="historic-section">
+          <h4>Histórico</h4>
+          <p>Cadastrado em {user.created}.</p>
+          <p>Última atualização em {user.lastEdited}.</p>
         </div>
-      </div>
-
-      <hr />
-
-      <div className="historic-section">
-        <h4>Histórico</h4>
-        <p>Cadastrado em {user.created}.</p>
-        <p>Última atualização em {user.lastEdited}.</p>
       </div>
       
       <button

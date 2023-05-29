@@ -1,7 +1,7 @@
 import React from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faX } from "@fortawesome/free-solid-svg-icons"
+import { faXmark } from "@fortawesome/free-solid-svg-icons"
 
 import "./styles.scss";
 import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
@@ -20,7 +20,7 @@ const ModalComponent: React.FC<Props> = ({ historic, headerTitle, closeModal, co
         <div className={`modal-header ${historic ? "historic-header" : "common-header"}`}>
           <p>{ headerTitle }</p>
           <button onClick={closeModal}>
-            <FontAwesomeIcon icon={faX} className="icon-close-modal" />
+            <FontAwesomeIcon icon={faXmark} className="icon-close-modal" />
           </button>
         </div>
         <div className="modal-content-wrapper">

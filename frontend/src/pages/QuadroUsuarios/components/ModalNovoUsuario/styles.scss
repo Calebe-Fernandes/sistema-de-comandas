@@ -1,14 +1,51 @@
 .modal-novo-usuario {
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 
-  button {
-    background-color: #D34F05;
+  .form-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+    padding: 0 20px;
+
+    .password-input {
+      position: relative;
+
+      input {
+        width: 100%;
+        padding-right: 40px;
+      }
+
+      button {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -12px;
+        height: 24px;
+        width: 24px;
+        margin-right: 8px;
+        border-radius: 8px;
+      }
+    }
+  }
+
+  .main-button {
+    background-color: var(--regular-orange);;
     color: white;
     padding: 8px 16px;
     border-radius: 8px;
     align-self: self-end;
     font-weight: 600;
     font-size: 16px;
+    margin: 24px 20px 0;
+  }
+
+  .main-button:disabled,
+  .main-button[disabled]{
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
   }
 }

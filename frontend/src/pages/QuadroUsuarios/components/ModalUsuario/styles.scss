@@ -1,66 +1,73 @@
 .modal-usuario {
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 
-  .form-wrapper {
+  .user-info {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    overflow-y: auto;
+    padding: 0 20px;
 
-    .password-input {
-      position: relative;
-
-      input {
-        width: 100%;
-        padding-right: 40px;
+    .form-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+  
+      .password-input {
+        position: relative;
+  
+        input {
+          width: 100%;
+          padding-right: 40px;
+        }
+  
+        button {
+          position: absolute;
+          right: 0;
+          top: 50%;
+          margin-top: -12px;
+          height: 24px;
+          width: 24px;
+          margin-right: 8px;
+          border-radius: 8px;
+        }
       }
-
-      button {
-        position: absolute;
-        right: 0;
-        top: 50%;
-        margin-top: -12px;
-        height: 24px;
-        width: 24px;
-        margin-right: 8px;
-        border-radius: 8px;
+    }
+  
+    hr {
+      border: 1px solid #DADADA;
+      border-radius: 10px;
+      margin: 28px 0 20px;
+    }
+  
+    .historic-section{
+      h4 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 16px;
       }
-    }
-  }
-
-  hr {
-    border: 1px solid #DADADA;
-    border-radius: 10px;
-    margin: 28px 0 20px;
-  }
-
-  .historic-section{
-    margin-bottom: 32px;
-
-    h4 {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 16px;
-    }
-
-    p {
-      font-size: 16px;
-      font-weight: 300;
-    }
-
-    p:first-of-type {
-      margin-bottom: 8px;
+  
+      p {
+        font-size: 16px;
+        font-weight: 300;
+      }
+  
+      p:first-of-type {
+        margin-bottom: 8px;
+      }
     }
   }
 
   .main-button {
-    background-color: #D34F05;
+    background-color: var(--regular-orange);;
     color: white;
     padding: 8px 16px;
     border-radius: 8px;
     align-self: self-end;
     font-weight: 600;
     font-size: 16px;
+    margin: 24px 20px 0;
   }
 
   .main-button:disabled,
