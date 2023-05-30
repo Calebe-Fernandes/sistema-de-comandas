@@ -139,6 +139,35 @@ public class OrderController {
         AvaliableTable closingTable = tablesRepository.findByNumber(order.getTable());
         tablesRepository.delete(closingTable);
 
+
+        for(FoodWithdraw food : order.getFoodWithdrawalList()){
+            long foodId = food.getFood().getId();
+            int foodQtd = food.getQuantity();
+
+            FoodStuff item = foodStuffRepository.getById(foodId);
+
+            int salesTotal = item.getSales();
+            int newSalesTotal = salesTotal+foodQtd;
+
+            item.setSales(newSalesTotal);
+            foodStuffRepository.save(item);
+
+        }
+        for(DrinkWithdrawal drink : order.getDrinkWithdrawalList()){
+            long drinkId = drink.getDrink().getId();
+            int drinkQtd = drink.getQuantity();
+
+            Drink drinkItem = drinkRepository.getById(drinkId);
+
+            int salesTotal = drinkItem.getSales();
+            int newSalesTotal = salesTotal+drinkQtd;
+
+            drinkItem.setSales(newSalesTotal);
+            drinkRepository.save(drinkItem);
+
+        }
+
+
         return orderRepository.save(order);
     }
 

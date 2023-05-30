@@ -116,4 +116,5 @@ public class OrderModel {
     public void setFoodWithdrawalList(List<FoodWithdraw> foodWithdrawalList) {
         this.foodWithdrawalList = foodWithdrawalList;
     }
+
 }
