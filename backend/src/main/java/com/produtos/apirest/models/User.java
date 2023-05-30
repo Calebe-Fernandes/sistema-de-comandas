@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import javax.persistence.*;
 
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name = "TB_USERS")
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -32,7 +33,7 @@ public class User implements Serializable {
     }
 
     public User(long id, String username, String password, String role, String token, String email, String endereco,
-            Boolean isActive) {
+            boolean isActive) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -106,11 +107,11 @@ public class User implements Serializable {
         this.endereco = endereco;
     }
 
-    public Boolean getIsActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 
-    public void setIsActive(Boolean isActive) {
+    public void setIsActive(boolean isActive) {
         this.isActive = isActive;
     }
 
