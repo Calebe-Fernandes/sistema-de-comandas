@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import java.util.Date;
 
 import javax.transaction.Transactional;
 
@@ -42,6 +43,9 @@ public class OrderController {
 
     @Autowired
     OrderRepository orderRepository;
+    @Autowired
+    ProfitPerDayRepository profitPerDayRepository;
+
 
     @Autowired
     OpenTablesRepository tablesRepository;
@@ -139,35 +143,17 @@ public class OrderController {
         AvaliableTable closingTable = tablesRepository.findByNumber(order.getTable());
         tablesRepository.delete(closingTable);
 
+        //registrando valor no ppd
 
-        for(FoodWithdraw food : order.getFoodWithdrawalList()){
-            long foodId = food.getFood().getId();
-            int foodQtd = food.getQuantity();
+        ProfitPerDay profitThisDay = new ProfitPerDay();
+        profitThisDay.setProfit(order.getOrderTotal());
+        profitThisDay.setInitialDate(order.getClosingTime());
+        profitThisDay.setFinalDate(order.getClosingTime());
+        profitThisDay.setDrinkWithdrawalList(order.getDrinkWithdrawalList());
+        profitThisDay.setFoodWithdrawalList(order.getFoodWithdrawalList());
+        profitPerDayRepository.save(profitThisDay);
 
-            FoodStuff item = foodStuffRepository.getById(foodId);
-
-            int salesTotal = item.getSales();
-            int newSalesTotal = salesTotal+foodQtd;
-
-            item.setSales(newSalesTotal);
-            foodStuffRepository.save(item);
-
-        }
-        for(DrinkWithdrawal drink : order.getDrinkWithdrawalList()){
-            long drinkId = drink.getDrink().getId();
-            int drinkQtd = drink.getQuantity();
-
-            Drink drinkItem = drinkRepository.getById(drinkId);
-
-            int salesTotal = drinkItem.getSales();
-            int newSalesTotal = salesTotal+drinkQtd;
-
-            drinkItem.setSales(newSalesTotal);
-            drinkRepository.save(drinkItem);
-
-        }
-
-
+        //
         return orderRepository.save(order);
     }
 
