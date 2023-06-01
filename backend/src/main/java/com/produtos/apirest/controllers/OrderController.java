@@ -14,6 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.transaction.Transactional;
@@ -43,8 +47,6 @@ public class OrderController {
 
     @Autowired
     OrderRepository orderRepository;
-    @Autowired
-    ProfitPerDayRepository profitPerDayRepository;
 
 
     @Autowired
@@ -130,6 +132,57 @@ public class OrderController {
         return orderRepository.findByIsOpen(false);
     }
 
+    //send a body and filter closed orders by date
+    @PostMapping("/order/closed")
+    @ApiOperation(value = "Envia um body para filtro de data")
+    public OrderModel filterPPD(@RequestBody PostBody postBody) {
+
+        OrderModel totalOrder = new OrderModel();
+        Date date1 = stringToDate(postBody.initialDate);
+        Date date2 = stringToDate(postBody.finalDate);
+        totalOrder.setOpeningTime(date1);
+        totalOrder.setClosingTime(date2);
+        totalOrder.setOrderTotal((float) 0);
+        List<OrderModel> allOrders = orderRepository.findByIsOpen(false);
+
+        for(OrderModel order : allOrders) {
+            if(order.getClosingTime().compareTo(totalOrder.getClosingTime()) < 0
+            && order.getOpeningTime().compareTo(totalOrder.getOpeningTime()) > 0){
+
+                //operação dentro do filtro
+
+                totalOrder.setOrderTotal(totalOrder.getOrderTotal() + order.getOrderTotal());
+
+                if (totalOrder.getDrinkWithdrawalList() == null) {
+                    totalOrder.setDrinkWithdrawalList(order.getDrinkWithdrawalList());
+                } else {
+                    totalOrder.getDrinkWithdrawalList().addAll(order.getDrinkWithdrawalList());
+                }
+                if (totalOrder.getFoodWithdrawalList() == null) {
+                    totalOrder.setFoodWithdrawalList(order.getFoodWithdrawalList());
+                } else {
+                    totalOrder.getFoodWithdrawalList().addAll(order.getFoodWithdrawalList());
+                }
+
+                //
+            }
+        }
+        
+
+
+
+        return totalOrder;
+    }
+    public Date stringToDate(String string){
+        ParsePosition pp = new ParsePosition(0);
+        Date date=new SimpleDateFormat("dd/MM/yyyy").parse(string, pp);
+        return date;
+    }
+    public static class PostBody {
+        public String initialDate;
+        public String finalDate;
+    }
+
     // Close Order
     @PutMapping("/order/close/{id}")
     @Transactional
@@ -143,17 +196,6 @@ public class OrderController {
         AvaliableTable closingTable = tablesRepository.findByNumber(order.getTable());
         tablesRepository.delete(closingTable);
 
-        //registrando valor no ppd
-
-        ProfitPerDay profitThisDay = new ProfitPerDay();
-        profitThisDay.setProfit(order.getOrderTotal());
-        profitThisDay.setInitialDate(order.getClosingTime());
-        profitThisDay.setFinalDate(order.getClosingTime());
-        profitThisDay.setDrinkWithdrawalList(order.getDrinkWithdrawalList());
-        profitThisDay.setFoodWithdrawalList(order.getFoodWithdrawalList());
-        profitPerDayRepository.save(profitThisDay);
-
-        //
         return orderRepository.save(order);
     }
 

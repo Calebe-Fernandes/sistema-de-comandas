@@ -14,7 +14,6 @@ public class Item implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private int sales;
     private Float price;
     private String productName;
     private String description;
@@ -23,13 +22,12 @@ public class Item implements Serializable {
     public Item() {
     }
 
-    public Item(long id, int sales, Float price, String productName, String description, boolean isActive) {
+    public Item(long id, Float price, String productName, String description, boolean isActive) {
         this.id = id;
         this.price = price;
         this.productName = productName;
         this.description = description;
         this.isActive = isActive;
-        this.sales = sales;
     }
 
     public long getId() {
@@ -49,14 +47,6 @@ public class Item implements Serializable {
             throw new ApiRequestException("Preço deve ser maior do que 0");
         }
         this.price = price;
-    }
-
-    public int getSales(){
-        return sales;
-    }
-
-    public void setSales(int sales){
-        this.sales = sales;
     }
 
     public String getProductName() {
