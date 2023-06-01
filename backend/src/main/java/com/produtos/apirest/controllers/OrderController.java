@@ -147,30 +147,43 @@ public class OrderController {
 
         for(OrderModel order : allOrders) {
             if(order.getClosingTime().compareTo(totalOrder.getClosingTime()) < 0
-            && order.getOpeningTime().compareTo(totalOrder.getOpeningTime()) > 0){
-
+            && order.getClosingTime().compareTo(totalOrder.getOpeningTime()) > 0
+            || order.getClosingTime().compareTo(totalOrder.getClosingTime()) == 0
+            || order.getClosingTime().compareTo(totalOrder.getOpeningTime()) == 0
+            ){
                 //operação dentro do filtro
 
-                totalOrder.setOrderTotal(totalOrder.getOrderTotal() + order.getOrderTotal());
+                PPDAxis ppd = new PPDAxis();
+                ppd.setDate(order.getClosingTime());
+                ppd.setProfit(order.getOrderTotal());
+                totalOrder.getPPDAxisList().add(ppd);
 
-                if (totalOrder.getDrinkWithdrawalList() == null) {
-                    totalOrder.setDrinkWithdrawalList(order.getDrinkWithdrawalList());
-                } else {
-                    totalOrder.getDrinkWithdrawalList().addAll(order.getDrinkWithdrawalList());
+                for(DrinkWithdrawal drinkWithdrawal : order.getDrinkWithdrawalList()){
+                    ItemAxis item = new ItemAxis();
+                    item.setSales(drinkWithdrawal.getQuantity());
+                    item.setName(drinkWithdrawal.getDrink().getProductName());
+                    totalOrder.getItemAxisList().add(item);
                 }
-                if (totalOrder.getFoodWithdrawalList() == null) {
-                    totalOrder.setFoodWithdrawalList(order.getFoodWithdrawalList());
-                } else {
-                    totalOrder.getFoodWithdrawalList().addAll(order.getFoodWithdrawalList());
+                for(FoodWithdraw foodWithdraw : order.getFoodWithdrawalList()){
+                    ItemAxis item = new ItemAxis();
+                    item.setSales(foodWithdraw.getQuantity());
+                    item.setName(foodWithdraw.getFood().getProductName());
+                    totalOrder.getItemAxisList().add(item);
+                }
+
+                for(ItemAxis item : totalOrder.getItemAxisList()){
+                    String name = item.getName();
+                    for(ItemAxis itemComparate : totalOrder.getItemAxisList()){
+                        if(itemComparate.getName()==name){
+                            item.setSales(item.getSales()+itemComparate.getSales());
+                            totalOrder.getItemAxisList().remove(itemComparate);
+                        }
+                    }
                 }
 
                 //
             }
         }
-        
-
-
-
         return totalOrder;
     }
     public Date stringToDate(String string){
