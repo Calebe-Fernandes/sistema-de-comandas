@@ -8,6 +8,7 @@ import DetalheComanda from "./DetalheComanda";
 import MenuProdutos from "./MenuProdutos";
 import Administracao from "./Administracao";
 import QuadroUsuarios from "./QuadroUsuarios";
+import AnaliseVendas from "./AnaliseVendas";
 
 export {
   Home,
@@ -19,5 +20,6 @@ export {
   DetalheComanda,
   MenuProdutos,
   Administracao,
-  QuadroUsuarios
+  QuadroUsuarios,
+  AnaliseVendas
 };

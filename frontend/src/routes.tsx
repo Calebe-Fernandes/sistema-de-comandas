@@ -10,7 +10,8 @@ import {
   HistóricoGerente,
   Estoque,
   Administracao,
-  QuadroUsuarios
+  QuadroUsuarios,
+  AnaliseVendas
 } from './pages';
 import DetalheComanda from './pages/DetalheComanda';
 
@@ -29,6 +30,7 @@ const Router = () => {
       <Route path="caixa/historico" element={<HistóricoCaixa/>}/>  
       <Route path="gerente/historico" element={<HistóricoGerente/>}/>
       <Route path="/adm/quadro_de_usuarios" element={<QuadroUsuarios/>}/>
+      <Route path="/adm/analise_de_vendas" element={<AnaliseVendas/>}/>
     </Routes>
   );
 };
