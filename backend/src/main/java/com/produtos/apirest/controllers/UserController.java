@@ -1,9 +1,13 @@
 package com.produtos.apirest.controllers;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,10 +45,18 @@ public class UserController {
     @PostMapping("/user")
     @Transactional
     @ApiOperation(value = "Cria um novo usuário")
-    public ResponseEntity<String> createUser(@RequestBody @Validated User newUser){
-        newUser.setCreatedAt(LocalDateTime.now());
-        newUser.setUpdatedAt(LocalDateTime.now());
+    public ResponseEntity<User> createUser(@RequestBody @Validated User newUser){
+        Date dateNow = new Date();
+        newUser.setCreatedAt(dateNow);
+        newUser.setUpdatedAt(dateNow);
         userRepository.save(newUser);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Deu certo porra");
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(newUser);
+    }
+
+    @PutMapping("/user")
+    @Transactional
+    @ApiOperation(value = "Atualiza as informações de um usuário.")
+    public ResponseEntity<User> updateUser(@RequestBody @Validated User updatedUser){
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userRepository.save(updatedUser));
     }
 }

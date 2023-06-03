@@ -3,7 +3,7 @@ package com.produtos.apirest.models;
 import com.produtos.apirest.exceptions.ApiRequestException;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -24,8 +24,8 @@ public class User implements Serializable {
     private String email;
     private String endereco;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
 
     private boolean isActive;
 
@@ -33,7 +33,7 @@ public class User implements Serializable {
     }
 
     public User(long id, String username, String password, String role, String token, String email, String endereco,
-            boolean isActive, LocalDateTime createdAt, LocalDateTime updatedAt) {
+            boolean isActive, Date createdAt, Date updatedAt) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -115,19 +115,19 @@ public class User implements Serializable {
         this.isActive = isActive;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 }
