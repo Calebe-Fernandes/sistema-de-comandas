@@ -33,7 +33,7 @@ public class User implements Serializable {
     }
 
     public User(long id, String username, String password, String role, String token, String email, String endereco,
-            boolean isActive) {
+            boolean isActive, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -43,8 +43,8 @@ public class User implements Serializable {
         this.endereco = endereco;
         this.isActive = isActive;
 
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public long getId() {
@@ -119,6 +119,10 @@ public class User implements Serializable {
         return createdAt;
     }
 
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
@@ -126,5 +130,4 @@ public class User implements Serializable {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-
 }
