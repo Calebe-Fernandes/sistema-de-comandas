@@ -1,9 +1,21 @@
-#! /bin/bash
+#!/bin/bash
 
-if [ -f "apirest.jar" ]; then
-	rm "apirest.jar"
+CONTAINER_APP="backend-app-1"
+
+# Check if the container is running
+if docker ps --filter "name=${CONTAINER_APP}" --format "{{.Names}}" | grep -q "${CONTAINER_APP}"; then
+    echo "Stopping and removing container: ${CONTAINER_APP}"
+    sudo docker stop ${CONTAINER_APP}
+    sudo docker rm ${CONTAINER_APP}
+else
+    echo "Container ${CONTAINER_NAME} is not running."
 fi
-docker build -t build-jar-inside-docker-image -f Dockerfile.build .
-docker create -it --name build-jar-inside-docker build-jar-inside-docker-image bash
-docker cp build-jar-inside-docker:/target/apirest-0.0.1.jar apirest.jar
-docker rm -f build-jar-inside-docker
+
+echo "Building .jar"
+./mvnw clean package -DskipTests 
+
+echo "Moving .jar"
+mv target/apirest-0.0.1.jar apirest.jar
+
+echo "Starting the containers"
+sudo docker compose up -d --build 
