@@ -60,7 +60,7 @@ public class UserController {
     @ApiOperation(value = "Retorna uma lista com todos os usuários cadastrados")
     public ResponseEntity<List<User>> listUsers(@RequestHeader("Authorization") String bearerToken) {
         // gambiara, só pra ver ser o login teve sucesso
-        long a = AuthJjwt.BearerTokenGetUserId(bearerToken);
+        AuthJjwt.tokenAuth(bearerToken);
         return ResponseEntity.status(HttpStatus.OK).body(userRepository.findAll());
     }
 

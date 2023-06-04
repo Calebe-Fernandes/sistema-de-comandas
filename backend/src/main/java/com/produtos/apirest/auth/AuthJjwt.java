@@ -10,6 +10,7 @@ import com.produtos.apirest.models.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,6 +18,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class AuthJjwt {
     private static Key AuthKey = new SecretKeySpec("tokenKEY12345678910tokenKEY12345678910".getBytes(),
             SignatureAlgorithm.HS256.getJcaName());
+    
+    private static JwtParser tokenParser = Jwts.parserBuilder().setSigningKey(AuthKey).build();
 
     public static String generateToken(long userId) {
         // expiration time for the token (1 day = 1000(ms) * 60(s) * 60(min) * 24(h))
@@ -31,22 +34,14 @@ public class AuthJjwt {
         return token;
     }
 
-    public static long BearerTokenGetUserId(String bearerToken) {
+    public static void tokenAuth(String bearerToken) {
         if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
             throw new ApiRequestException("Não foi enviado Auth");
         }
 
         try {
-            String token = bearerToken.substring(7); // Extract the token from the Authorization header
-
             // Validate and parse the token
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(AuthKey)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            return Integer.parseInt(claims.getSubject());
+            tokenParser.parseClaimsJws(bearerToken.substring(7));
         } catch (ExpiredJwtException exp) {
             throw new ApiRequestException("Token expired");
         } catch (MalformedJwtException inv) {
