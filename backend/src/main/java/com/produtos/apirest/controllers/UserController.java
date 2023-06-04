@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.produtos.apirest.models.User;
 import com.produtos.apirest.auth.AuthJjwt;
+import com.produtos.apirest.exceptions.ApiRequestException;
 import com.produtos.apirest.repository.UserRepository;
 
 import io.swagger.annotations.Api;
@@ -60,7 +61,7 @@ public class UserController {
     @ApiOperation(value = "Retorna uma lista com todos os usuários cadastrados")
     public ResponseEntity<List<User>> listUsers(@RequestHeader("Authorization") String bearerToken) {
         // gambiara, só pra ver ser o login teve sucesso
-        AuthJjwt.tokenAuth(bearerToken);
+        //AuthJjwt.tokenAuth(bearerToken);
         return ResponseEntity.status(HttpStatus.OK).body(userRepository.findAll());
     }
 
@@ -68,6 +69,7 @@ public class UserController {
     @Transactional
     @ApiOperation(value = "Cria um novo usuário")
     public ResponseEntity<User> createUser(@RequestBody @Validated User newUser) {
+        //AuthJjwt.tokenAuth(bearerToken, List.of("manager", "admin"));
         Date dateNow = new Date();
         newUser.setCreatedAt(dateNow);
         newUser.setUpdatedAt(dateNow);
@@ -75,10 +77,32 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(newUser);
     }
 
+    @PostMapping("/user-recovery")
+    @Transactional
+    @ApiOperation(value = "Recupera os dados de um usuário")
+    public ResponseEntity<User> recoveryPassword(@RequestBody User newUser,
+            @RequestHeader("Authorization") String bearerToken) {
+        AuthJjwt.tokenAuth(bearerToken, List.of("manager", "admin"));
+        User user = userRepository.findByUsername(newUser.getUsername());
+
+        if (user == null)
+            throw new ApiRequestException("username não existe");
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
+    }
+
     @PutMapping("/user")
     @Transactional
     @ApiOperation(value = "Atualiza as informações de um usuário.")
-    public ResponseEntity<User> updateUser(@RequestBody @Validated User updatedUser) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userRepository.save(updatedUser));
+    public ResponseEntity<User> updateUser(@RequestBody @Validated User updatedUser,
+            @RequestHeader("Authorization") String bearerToken) {
+        AuthJjwt.tokenAuth(bearerToken, List.of("manager", "admin"));
+
+        try {
+            User newUser = userRepository.save(updatedUser);
+            newUser.setUpdatedAt(new Date());
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(newUser);
+        } catch (ApiRequestException e) {
+            throw new ApiRequestException("Erro ao atualizar o usuário: " + e.getMessage());
+        }
     }
 }
