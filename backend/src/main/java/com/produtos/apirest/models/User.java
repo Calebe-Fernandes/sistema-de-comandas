@@ -1,5 +1,6 @@
 package com.produtos.apirest.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.produtos.apirest.exceptions.ApiRequestException;
 
 import java.io.Serializable;
@@ -19,9 +20,9 @@ public class User implements Serializable {
     
     @Column(unique = true)
     private String username;
+    @JsonIgnore
     private String password;
     private String role;
-    private String token;
     private String email;
     private String endereco;
 
@@ -33,13 +34,12 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(long id, String username, String password, String role, String token, String email, String endereco,
+    public User(long id, String username, String password, String role, String email, String endereco,
             boolean isActive, Date createdAt, Date updatedAt) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.role = role;
-        this.token = token;
         this.email = email;
         this.endereco = endereco;
         this.isActive = isActive;
@@ -82,14 +82,6 @@ public class User implements Serializable {
         } else {
             throw new ApiRequestException("Role inválida. Só é aceito 'waiter', 'cashier', 'manager', 'admin'.");
         }
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public String getEmail() {

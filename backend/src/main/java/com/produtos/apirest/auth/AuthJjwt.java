@@ -53,7 +53,7 @@ public class AuthJjwt {
 
     public static <T> void tokenAuth(String bearerToken, T roles) {
         if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
-            throw new ApiRequestException("Não foi enviado Auth");
+            throw new ApiRequestException("Não foi enviado token corretamente");
         }
     
         try {
