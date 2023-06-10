@@ -1,0 +1,17 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:12
+    environment:
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: api_apoo
+    ports:
+      - 5432:5432
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.run
+    depends_on:
+      - postgres
+    ports:
+      - 8080:8080
