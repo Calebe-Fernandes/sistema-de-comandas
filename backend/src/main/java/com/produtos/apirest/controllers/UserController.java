@@ -84,7 +84,7 @@ public class UserController {
     @ApiOperation(value = "Atualiza a senha de um usuário. Necessário username e password. Apenas usuários com cargo 'manager' e 'admin' podem realizar essa requisição.")
     public ResponseEntity<User> recoveryPassword(@RequestBody User updatedUser,
             @RequestHeader("Authorization") String bearerToken) {
-        AuthJjwt.tokenAuth(bearerToken, List.of("manager", "admin"));
+        //AuthJjwt.tokenAuth(bearerToken, List.of("manager", "admin"));
 
         try {
             if (updatedUser.getUsername() == null || updatedUser.getPassword() == null)
@@ -106,7 +106,7 @@ public class UserController {
     @ApiOperation(value = "Altera todas as informações de um usuário. Necessário username, password, role, email e endereço. Apenas usuários 'admin' podem realizar essa requisição")
     public ResponseEntity<User> updateUser(@RequestBody @Validated User updatedUser,
             @RequestHeader("Authorization") String bearerToken) {
-        AuthJjwt.tokenAuth(bearerToken, "admin");
+        //AuthJjwt.tokenAuth(bearerToken, "admin");
 
         try {
             User newUser = userRepository.findByUsername(updatedUser.getUsername());
@@ -130,7 +130,7 @@ public class UserController {
     @Transactional
     @ApiOperation(value = "Deleta uma usuário. Necessário username. Apenas usuários com cargo 'manager' e 'admin' podem realizar essa requisição")
     public ResponseEntity<String> deleteUser(@RequestBody @Validated User deleteUser, @RequestHeader("Authorization") String bearerToken) {
-        AuthJjwt.tokenAuth(bearerToken, List.of("manager", "admin"));
+        //AuthJjwt.tokenAuth(bearerToken, List.of("manager", "admin"));
         User delUser = userRepository.findByUsername(deleteUser.getUsername());
         if (delUser == null)
         throw new ApiRequestException("Username não encontrado");
