@@ -8,7 +8,7 @@ interface Props {
   title: string;
 }
 
-const CommandHeaderComponent: React.FC<Props> = ({ title }) => {
+const FlatHeaderComponent: React.FC<Props> = ({ title }) => {
 
   const navigate = useNavigate();
 
@@ -17,7 +17,7 @@ const CommandHeaderComponent: React.FC<Props> = ({ title }) => {
   };
   return (
     <>
-      <header className="command-header">
+      <header className="flat-header">
         <button className="go-back-button" onClick={navigateToCommands}>
           <FontAwesomeIcon icon={faArrowLeft} className="go-back-button-icon" />
         </button>
@@ -28,4 +28,4 @@ const CommandHeaderComponent: React.FC<Props> = ({ title }) => {
   )
 }
 
-export default CommandHeaderComponent;
+export default FlatHeaderComponent;

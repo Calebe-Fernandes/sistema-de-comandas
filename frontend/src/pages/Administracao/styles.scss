@@ -1,0 +1,95 @@
+.adm-header {
+  display: flex;
+  height: 80px;
+  background-color: #E6873B;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+
+  .adm-header-title {
+    display: flex;
+    gap: 16px;
+    color: white;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .logout-button {
+    display: flex;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: white;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
+.adm-container {
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .adm-card {
+    display: flex;
+    flex-direction: column;
+    background: #FAEDE4;
+    border-radius: 12px;
+    padding: 16px 24px;
+    gap: 16px;
+
+    .adm-card-content {
+      display: flex;
+      gap: 16px;
+
+      .adm-card-icon {
+        height: 56px;
+        width: 56px;
+        min-width: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #FBDBC4;
+        border-radius: 8px;
+      }
+
+      .adm-card-texts {
+        padding-top: 4px;
+
+        .adm-card-title {
+          font-size: 16px;
+          font-weight: 700;
+        }
+    
+        .adm-card-text {
+          font-size: 14px;
+          margin-top: 8px;
+        }
+      }
+    }
+
+    button {
+      display: flex;
+      padding: 8px 16px;
+      gap: 8px;
+      background: #D34F05;
+      border-radius: 100px;
+      color: white;
+      align-self: end;
+      align-items: center;
+
+      p {
+        font-size: 15px;
+        font-weight: 600;
+      }
+
+      .arrow-icon {
+        font-size: 18px;
+      }
+    }
+  }
+}

@@ -1,7 +1,15 @@
 import AddButtonComponent from "./AddButtonComponent";
-import CommandHeaderComponent from "./CommandHeader";
+import FlatHeaderComponent from "./FlatHeader";
 import HeaderComponent from "./Header";
 import Loader from "./Loader";
 import EmptyContent from "./EmptyContent";
+import ModalComponent from "./Modal";
 
-export { AddButtonComponent, CommandHeaderComponent, HeaderComponent, Loader, EmptyContent };
+export {
+  AddButtonComponent,
+  FlatHeaderComponent,
+  HeaderComponent,
+  Loader,
+  EmptyContent,
+  ModalComponent
+};

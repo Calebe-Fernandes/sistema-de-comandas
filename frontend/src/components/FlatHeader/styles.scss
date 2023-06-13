@@ -1,12 +1,10 @@
-header.command-header {
-  margin-bottom: 20px;
+header.flat-header {
   background: var(--regular-orange);
   display: flex;
   align-items: center;
   gap: 40px;
   height: 70px;
-  box-shadow: 0 2px 10px #00000040;
-  border-radius: 0 0 10px 10px;
+  box-shadow: 0 2px 10px #0000001c;
   width: 100%;
 
   .go-back-button {
@@ -15,7 +13,7 @@ header.command-header {
     min-width: 30px;
     height: 30px;
     border-radius: 100px;
-    background: var(--medium-light-orange);
+    background: rgba(255, 255, 255, 0.3);
   
     .go-back-button-icon {
       color: var(--white);
@@ -27,7 +25,7 @@ header.command-header {
   }
 
   p {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--white);
     margin: 0 auto;

@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
 
 * {
   font-family: 'Montserrat', sans-serif;
@@ -85,7 +86,7 @@ table {
   }
 
   .fixed-thead {
-    box-shadow: 0px 1px 0px #000000;
+    box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.2);
     position: -webkit-sticky;
     position: sticky;
     top: 0;
@@ -160,6 +161,59 @@ input[type=checkbox] {
     height: 30px;
     width: 30px;
     min-width: 30px;
+  }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  label {
+    color: #9D9D9D;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  input, select {
+    height: 40px;
+    padding: 4px 16px;
+    border-radius: 8px;
+    border: none;
+    background-color: #EFEFEF;
+    font-size: 16px;
+
+    option:disabled {
+      font-size: 14px;
+    }
+  }
+
+  select {
+    /* reset */
+    margin: 0;      
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    padding-right: 36px;
+  }
+
+  select.round {
+    background-image:
+      linear-gradient(45deg, transparent 50%, gray 50%),
+      linear-gradient(135deg, gray 50%, transparent 50%),
+      radial-gradient(#ddd 70%, transparent 72%);
+    background-position:
+      calc(100% - 20px) calc(1em + 2px),
+      calc(100% - 15px) calc(1em + 2px),
+      calc(100% - .5em) .5em;
+    background-size:
+      5px 5px,
+      5px 5px,
+      1.5em 1.5em;
+    background-repeat: no-repeat;
   }
 }
 
