@@ -31,12 +31,20 @@ public class OrderModel {
     @OneToMany(mappedBy = "comanda")
     @JsonIgnoreProperties("order")
     private List<FoodWithdraw> foodWithdrawalList;
+    @OneToMany(mappedBy = "comanda")
+    @JsonIgnoreProperties("order")
+    private List<ItemAxis> itemAxisList;
+    @OneToMany(mappedBy = "comanda")
+    @JsonIgnoreProperties("order")
+    private List<PPDAxis> ppdAxisList;
 
     public OrderModel() {
     }
 
     public OrderModel(long id, int table, Boolean isOpen, Date openingTime, Date closingTime,
-            List<DrinkWithdrawal> drinkWithdrawalList, List<FoodWithdraw> foodWithdrawalList) {
+            List<DrinkWithdrawal> drinkWithdrawalList, List<FoodWithdraw> foodWithdrawalList,
+            List<ItemAxis> itemAxisList, List<PPDAxis> ppdAxisList
+            ) {
         this.id = id;
         this.table = table;
         this.isOpen = isOpen;
@@ -44,6 +52,8 @@ public class OrderModel {
         this.closingTime = closingTime;
         this.drinkWithdrawalList = drinkWithdrawalList;
         this.foodWithdrawalList = foodWithdrawalList;
+        this.itemAxisList = itemAxisList;
+        this.ppdAxisList = ppdAxisList;
     }
 
     public OrderModel setOrderAttrOnCreate() {
@@ -116,4 +126,19 @@ public class OrderModel {
     public void setFoodWithdrawalList(List<FoodWithdraw> foodWithdrawalList) {
         this.foodWithdrawalList = foodWithdrawalList;
     }
+    public List<ItemAxis> getItemAxisList() {
+        return itemAxisList;
+    }
+
+    public void setItemAxisList(List<ItemAxis> itemAxisList) {
+        this.itemAxisList = itemAxisList;
+    }
+    public List<PPDAxis> getPPDAxisList() {
+        return ppdAxisList;
+    }
+
+    public void setPPDAxisList(List<PPDAxis> ppdAxisList) {
+        this.ppdAxisList = ppdAxisList;
+    }
+
 }

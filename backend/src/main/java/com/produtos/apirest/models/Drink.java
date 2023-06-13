@@ -14,9 +14,9 @@ public class Drink extends Item {
     public Drink() {
     }
 
-    public Drink(long id, Float price, String productName, String description, Integer stockAmmount,
+    public Drink(long id, int sales, Float price, String productName, String description, Integer stockAmmount,
             Boolean isAlcoholic) {
-        super(id, price, productName, description, true);
+        super(id, sales, price, productName, description, true);
         this.stockAmmount = stockAmmount;
         this.isAlcoholic = isAlcoholic;
     }

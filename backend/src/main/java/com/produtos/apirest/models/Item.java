@@ -30,6 +30,9 @@ public class Item implements Serializable {
         this.isActive = isActive;
     }
 
+    public Item(long id, int sales, Float price, String productName, String description, boolean b) {
+    }
+
     public long getId() {
         return id;
     }

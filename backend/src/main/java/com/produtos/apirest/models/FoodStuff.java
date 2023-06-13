@@ -13,8 +13,8 @@ public class FoodStuff extends Item {
     public FoodStuff() {
     }
 
-    public FoodStuff(long id, Float price, String productName, String description, Boolean isAvaliable) {
-        super(id, price, productName, description, true);
+    public FoodStuff(long id, int sales, Float price, String productName, String description, Boolean isAvaliable) {
+        super(id, sales, price, productName, description, true);
         this.isAvaliable = isAvaliable;
     }
 
