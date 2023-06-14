@@ -41,20 +41,21 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation(value = "Autentica Usuário e retorna seu token. Necessário apenas campo username e password")
-    public ResponseEntity<String> login(@RequestBody User loginUser) {
+    public ResponseEntity<User> login(@RequestBody User loginUser) {
         // Retrieve user from the database based on the provided username
         User user = userRepository.findByUsername(loginUser.getUsername());
 
         if (user == null)
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials (user)");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 
         if (!validatePassword(loginUser.getPassword(), user.getPassword()))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials (password)");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 
         // Generate and return a token
         String token = AuthJjwt.generateToken(user.getId());
         System.out.println("token out? " + token);
-        return ResponseEntity.status(HttpStatus.OK).body(token);
+        user.setToken(token);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
     // User operations

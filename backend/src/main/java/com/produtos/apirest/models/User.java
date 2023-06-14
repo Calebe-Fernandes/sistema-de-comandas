@@ -20,11 +20,12 @@ public class User implements Serializable {
     
     @Column(unique = true)
     private String username;
-    @JsonIgnore
     private String password;
     private String role;
     private String email;
     private String endereco;
+
+    private String token;
 
     private Date createdAt;
     private Date updatedAt;
@@ -35,7 +36,7 @@ public class User implements Serializable {
     }
 
     public User(long id, String username, String password, String role, String email, String endereco,
-            boolean isActive, Date createdAt, Date updatedAt) {
+            boolean isActive, Date createdAt, Date updatedAt, String token) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -46,6 +47,7 @@ public class User implements Serializable {
 
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.token = token;
     }
 
     public long getId() {
@@ -75,6 +77,8 @@ public class User implements Serializable {
     public String getRole() {
         return role;
     }
+
+    public String getToken() {return token;}
 
     public void setRole(String role) {
         if (role.equals("manager") || role.equals("admin") || role.equals("waiter") || role.equals("cashier")) {
@@ -123,4 +127,6 @@ public class User implements Serializable {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public void setToken(String token){this.token = token ;}
 }

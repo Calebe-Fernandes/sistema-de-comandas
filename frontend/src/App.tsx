@@ -6,10 +6,10 @@ import Routes from './routes/routes'
 
 function App() {
   return (
-    <BrowserRouter>
-        <Routes />
-        <ToastContainer />
-    </BrowserRouter>
+      <BrowserRouter>
+          <Routes />
+          <ToastContainer />
+      </BrowserRouter>
   );
 }
 

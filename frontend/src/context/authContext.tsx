@@ -10,9 +10,8 @@ export const AuthProvider = ({children} : any) => {
   const navigate = useNavigate();
 
   // call this function when you want to authenticate the user
-  const login = async (data:any) => {
+  const login = (data:any) => {
     setUser(data);
-    navigate("/profile");
   };
 
   // call this function to sign out logged in user

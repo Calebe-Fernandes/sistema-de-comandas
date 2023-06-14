@@ -20,6 +20,11 @@ const Administracao: React.FC = () => {
     navigate("/adm/analise_de_vendas");
   };
 
+  const logout = () =>{
+    localStorage.removeItem('user');
+    navigate("/login", { replace: true });
+  }
+
   return(
     <>
       <div className="adm-header">
@@ -27,7 +32,7 @@ const Administracao: React.FC = () => {
           <FontAwesomeIcon icon={faUser} className="adm-icon" />
           <p>Administrador</p>
         </div>
-        <button className="logout-button">
+        <button className="logout-button" onClick={logout}>
           <FontAwesomeIcon icon={faArrowRightFromBracket} className="logout-icon" />
           <p>Sair</p>
         </button>
