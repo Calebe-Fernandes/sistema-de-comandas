@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { api } from "../../../../services/api";
+import { toast } from 'react-toastify';
+
+
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -13,16 +17,56 @@ const ModalNovoUsuario: React.FC = () => {
   const [userPassword, setUserPassword] = useState<string>("");
   const [userStatus, setUserStatus] = useState<string>("");
 
+  
+
   var userForm = {
-    "name": userName,
+    "username": userName,
     "role": userRole,
     "email": userEmail,
     "password": userPassword,
-    "status": userStatus,
+    "isActive": userStatus,
   }
 
-  function updateUser() {
-    console.log(userForm);
+  function valdiateForm(){
+    if(userForm.username == '' || userForm.role == '' || userForm.email == '' || userForm.password == '' || userForm.isActive == '' ){
+      toast.error('Preencha todos os campos antes de continuar', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    }); 
+    }else{
+      updateUser();
+    }
+  }
+
+  function updateUser() { 
+    api.post('/user',userForm)
+    .then(response => {
+      toast.success('Usuário cadastrado com sucesso', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }); 
+      }).catch(error => {
+        toast.error('Ocorreu um erro durante o cadastro', {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        }); 
+        console.log(error) 
+    });
   }
 
   return (
@@ -94,7 +138,7 @@ const ModalNovoUsuario: React.FC = () => {
 
       <button
         className="main-button"
-        onClick={updateUser}
+        onClick={valdiateForm}
       >
         Criar usuário
       </button>

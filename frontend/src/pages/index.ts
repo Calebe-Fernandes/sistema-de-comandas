@@ -1,4 +1,3 @@
-import Home from "./Home";
 import Comandas from "./Comandas";
 import Estoque from "./Estoque";
 import HistóricoCaixa from "./HistóricoCaixa";
@@ -11,6 +10,5 @@ import AnaliseVendas from "./AnaliseVendas";
 import Administracao from "./Administracao";
 import QuadroUsuarios from "./QuadroUsuarios";
 
-
-export { Home, Comandas, Estoque, HistóricoCaixa, HistóricoGerente, NovaComanda, DetalheComanda, MenuProdutos, Login, AnaliseVendas, Administracao, QuadroUsuarios};
+export { Comandas, Estoque, HistóricoCaixa, HistóricoGerente, NovaComanda, DetalheComanda, MenuProdutos, Login, AnaliseVendas, Administracao, QuadroUsuarios};
 

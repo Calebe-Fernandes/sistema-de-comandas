@@ -58,6 +58,12 @@ const Login: React.FC = () => {
         setUser(userData);
         if(userData.role === "admin"){
             navigate("/adm", { replace: true });
+        }else if(userData.role === "manager"){
+            navigate("/estoque", { replace: true });
+        }else if(userData.role === "cashier"){
+            navigate("/caixa/comandas", { replace: true });
+        }else if(userData.role === "waiter"){
+            navigate("/garcom/comandas", { replace: true });
         }
         })
         .catch(error => {
@@ -76,7 +82,7 @@ const Login: React.FC = () => {
 
     return( 
         <>
-            <header><p>Fazer Login</p></header>
+            <header className="login-header"><p>Fazer Login</p></header>
             <div className="login-main-content">
                 <div className="login-form">
                     <div className="field-group">
