@@ -130,8 +130,8 @@ const ModalNovoUsuario: React.FC = () => {
             defaultValue="disabled"
           >
             <option disabled value="disabled">Selecione uma opção</option>
-            <option value="active">Ativo</option>
-            <option value="inactive">Inativo</option>
+            <option value="true">Ativo</option>
+            <option value="false">Inativo</option>
           </select>
         </div>
       </div>

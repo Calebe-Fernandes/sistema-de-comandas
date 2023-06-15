@@ -22,7 +22,7 @@ const Administracao: React.FC = () => {
 
   const logout = () =>{
     localStorage.removeItem('user');
-    navigate("/login", { replace: true });
+    navigate("/", { replace: true });
   }
 
   return(

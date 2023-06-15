@@ -87,7 +87,7 @@ const ModalUsuario: React.FC<Props> = ({user}) => {
             <label>Nome *</label>
             <input
               type="text"
-              defaultValue={user.name}
+              defaultValue={user.username}
               onChange={(e) => checkChanges(e.target.value, "name")}
             />
           </div>
@@ -149,8 +149,8 @@ const ModalUsuario: React.FC<Props> = ({user}) => {
 
         <div className="historic-section">
           <h4>Histórico</h4>
-          <p>Cadastrado em {user.created}.</p>
-          <p>Última atualização em {user.lastEdited}.</p>
+          <p>Cadastrado em {user.createdAt.slice(0,10)}.</p>
+          <p>Última atualização em {user.updatedAt.slice(0,10)}.</p>
         </div>
       </div>
       
