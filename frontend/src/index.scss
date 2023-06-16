@@ -17,7 +17,7 @@
   --regular-orange: #E5802F;
   --regular-orange-hover: #DA721C;
   --dark-orange: #D34F05;
-  --dark-orange-hover: #C34B05;
+  --dark-orange-hover: #bb4806;
   --light-grey: #EEEEEE;  
   --medium-light-grey: #DADADA;
   --medium-grey: #9D9D9D;
@@ -36,6 +36,20 @@
   padding: 0;
   box-sizing: border-box;
   text-decoration: none;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 100vw;
 }
 
 button {
