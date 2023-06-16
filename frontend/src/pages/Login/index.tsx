@@ -35,7 +35,7 @@ const Login: React.FC = () => {
     },[password,userName])
 
     function sendRecoveryRequest(){
-        toast.success('Uma nova senha foi requisitada ao administrador e chegará ao seu email assim que autorizado', {
+        toast.warning('Requisite a alteração de senha para seu superior', {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
