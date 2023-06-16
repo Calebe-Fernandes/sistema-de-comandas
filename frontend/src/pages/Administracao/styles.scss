@@ -1,7 +1,7 @@
 .adm-header {
   display: flex;
   height: 80px;
-  background-color: #E6873B;
+  background-color: var(--regular-orange);
   align-items: center;
   justify-content: space-between;
   padding: 0 32px;
@@ -25,10 +25,18 @@
     align-items: center;
     font-size: 16px;
     font-weight: 600;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transition-duration: 0.6s;
+    }
   }
 }
 
 .adm-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
   padding: 40px 32px;
   display: flex;
   flex-direction: column;
@@ -76,7 +84,7 @@
       display: flex;
       padding: 8px 16px;
       gap: 8px;
-      background: #D34F05;
+      background: var(--dark-orange);
       border-radius: 100px;
       color: white;
       align-self: end;
@@ -89,6 +97,11 @@
 
       .arrow-icon {
         font-size: 18px;
+      }
+
+      &:hover {
+        background: var(--dark-orange-hover);
+        transition-duration: 0.6s;
       }
     }
   }

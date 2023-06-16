@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import Chart from 'react-apexcharts';
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 
 import "./styles.scss";
 import { FlatHeaderComponent } from "../../components";
+
+import SearchAnalysis from "../../assets/search-analysis.png";
 
 export interface ApexOptions {
   annotations?: ApexAnnotations;
@@ -29,8 +35,18 @@ export interface ApexOptions {
   yaxis?: ApexYAxis | ApexYAxis[];
 }
 
-
 const AnaliseVendas: React.FC = () => {
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
+  const [search, setSearch] = useState<boolean>(false);
+  const [searchBox, setSearchBox] = useState<boolean>(true);
+
+  function submitSearch() {
+    setSearch(true);
+    setSearchBox(false);
+    console.log(search, searchBox)
+  }
+
   const ProfitSeries = [
     {
       name: 'Valor obtido (R$)',
@@ -119,7 +135,6 @@ const AnaliseVendas: React.FC = () => {
     series: ProfitByItemSeries
   };
 
-
   const itensMaisPedidos = [
     'Porção Batata Frita (G)',
     'Coca Cola 2L',
@@ -131,39 +146,112 @@ const AnaliseVendas: React.FC = () => {
   return(
     <>
       <FlatHeaderComponent title="Análise de Vendas"/>
+
       <div className="analise-vendas-container">
         <div className="analise-vendas-wrapper">
-          <Chart options={ProfitOptions} series={ProfitSeries} height={300} />
+          {
+            (search==false || searchBox==true) &&
+            <div className="search-box-container">
+              <div className={search ? "box-header-close" : "box-header"}>
+                <p>Selecione um intervalo de data para realizar a análise</p>
 
-          <div className="grid-right">
-            <h4>Itens mais pedidos</h4>
-
-            <div>
-              {
-                itensMaisPedidos.map((item, index) => {
-                  return (
-                    <p className="most-ordered-item">
-                      <span>{ index + 1 }°</span>
-                      { item }
-                    </p>
-                  )
-                })
-              }
-            </div>
-            <div className="most-ordered-charts">
-              <div>
-                <p>Faturamento por itens mais pedidos</p>
-                <Chart type="bar" options={ProfitByItemOptions} series={ProfitByItemSeries} height={250} />
+                {
+                  search ?
+                  <button className="close" onClick={() => setSearchBox(false)}>
+                    <FontAwesomeIcon icon={faXmark} className="icon-close-modal" />
+                  </button>
+                  :
+                  <></>
+                }
               </div>
-              <div>
-                <p>Faturamento por itens mais pedidos</p>
-                <Chart type="bar" options={ProfitByItemOptions} series={ProfitByItemSeries} height={250} />
+
+              <div className="box-content">
+                <div className="data-range-inputs">
+                  <p>De</p>
+
+                  <div className="form-field">
+                    <label htmlFor="">De</label>
+                    <input
+                      type="date"
+                      defaultValue={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                    />
+                  </div>
+
+                  <p>até</p>
+
+                  <div className="form-field">
+                    <label htmlFor="">Até</label>
+                    <input
+                      type="date"
+                      defaultValue={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+              <button  className="search-button" onClick={submitSearch}>
+                Buscar
+                <FontAwesomeIcon icon={faSearch} />
+              </button>
               </div>
             </div>
+          }
 
-          </div> 
-        </div>
+          {
+            !searchBox &&
+            <div className="date-container" onClick={() => setSearchBox(true)}>
+              <p>{startDate}   -   {endDate}</p>
               
+              <FontAwesomeIcon icon={faCalendar} />
+            </div>
+          }
+
+          {
+            search ?
+            <div className="charts-container">
+              <div>
+                <Chart options={ProfitOptions} series={ProfitSeries} height={300} />
+              </div>
+
+              <div className="grid-right">
+                <h4>Itens mais pedidos</h4>
+
+                <div>
+                  {
+                    itensMaisPedidos.map((item, index) => {
+                      return (
+                        <p className="most-ordered-item">
+                          <span>{ index + 1 }°</span>
+                          { item }
+                        </p>
+                      )
+                    })
+                  }
+                </div>
+
+                <div className="most-ordered-charts">
+                  <div>
+                    <p>Faturamento por itens mais pedidos</p>
+                    <Chart type="bar" options={ProfitByItemOptions} series={ProfitByItemSeries} height={250} />
+                  </div>
+                  <div>
+                    <p>Faturamento por itens mais pedidos</p>
+                    <Chart type="bar" options={ProfitByItemOptions} series={ProfitByItemSeries} height={250} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            :
+            <div className="busca-nao-realizada">
+              <p>Busque um intervalo de data para visualizar a análise de vendas no período.</p>
+            
+              <div className="search-analysis-image">
+                <img src={SearchAnalysis} alt="" />
+              </div>
+            </div>
+          }
+        </div>
       </div>
     </>
   )

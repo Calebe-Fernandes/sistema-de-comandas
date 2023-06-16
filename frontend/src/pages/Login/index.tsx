@@ -2,7 +2,6 @@ import React, {useState,useEffect} from "react";
 import { toast } from 'react-toastify';
 import "./styles.scss";
 
-
 const Login: React.FC = () => {
 
 const [password, setPassword] = useState<string>('');
@@ -47,26 +46,27 @@ function sendRecoveryRequest(){
 }
 
 return( 
-    <>
-    <header><p>Fazer Login</p></header>
-    <div className="login-main-content">
-        <form className="login-form">
-            <div className="field-group">
-                <label>E-mail</label>
-                <input type="text" placeholder="Digite seu e-mail" onChange={handleEmail}/>
-                {isValidEmail ? (<p></p>) : <p>Por favor insira um e-mail válido</p>}               
-            </div>
-            <div className="field-group">
-                <label>Senha</label>
-                <input type="password"  placeholder="Digite sua senha" onChange={handlePassword}/>
-            </div>
-            <a  onClick={sendRecoveryRequest}>Esqueci a senha</a>
-            <div className="field-group">
-              <button className="btn"disabled={!isEnable} >Entrar</button>
-            </div>
-        </form>
+    <div className="login">
+        <header><p>Fazer Login</p></header>
+
+        <div className="login-main-content">
+            <form className="login-form">
+                <div className="field-group">
+                    <label>E-mail</label>
+                    <input type="text" placeholder="Digite seu e-mail" onChange={handleEmail}/>
+                    {isValidEmail ? (<p></p>) : <p>Por favor insira um e-mail válido</p>}               
+                </div>
+                <div className="field-group">
+                    <label>Senha</label>
+                    <input type="password"  placeholder="Digite sua senha" onChange={handlePassword}/>
+                </div>
+                <a  onClick={sendRecoveryRequest}>Esqueci a senha</a>
+                <div className="field-group">
+                <button className="btn"disabled={!isEnable} >Entrar</button>
+                </div>
+            </form>
+        </div>
     </div>
-    </>
 )
 }
 
