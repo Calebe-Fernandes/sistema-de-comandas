@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { CommandHeaderComponent, Loader, EmptyContent } from "../../components";
+import { FlatHeaderComponent, Loader, EmptyContent } from "../../components";
 import { api } from "../../services/api";
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router";
@@ -239,7 +239,7 @@ const MenuProdutos: React.FC = () => {
 
   return (
     <>
-      <CommandHeaderComponent title="Menu" />
+      <FlatHeaderComponent title="Menu" />
       <div className="new-command-container menu-produtos-container">
         <div className="menu-options">
           <button onClick={getDrinkList} className="menu-option active"><p>Bebidas</p></button>

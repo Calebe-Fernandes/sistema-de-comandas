@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CommandHeaderComponent, Loader } from "../../components";
+import { FlatHeaderComponent, Loader } from "../../components";
 import { useNavigate } from "react-router";
 import { api } from "../../services/api";
 import EmptyContent from "../../components/EmptyContent";
@@ -280,7 +280,7 @@ const NovaComanda: React.FC = () => {
 
   return (
     <>
-      <CommandHeaderComponent title="Nova Comanda" />
+      <FlatHeaderComponent title="Nova Comanda" />
 
       <div className="new-command-container">
 
