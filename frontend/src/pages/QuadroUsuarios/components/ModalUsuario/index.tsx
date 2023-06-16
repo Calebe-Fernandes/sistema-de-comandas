@@ -3,10 +3,14 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
+import { api } from "../../../../services/api";
+import { toast } from 'react-toastify';
+
+
 import "./styles.scss";
 
 interface User {
-  [name: string]: string;
+  [username: string]: string;
   role: string,
   email: string,
   password: string,
@@ -17,15 +21,16 @@ interface User {
 
 interface Props {
   user: User,
+  adminToken:string
 } 
 
-const ModalUsuario: React.FC<Props> = ({user}) => {
+const ModalUsuario: React.FC<Props> = ({user,adminToken}) => {
   useEffect(() => {
-    setUserName(user.name);
+    setUserName(user.username);
     setUserRole(user.role);
     setUserEmail(user.email);
     setUserPassword(user.password);
-    setUserStatus(user.status);
+    setUserStatus(user.isActive);
   },[]);
 
   const [fieldsChanged, setFieldsChanged] = useState<string[]>([]);
@@ -37,15 +42,48 @@ const ModalUsuario: React.FC<Props> = ({user}) => {
   const [userStatus, setUserStatus] = useState<string>("");
 
   var userForm = {
-    "name": userName,
+    "username": userName,
     "role": userRole,
     "email": userEmail,
     "password": userPassword,
-    "status": userStatus,
+    "isActive": userStatus,
+    "endereco":null,
+    "id":user.id,
+    "token":user.token
   }
 
-  function updateUser() {
-    console.log(userForm);
+  useEffect((()=>{
+    console.log(adminToken);
+  }),[])
+
+
+ async function updateUser(token:string) {
+  console.log(userForm)
+      await api.put('/user',userForm,{  headers: {
+        'Authorization': `Bearer ${token}`
+      }})
+      .then(response => {
+        toast.success('Usuário atualizado com sucesso', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }); 
+      }).catch(error => {
+        toast.error('Ocorreu um erro durante o processo', {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        }); 
+        console.log(error) 
+    });
   }
 
   function setUserState(fieldValue:any, fieldName: any) {
@@ -62,7 +100,7 @@ const ModalUsuario: React.FC<Props> = ({user}) => {
       case "password":
         setUserPassword(fieldValue);
         break;
-      case "status":
+      case "isActive":
         setUserStatus(fieldValue);
         break;
     }
@@ -89,6 +127,7 @@ const ModalUsuario: React.FC<Props> = ({user}) => {
               type="text"
               defaultValue={user.username}
               onChange={(e) => checkChanges(e.target.value, "name")}
+              disabled
             />
           </div>
 
@@ -101,6 +140,7 @@ const ModalUsuario: React.FC<Props> = ({user}) => {
               <option value="waiter">Garçom</option>
               <option value="cashier">Caixa</option>
               <option value="manager">Gerente</option>
+              <option value="admin">Administrador</option>
             </select>
           </div>
 
@@ -136,11 +176,11 @@ const ModalUsuario: React.FC<Props> = ({user}) => {
           <div className="form-field">
             <label>Status *</label>
             <select
-              defaultValue={user.status}
-              onChange={(e) => checkChanges(e.target.value, "status")}
+              defaultValue={user.isActive}
+              onChange={(e) => checkChanges(e.target.value, "isActive")}
             >
-              <option value="active">Ativo</option>
-              <option value="inactive">Inativo</option>
+              <option value="true">Ativo</option>
+              <option value="false">Inativo</option>
             </select>
           </div>
         </div>
@@ -157,7 +197,7 @@ const ModalUsuario: React.FC<Props> = ({user}) => {
       <button
         disabled={fieldsChanged.length==0}
         className="main-button"
-        onClick={updateUser}
+        onClick={()=>{updateUser(adminToken)}}
       >
         Atualizar usuário
       </button>

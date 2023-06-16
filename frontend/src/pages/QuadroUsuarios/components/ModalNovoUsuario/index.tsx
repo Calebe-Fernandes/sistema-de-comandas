@@ -24,10 +24,11 @@ const ModalNovoUsuario: React.FC = () => {
     "role": userRole,
     "email": userEmail,
     "password": userPassword,
-    "isActive": userStatus,
+    "isActive": userStatus || 'true',
   }
 
   function valdiateForm(){
+    console.log(userForm)
     if(userForm.username == '' || userForm.role == '' || userForm.email == '' || userForm.password == '' || userForm.isActive == '' ){
       toast.error('Preencha todos os campos antes de continuar', {
         position: "top-center",
@@ -92,6 +93,8 @@ const ModalNovoUsuario: React.FC = () => {
             <option value="waiter">Garçom</option>
             <option value="cashier">Caixa</option>
             <option value="manager">Gerente</option>
+            <option value="admin">Administrador</option>
+
           </select>
         </div>
 
@@ -127,7 +130,7 @@ const ModalNovoUsuario: React.FC = () => {
           <select
             onChange={(e) => setUserStatus(e.target.value)}
             className="round"
-            defaultValue="disabled"
+            defaultValue="true"
           >
             <option disabled value="disabled">Selecione uma opção</option>
             <option value="true">Ativo</option>

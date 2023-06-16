@@ -65,6 +65,16 @@ const Login: React.FC = () => {
         }else if(userData.role === "waiter"){
             navigate("/garcom/comandas", { replace: true });
         }
+
+        toast.success(`Seja bem-vindo novamente ${userData.username.split(' ')[0]}`, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        }); 
         })
         .catch(error => {
             toast.error('Usuário ou senha não válidos', {

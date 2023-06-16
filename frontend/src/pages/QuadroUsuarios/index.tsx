@@ -32,14 +32,6 @@ const QuadroUsuarios: React.FC = () => {
 
   const localData  = localStorage.getItem('user');
   
-  const roles = {
-    "admin":"Administrador",
-    "manager":"Gerente",
-    "cashier":"Caixa",
-    "waiter":"Garçom"
-  }
- 
-
   useEffect(() => {
     if(localData){
       setAdminData(JSON.parse(localData))
@@ -76,6 +68,7 @@ const QuadroUsuarios: React.FC = () => {
       document.body.style.overflow ='auto'
       setUserModal(false);
     }
+    getAllUsers(localData);
   }
 
   function toggleNewUserModal() {
@@ -86,6 +79,7 @@ const QuadroUsuarios: React.FC = () => {
       document.body.style.overflow ='auto'
       setNewUserModal(false);
     }
+    getAllUsers(localData);
   }
 
   return (
@@ -110,6 +104,7 @@ const QuadroUsuarios: React.FC = () => {
               <tr>
                 <th>Nome</th>
                 <th>Função</th>
+                <th>Status</th>
                 <th></th>
               </tr>
             </thead>
@@ -120,6 +115,7 @@ const QuadroUsuarios: React.FC = () => {
                   <tr key={index}>
                     <td>{user.username}</td>
                     <td>{user.role==="manager" ? "Gerente" : user.role==="cashier" ? "Caixa":user.role==="admin" ? "Administrador": "Garçom"}</td>
+                    <td style={user.isActive ? {color:'green'} : {color:'red'}}>{user.isActive ? "Ativo" : "Inativo"}</td>
                     <td className="view-td">
                       <button onClick={() => toggleUserModal(user)}>
                         <FontAwesomeIcon icon={faEye} />
@@ -136,11 +132,11 @@ const QuadroUsuarios: React.FC = () => {
       <AddButtonComponent navigate={()=>toggleNewUserModal()}/>
 
       {
-        userModal && modalInfo &&
+        userModal && modalInfo && localData &&
         <ModalComponent
           headerTitle="Visualização de usuário"
           closeModal={() => toggleUserModal("")}
-          content={<ModalUsuarios user={modalInfo}/>}
+          content={<ModalUsuarios user={modalInfo} adminToken={JSON.parse(localData).token}/>}
         />
       }
 
