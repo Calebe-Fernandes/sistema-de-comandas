@@ -15,12 +15,9 @@ const Login: React.FC = () => {
     const [user, setUser] = useLocalStorage("user", null);
     const navigate = useNavigate();
 
-
-
     function handlePassword(event:any){
         setPassword(event.target.value);
     }
-
 
     function handleUserName(event:any){
         setUserName(event.target.value);

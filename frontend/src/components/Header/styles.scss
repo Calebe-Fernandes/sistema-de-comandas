@@ -1,20 +1,42 @@
 header.header {
   display: flex;
-  padding-bottom: 50px;
+  padding-bottom: 32px;
 
-  .go-back-button {
-    min-width: 30px;
-    height: 30px;
+  .logout-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 20px;
     border-radius: 100px;
     background: var(--medium-light-orange);
-    margin: 20px 40px 0 30px;
+    margin: auto 20px;
   
     .go-back-button-icon {
       color: var(--white);
+      font-size: 16px;
+    }
+
+    p {
+      font-weight: 500;
+      font-size: 15px;
+      color: white;
     }
   
     &:hover{
       background: var(--regular-orange);
+    }
+  }
+
+  @media only screen and (max-width: 500px) {
+    .logout-button-display {
+      min-width: 36px;
+      height: 36px;
+      padding: 0;
+
+      p {
+        display: none;
+      }
     }
   }
 
@@ -26,7 +48,7 @@ header.header {
     gap: 40px;
     height: 70px;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
-    border-radius: 0px 0px 0px 50px;
+    border-radius: 0 0 50px 0;
     width: 100%;
 
     div {
@@ -41,4 +63,11 @@ header.header {
       padding-bottom:2px;
     }
   }
+}
+
+header.waiter-header {
+  width: 100%;
+  justify-content: end;
+  padding-top: 20px;
+  padding-right: 10px;
 }

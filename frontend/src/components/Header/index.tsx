@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
+import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
 import "./styles.scss";
 
 interface Props {
@@ -13,8 +13,9 @@ const HeaderComponent: React.FC<Props> = ({ user, page }) => {
 
   const navigate = useNavigate();
 
-  const navigateToHome = () => {
-    navigate("/");
+  const logout = () => {
+    localStorage.removeItem('user');
+    navigate("/", { replace: true });
   };
 
   const navigateToCashierCommands = () => {
@@ -34,39 +35,43 @@ const HeaderComponent: React.FC<Props> = ({ user, page }) => {
   }
 
   return (
-    <>
-      <header className="header">
-        <button className="go-back-button" onClick={navigateToHome}>
-          <FontAwesomeIcon icon={faArrowLeft} className="go-back-button-icon" />
-        </button>
+    <header className={user=="waiter" ? "header waiter-header" : "header"}>
+      {
+        user !== "waiter" ?
+        <div className="links-container" >
+          {user === "cashier" ?
+            <div
+              className={page === "commands" ? "active" : ""}
+              onClick={navigateToCashierCommands}
+            > Comandas </div>
+            : null}
+          {user === "manager" ?
+            <div className={page === "stock" ? "active" : ""}
+              onClick={navigateToStock}
+            > Estoque</div>
+            : null}
+          {user === "cashier"?
+            <div className={page === "history" ? "active" : ""}
+            onClick={navigateToCashierHistory}
+            > Histórico</div>
+            : null}
+          {user === "manager"?
+            <div className={page === "history" ? "active" : ""}
+            onClick={navigateToManagerHistory}
+            > Histórico</div>
+            : null}
+        </div>
+        : null
+      }
 
-        {user !== "waiter" ?
-          <div className="links-container" >
-            {user === "cashier" ?
-              <div
-                className={page === "commands" ? "active" : ""}
-                onClick={navigateToCashierCommands}
-              > Comandas </div>
-              : null}
-            {user === "manager" ?
-              <div className={page === "stock" ? "active" : ""}
-                onClick={navigateToStock}
-              > Estoque</div>
-              : null}
-            {user === "cashier"?
-              <div className={page === "history" ? "active" : ""}
-              onClick={navigateToCashierHistory}
-              > Histórico</div>
-              : null}
-            {user === "manager"?
-              <div className={page === "history" ? "active" : ""}
-              onClick={navigateToManagerHistory}
-              > Histórico</div>
-              : null}
-          </div>
-          : null}
-      </header>
-    </>
+      <button
+        className={user=="waiter" ? "logout-button" : "logout-button logout-button-display"}
+        onClick={logout}
+      >
+        <FontAwesomeIcon icon={faArrowRightFromBracket} className="go-back-button-icon" />
+        <p>Sair</p>
+      </button>
+    </header>
   )
 }
 
