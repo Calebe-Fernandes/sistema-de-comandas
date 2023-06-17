@@ -8,7 +8,7 @@ export const ProtectedManagerRoute = ({ children } : any) => {
   }
   if (userData.role !== 'manager') {
     // user is not authenticated
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
   return children;
 };

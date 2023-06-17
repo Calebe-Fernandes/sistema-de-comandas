@@ -42,8 +42,6 @@ const AnaliseVendas: React.FC = () => {
   const [endDate, setEndDate] = useState<string>("");
   const [search, setSearch] = useState<boolean>(false);
   const [searchBox, setSearchBox] = useState<boolean>(true);
-  const [items, setItems] = useState<any[]>([]);
-  const [ppd, setPPD] = useState<any[]>([]);
   const [ppdYAxis, setPPDYAxis] = useState<any[]>([]);
   const [ppdXAxis, setPPDXAxis] = useState<any[]>([]);
   const [itemSeries, setitemSeries] = useState<any[]>([]);
@@ -70,7 +68,6 @@ const AnaliseVendas: React.FC = () => {
           res[value.name].price = value.price;
           return res;
       }, {});
-      setItems(arrangedItems);
       arrangedItems.sort();
       const dscList = arrangedItems.filter((item: { sales: any; })=> item.sales).sort((prev: { sales: number; }, next: { sales: number; }) => {
         return next.sales - prev.sales;
@@ -101,7 +98,6 @@ const AnaliseVendas: React.FC = () => {
           res[value.date].profit += value.profit
           return res;
       }, {});
-      setPPD(arrangedPPD);
       let yAxis2 = arrangedPPD.map((a: { profit: any; }) => a.profit);
       setPPDYAxis(yAxis2);
       let xAxis2 = arrangedPPD.map((a: { date: any; }) => a.date);
@@ -230,9 +226,9 @@ const AnaliseVendas: React.FC = () => {
     
   return(
     <>
-      <FlatHeaderComponent title="Análise de Vendas"/>
+      <div className="analise-vendas-page">
+        <FlatHeaderComponent title="Análise de Vendas"/>
 
-      <div className="analise-vendas-container">
         <div className="analise-vendas-wrapper">
           {
             (search==false || searchBox==true) &&
@@ -275,7 +271,7 @@ const AnaliseVendas: React.FC = () => {
                   </div>
                 </div>
 
-              <button  className="search-button" onClick={submitSearch}>
+              <button  className="search-button" disabled={ startDate !== "" && endDate!=="" ? false : true} onClick={submitSearch}>
                 Buscar
                 <FontAwesomeIcon icon={faSearch} />
               </button>
@@ -339,6 +335,7 @@ const AnaliseVendas: React.FC = () => {
         </div>
       </div>
     </>
+
   )
 }
 

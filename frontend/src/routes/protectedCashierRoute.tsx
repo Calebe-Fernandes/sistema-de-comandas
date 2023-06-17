@@ -8,7 +8,7 @@ export const ProtectedCashierRoute = ({ children } : any) => {
   }
   if (userData.role !== 'cashier') {
     // user is not authenticated
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
   return children;
 };

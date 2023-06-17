@@ -6,6 +6,9 @@ import { AddButtonComponent, FlatHeaderComponent, ModalComponent } from "../../c
 import ModalUsuarios from "./components/ModalUsuario";
 import ModalNovoUsuario from "./components/ModalNovoUsuario";
 import { api } from "../../services/api";
+import {Loader } from "../../components";
+
+
 
 interface User {
   id: number,
@@ -22,15 +25,16 @@ interface User {
 
 
 const QuadroUsuarios: React.FC = () => {
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState<string>("");
   const [userModal, setUserModal] = useState<boolean>(false);
   const [newUserModal, setNewUserModal] = useState<boolean>(false);
   const [modalInfo, setModalInfo] = useState();
   const [users, setUserList] = useState<User[]>([]);
-  const [filterUsers,setFilteredUsers] = useState<User[]>([]) 
-  const [adminData, setAdminData] = useState<any>()
-
+  const [filterUsers,setFilteredUsers] = useState<User[]>([]); 
+  const [adminData, setAdminData] = useState<any>();
   const localData  = localStorage.getItem('user');
+  const [waitingApiResponse, setWaitingApiResponse]= useState<boolean>(true);
+
   
   useEffect(() => {
     if(localData){
@@ -54,7 +58,8 @@ const QuadroUsuarios: React.FC = () => {
       'Authorization': `Bearer ${JSON.parse(localData).token}`
     }})
     .then(response =>{
-        setUserList(response.data);
+      setWaitingApiResponse(false);
+      setUserList(response.data);
     })
   }
 
@@ -99,7 +104,9 @@ const QuadroUsuarios: React.FC = () => {
         </div>
 
         <div className="table-container">
-          <table>
+        {waitingApiResponse && <Loader/>}
+        {!waitingApiResponse && 
+         <table>
             <thead className="fixed-thead">
               <tr>
                 <th>Nome</th>
@@ -108,7 +115,6 @@ const QuadroUsuarios: React.FC = () => {
                 <th></th>
               </tr>
             </thead>
-
             <tbody>
             {filterUsers?.length && filterUsers.map((user: any, index) => {
                 return <>
@@ -126,6 +132,7 @@ const QuadroUsuarios: React.FC = () => {
               })}
             </tbody>
           </table>
+        }
         </div>
       </div>
 

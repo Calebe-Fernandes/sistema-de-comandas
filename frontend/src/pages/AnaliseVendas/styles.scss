@@ -109,6 +109,10 @@
           align-items: center;
           justify-content: center;
           gap: 8px;
+
+          &:disabled{
+            background-color: lightgray;
+          }
     
           @media only screen and (max-width: 600px) {
             width: 100%;

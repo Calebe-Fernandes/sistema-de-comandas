@@ -17,10 +17,10 @@ const Router = () => {
       <Route path="/garcom/comandas/detalhes/:id" element={<ProtectedWaiterRoute><DetalheComanda/></ProtectedWaiterRoute>} />
       <Route path="/garcom/comandas/detalhes/menu/:id" element={<ProtectedWaiterRoute><MenuProdutos/></ProtectedWaiterRoute>}/>   
       <Route path="/caixa/comandas" element={<ProtectedCashierRoute><Comandas/></ProtectedCashierRoute>}/>
-      <Route path="/caixa/comandas/detalhes/:id" element={<ProtectedAdminRoute><DetalheComanda/></ProtectedAdminRoute>}/>  
+      <Route path="/caixa/comandas/detalhes/:id" element={<ProtectedCashierRoute><DetalheComanda/></ProtectedCashierRoute>}/>  
       <Route path="/estoque" element={<ProtectedManagerRoute><Estoque/></ProtectedManagerRoute>}/>  
-      <Route path="caixa/historico" element={<ProtectedAdminRoute><HistóricoCaixa/></ProtectedAdminRoute>}/>  
-      <Route path="gerente/historico" element={<ProtectedManagerRoute><HistóricoGerente/></ProtectedManagerRoute>}/>
+      <Route path="/caixa/historico" element={<ProtectedCashierRoute><HistóricoCaixa/></ProtectedCashierRoute>}/>  
+      <Route path="/gerente/historico" element={<ProtectedManagerRoute><HistóricoGerente/></ProtectedManagerRoute>}/>
       <Route path="/adm/quadro_de_usuarios" element={<ProtectedAdminRoute><QuadroUsuarios/></ProtectedAdminRoute>}/>
       <Route path="/adm/analise_de_vendas" element={<ProtectedAdminRoute><AnaliseVendas/></ProtectedAdminRoute>}/>
       <Route path="/adm" element={<ProtectedAdminRoute><Administracao/></ProtectedAdminRoute>}/>

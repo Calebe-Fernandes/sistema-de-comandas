@@ -8,7 +8,7 @@ export const ProtectedWaiterRoute = ({ children } : any) => {
   }
   if (userData.role !== 'waiter') {
     // user is not authenticated
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
   return children;
 };
