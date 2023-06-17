@@ -9,6 +9,8 @@ import "./styles.scss";
 import { FlatHeaderComponent } from "../../components";
 
 import SearchAnalysis from "../../assets/search-analysis.png";
+import { api } from "../../services/api";
+import { string } from "yargs";
 
 export interface ApexOptions {
   annotations?: ApexAnnotations;
@@ -40,17 +42,83 @@ const AnaliseVendas: React.FC = () => {
   const [endDate, setEndDate] = useState<string>("");
   const [search, setSearch] = useState<boolean>(false);
   const [searchBox, setSearchBox] = useState<boolean>(true);
+  const [items, setItems] = useState<any[]>([]);
+  const [ppd, setPPD] = useState<any[]>([]);
+  const [ppdYAxis, setPPDYAxis] = useState<any[]>([]);
+  const [ppdXAxis, setPPDXAxis] = useState<any[]>([]);
+  const [itemSeries, setitemSeries] = useState<any[]>([]);
+  const [itemSalesYAxis, setitemSalesYAxis] = useState<any[]>([]);
+  const [itemProfitYAxis, setitemProfitYAxis] = useState<any[]>([]);
+
+  async function filterRequest(){
+    await api.post('/order/closed',{
+      "initialDate": startDate,
+      "finalDate": endDate
+    })
+    .then(response =>{
+      var arrangedItems: any = [];
+      response.data.itemAxisList.reduce(function (res: any, value: any) {
+          if (!res[value.name]) {
+              res[value.name] = {
+                  sales: 0,
+                  prices: 0,
+                  name: value.name
+              };
+              arrangedItems.push(res[value.name])
+          }
+          res[value.name].sales += value.sales;
+          res[value.name].price = value.price;
+          return res;
+      }, {});
+      setItems(arrangedItems);
+      arrangedItems.sort();
+      const dscList = arrangedItems.filter((item: { sales: any; })=> item.sales).sort((prev: { sales: number; }, next: { sales: number; }) => {
+        return next.sales - prev.sales;
+      });
+      const slicedArray = dscList.slice(0,4);
+      setitemSeries(slicedArray.map((a: { name: any; }) => a.name));
+      setitemSalesYAxis(slicedArray.map((a: { sales: Number; }) => a.sales));
+
+      const ppi = [];
+      for(var i=0;i<5;i++){
+        try{
+          ppi.push(slicedArray[i].price*slicedArray[i].sales);
+          console.log(slicedArray[i].price);
+          console.log(slicedArray[i].sales);
+        }catch{};
+      }
+      setitemProfitYAxis(ppi);
+
+      var arrangedPPD: any = [];
+      response.data.ppdaxisList.reduce(function (res: any, value: any) {
+          if (!res[value.date]) {
+              res[value.date] = {
+                  profit: 0,
+                  date: value.date
+              };
+              arrangedPPD.push(res[value.date])
+          }
+          res[value.date].profit += value.profit
+          return res;
+      }, {});
+      setPPD(arrangedPPD);
+      let yAxis2 = arrangedPPD.map((a: { profit: any; }) => a.profit);
+      setPPDYAxis(yAxis2);
+      let xAxis2 = arrangedPPD.map((a: { date: any; }) => a.date);
+      setPPDXAxis(xAxis2);
+    });
+  }
 
   function submitSearch() {
     setSearch(true);
     setSearchBox(false);
-    console.log(search, searchBox)
+    filterRequest();
   }
 
   const ProfitSeries = [
     {
       name: 'Valor obtido (R$)',
-      data: [2000, 2500, 2320, 3187, 3000, 2147, 2698],
+      data: ppdYAxis,
     },
   ];
 
@@ -79,15 +147,7 @@ const AnaliseVendas: React.FC = () => {
       },
     },
     xaxis: {
-      categories: [
-        '01/01/2023',
-        '02/01/2023',
-        '03/01/2023',
-        '04/01/2023',
-        '05/01/2023',
-        '06/01/2023',
-        '07/01/2023',
-      ],
+      categories: ppdXAxis,
     },
     series: ProfitSeries
   };
@@ -95,7 +155,14 @@ const AnaliseVendas: React.FC = () => {
   const ProfitByItemSeries = [
     {
       name: 'Valor obtido no item',
-      data: [8420, 5041, 4521, 3575, 3159],
+      data: itemProfitYAxis,
+    },
+  ];
+  
+  const BestSellersSeries = [
+    {
+      name: 'Unidades vendidas',
+      data: itemSalesYAxis,
     },
   ];
 
@@ -119,13 +186,7 @@ const AnaliseVendas: React.FC = () => {
       labels: {
         show: false,
       },
-      categories: [
-        'Porção Batata Frita (G)',
-        'Coca Cola 2L',
-        'Porção Calabresa (M)',
-        'Guaraná 1L',
-        'X-Salada',
-      ],
+      categories: itemSeries,
     },
     yaxis: [{
       title: {
@@ -135,13 +196,37 @@ const AnaliseVendas: React.FC = () => {
     series: ProfitByItemSeries
   };
 
-  const itensMaisPedidos = [
-    'Porção Batata Frita (G)',
-    'Coca Cola 2L',
-    'Porção Calabresa (M)',
-    'Guaraná 1L',
-    'X-Salada',
-  ];
+  const SalesByItemOptions:ApexOptions = {
+    plotOptions: {
+      bar: {
+        distributed: true,
+      }
+    },
+    chart: {
+      width: "100%",
+      fontFamily: 'Montserrat, sans-serif',
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    legend: {
+      show: true,
+    },
+    xaxis: {
+      labels: {
+        show: false,
+      },
+      categories: itemSeries,
+    },
+    yaxis: [{
+      title: {
+        text: 'Baixas no estoque',
+      },
+    }],
+    series: ProfitByItemSeries
+  };
+
+  const itensMaisPedidos = itemSeries;
     
   return(
     <>
@@ -174,7 +259,7 @@ const AnaliseVendas: React.FC = () => {
                     <input
                       type="date"
                       defaultValue={startDate}
-                      onChange={(e) => setStartDate(e.target.value)}
+                      onChange={(e) => setStartDate(()=>{let format = e.target.value.split("-"); return format[2]+"/"+format[1]+"/"+format[0]})}
                     />
                   </div>
 
@@ -185,7 +270,7 @@ const AnaliseVendas: React.FC = () => {
                     <input
                       type="date"
                       defaultValue={endDate}
-                      onChange={(e) => setEndDate(e.target.value)}
+                      onChange={(e) => setEndDate(()=>{let format = e.target.value.split("-"); return format[2]+"/"+format[1]+"/"+format[0]})}
                     />
                   </div>
                 </div>
@@ -232,11 +317,11 @@ const AnaliseVendas: React.FC = () => {
 
                 <div className="most-ordered-charts">
                   <div>
-                    <p>Faturamento por itens mais pedidos</p>
-                    <Chart type="bar" options={ProfitByItemOptions} series={ProfitByItemSeries} height={250} />
+                    <p>Vendas por unidade</p>
+                    <Chart type="bar" options={SalesByItemOptions} series={BestSellersSeries} height={250} />
                   </div>
                   <div>
-                    <p>Faturamento por itens mais pedidos</p>
+                    <p>Faturamento por item</p>
                     <Chart type="bar" options={ProfitByItemOptions} series={ProfitByItemSeries} height={250} />
                   </div>
                 </div>

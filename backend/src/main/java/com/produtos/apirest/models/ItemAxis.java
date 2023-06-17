@@ -15,24 +15,24 @@ public class ItemAxis implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private float price;
     private String name;
     private int sales;
 
     public ItemAxis() {
     }
 
-    public ItemAxis(long id, String name, int sales) {
-        this.id = id;
+    public ItemAxis(float price, String name, int sales) {
+        this.price = price;
         this.name = name;
         this.sales = sales;
     }
 
-    public long getId() {
-        return id;
+    public float getPrice() {
+        return price;
     }
-    public void setId(long id) {
-        this.id = id;
+    public void setPrice(float price) {
+        this.price = price;
     }
     public String getName(){ return name; }
     public void setName(String name){ this.name = name;};

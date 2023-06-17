@@ -18,12 +18,12 @@ public class PPDAxis implements Serializable {
     private long id;
 
     private Float profit;
-    private Date date;
+    private String date;
 
     public PPDAxis() {
     }
 
-    public PPDAxis(long id, Float profit, Date date) {
+    public PPDAxis(long id, Float profit, String date) {
         this.id = id;
         this.profit = profit;
         this.date = date;
@@ -37,6 +37,6 @@ public class PPDAxis implements Serializable {
     }
     public Float getProfit(){ return profit; }
     public void setProfit(Float profit){ this.profit = profit;};
-    public Date getDate(){ return date;}
-    public void setDate(Date date){ this.date = date;}
+    public String getDate(){ return date;}
+    public void setDate(String date){ this.date = date;}
 }

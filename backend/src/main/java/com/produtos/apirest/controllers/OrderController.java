@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,7 +25,6 @@ import javax.transaction.Transactional;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -132,7 +132,7 @@ public class OrderController {
         return orderRepository.findByIsOpen(false);
     }
 
-    //send a body and filter closed orders by date
+    //send a body and filter closed orders by date (dd/mm/yyyy)
     @PostMapping("/order/closed")
     @ApiOperation(value = "Envia um body para filtro de data")
     public OrderModel filterPPD(@RequestBody PostBody postBody) {
@@ -143,6 +143,8 @@ public class OrderController {
         totalOrder.setOpeningTime(date1);
         totalOrder.setClosingTime(date2);
         totalOrder.setOrderTotal((float) 0);
+        totalOrder.setPPDAxisList(new ArrayList<PPDAxis>());
+        totalOrder.setItemAxisList(new ArrayList<ItemAxis>());
         List<OrderModel> allOrders = orderRepository.findByIsOpen(false);
 
         for(OrderModel order : allOrders) {
@@ -154,36 +156,30 @@ public class OrderController {
                 //operação dentro do filtro
 
                 PPDAxis ppd = new PPDAxis();
-                ppd.setDate(order.getClosingTime());
+                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                ppd.setDate(dateFormat.format(order.getClosingTime()));
                 ppd.setProfit(order.getOrderTotal());
                 totalOrder.getPPDAxisList().add(ppd);
 
                 for(DrinkWithdrawal drinkWithdrawal : order.getDrinkWithdrawalList()){
                     ItemAxis item = new ItemAxis();
                     item.setSales(drinkWithdrawal.getQuantity());
+                    item.setPrice(drinkWithdrawal.getDrink().getPrice());
                     item.setName(drinkWithdrawal.getDrink().getProductName());
                     totalOrder.getItemAxisList().add(item);
                 }
                 for(FoodWithdraw foodWithdraw : order.getFoodWithdrawalList()){
                     ItemAxis item = new ItemAxis();
                     item.setSales(foodWithdraw.getQuantity());
+                    item.setPrice(foodWithdraw.getFood().getPrice());
                     item.setName(foodWithdraw.getFood().getProductName());
                     totalOrder.getItemAxisList().add(item);
-                }
-
-                for(ItemAxis item : totalOrder.getItemAxisList()){
-                    String name = item.getName();
-                    for(ItemAxis itemComparate : totalOrder.getItemAxisList()){
-                        if(itemComparate.getName()==name){
-                            item.setSales(item.getSales()+itemComparate.getSales());
-                            totalOrder.getItemAxisList().remove(itemComparate);
-                        }
-                    }
                 }
 
                 //
             }
         }
+
         return totalOrder;
     }
     public Date stringToDate(String string){
